@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>SHASH TOVUQ</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -15,10 +15,11 @@
 
   --red1:#ff1b2d;
   --red2:#b40f18;
+
   --yellow1:#ffe600;
   --yellow2:#ffc400;
 
-  --card-bg: rgba(255,255,255,.84);
+  --card-bg: rgba(255,255,255,.86);
   --line: rgba(0,0,0,.08);
   --shadow: 0 14px 34px rgba(0,0,0,.10);
 }
@@ -26,7 +27,7 @@ body[data-theme="dark"]{
   --sand:#121212;
   --text:#f1f1f1;
 
-  --card-bg: rgba(28,28,28,.90);
+  --card-bg: rgba(28,28,28,.92);
   --line: rgba(255,255,255,.12);
   --shadow: 0 18px 44px rgba(0,0,0,.35);
 }
@@ -40,12 +41,13 @@ body{
     radial-gradient(1200px 600px at 50% -120px, rgba(180,15,24,.10), transparent 60%),
     linear-gradient(180deg, #fff, var(--sand));
   color:var(--text);
-  padding-bottom:120px;
+  padding-bottom:130px;
 }
 
-/* ===== header ===== */
+/* ✅ Header чуть больше */
 .header{
-  padding:18px 14px 30px;
+  padding:22px 14px 40px;      /* было меньше */
+  min-height:170px;            /* добавили высоту */
   color:#fff;
   position:relative;
   text-align:center;
@@ -83,7 +85,7 @@ body{
   left:10px;
   top:50%;
   transform:translateY(-50%);
-  width:86px;
+  width:88px;
   max-width:30vw;
   height:auto;
   z-index:5;
@@ -103,11 +105,11 @@ body{
   font-weight:900;
   text-transform:uppercase;
   opacity:.96;
-  margin-bottom:6px;
+  margin-bottom:7px;
   text-shadow: 0 10px 18px rgba(0,0,0,.25);
 }
 
-/* ✅ SHASH TOVUQ меньше */
+/* SHASH TOVUQ маленький */
 .brand-title{
   font-family:'Yeseva One', serif;
   font-size:24px;
@@ -120,12 +122,12 @@ body{
   transform: translateX(28px);
 }
 
-/* ✅ Tatib... правее под уровень Fast Food (подвинем) */
+/* Tatib... сдвинут вправо */
 .brand-phone{
   position:relative;
   z-index:50;
   pointer-events:none;
-  margin-top:8px;
+  margin-top:9px;
   font-size:15px;
   font-weight:900;
   opacity:.95;
@@ -133,7 +135,20 @@ body{
   text-align:left;
 }
 
-/* ✅ кнопки справа вертикально (сверху вниз) */
+/* ✅ номер телефона под Tatib... */
+.brand-tel{
+  position:relative;
+  z-index:50;
+  pointer-events:none;
+  margin-top:6px;
+  font-size:14px;
+  font-weight:900;
+  opacity:.95;
+  transform: translateX(28px);
+  text-align:left;
+}
+
+/* ✅ кнопки справа сверху вниз */
 .header-actions{
   position:absolute;
   right:10px;
@@ -174,12 +189,13 @@ body{
 .burger-ic span:nth-child(2){ top:5px; }
 .burger-ic span:nth-child(3){ bottom:0; }
 
-/* ===== common buttons ===== */
+/* ===== buttons ===== */
 .langs,.types,.payments{
   display:flex;
   gap:10px;
   padding:12px 12px 6px;
   justify-content:center;
+  flex-wrap:wrap; /* ✅ адаптация */
 }
 .btn{
   padding:12px 16px;
@@ -196,7 +212,7 @@ body{
 }
 .btn:active{ transform:scale(.98); }
 
-/* ✅ Язык: активный желтый, иначе белый */
+/* язык активный желтый */
 .langs .btn.active{
   background: linear-gradient(135deg, var(--yellow1), var(--yellow2));
   color:#111;
@@ -204,7 +220,7 @@ body{
   box-shadow: 0 14px 30px rgba(255,196,0,.25);
 }
 
-/* ✅ Доставка/Самовывоз: активный красный, иначе белый */
+/* доставка/самовывоз активный красный */
 .types .btn.active{
   background: linear-gradient(135deg, var(--red1), var(--red2));
   color:#fff;
@@ -212,7 +228,7 @@ body{
   box-shadow: 0 14px 30px rgba(255,27,45,.22);
 }
 
-/* ✅ Нал/Клик: активный красный, иначе белый */
+/* оплата активный красный */
 .payments .btn.active{
   background: linear-gradient(135deg, var(--red1), var(--red2));
   color:#fff;
@@ -224,29 +240,30 @@ body{
   margin:8px auto;
   display:block;
   padding:14px 14px;
-  width:88%;
+  width:min(520px, 92%);
   border-radius:18px;
   font-size:15px;
   border:1px solid var(--line);
-  background: rgba(255,255,255,.90);
+  background: rgba(255,255,255,.92);
   box-shadow: 0 10px 24px rgba(0,0,0,.06);
   outline:none;
   transition:.15s;
   color:var(--text);
 }
-body[data-theme="dark"] .input{ background: rgba(28,28,28,.90); }
+body[data-theme="dark"] .input{ background: rgba(28,28,28,.92); }
 .input:focus{
   border-color: rgba(255,27,45,.35);
   box-shadow: 0 14px 30px rgba(255,27,45,.12);
 }
 
-/* ✅ категории: активная желтая, неактивная белая */
+/* категории */
 .categories{
   display:flex;
   gap:8px;
   padding:10px 12px 4px;
   overflow-x:auto;
   scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
 }
 .categories .btn{
   min-width:122px;
@@ -261,12 +278,14 @@ body[data-theme="dark"] .input{ background: rgba(28,28,28,.90); }
   box-shadow: 0 14px 30px rgba(255,196,0,.25);
 }
 
-/* товары */
+/* products */
 .products{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:14px;
   padding:12px;
+  max-width:760px;
+  margin:0 auto;
 }
 .card{
   border-radius:24px;
@@ -288,7 +307,7 @@ body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 .price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .price small{ font-weight:800; opacity:.75; margin-left:4px; }
 
-/* ✅ +/- ярко желтые */
+/* +/- */
 .counter{ display:flex; justify-content:center; gap:10px; margin-top:8px; align-items:center; }
 .counter button{
   width:34px;
@@ -306,16 +325,17 @@ body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 
 /* cart */
 .cart{
-  background: rgba(255,255,255,.86);
-  margin:12px;
+  background: rgba(255,255,255,.88);
+  margin:12px auto;
   padding:16px;
   border-radius:26px;
   border:1px solid rgba(255,27,45,.18);
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  max-width:760px;
 }
-body[data-theme="dark"] .cart{ background: rgba(28,28,28,.90); border-color: rgba(255,27,45,.22); }
+body[data-theme="dark"] .cart{ background: rgba(28,28,28,.92); border-color: rgba(255,27,45,.22); }
 #cartTitle{ color: var(--red2); }
 textarea.input{ height:90px; }
 
@@ -338,7 +358,7 @@ textarea.input{ height:90px; }
 
 /* search */
 .search-wrap{
-  width:88%;
+  width:min(520px, 92%);
   margin:8px auto;
   position:relative;
   display:none;
@@ -369,7 +389,7 @@ body[data-theme="dark"] .search-clear{ background: rgba(28,28,28,.92); border-co
 .search-clear:active{ transform:translateY(-50%) scale(.96); }
 
 .search-title{
-  width:88%;
+  width:min(520px, 92%);
   margin:10px auto 0;
   font-weight:900;
   opacity:.92;
@@ -381,10 +401,12 @@ body[data-theme="dark"] .search-clear{ background: rgba(28,28,28,.92); border-co
 
 mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 
-/* ===== carousels ===== */
+/* carousels */
 .section{
   width:100%;
   padding:4px 12px 4px;
+  max-width:760px;
+  margin:0 auto;
 }
 .section-title{
   width:100%;
@@ -400,9 +422,8 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   gap:12px;
   overflow-x:auto;
   padding:2px 2px 10px;
+  -webkit-overflow-scrolling:touch;
 }
-
-/* ✅ Комбо чуть больше */
 .combo-card{
   min-width:230px;
   border-radius:26px;
@@ -430,7 +451,6 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 .combo-price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .badge{ position:absolute; left:10px; top:10px; font-size:18px; pointer-events:none; }
 
-/* ✅ Популярное/Новинки карточки */
 .small-card{
   min-width:190px;
   border-radius:24px;
@@ -456,7 +476,6 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 .small-name{ font-weight:900; margin-top:10px; }
 .small-price{ font-weight:900; color:var(--red2); margin-top:6px; }
 
-/* ✅ +/- в каруселях */
 .mini-counter{
   display:flex;
   align-items:center;
@@ -481,7 +500,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   text-align:center;
 }
 
-/* Sticky */
+/* sticky */
 .sticky-checkout{
   position:fixed;
   left:0; right:0; bottom:0;
@@ -493,9 +512,8 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   border-top:1px solid rgba(255,27,45,.14);
 }
 body[data-theme="dark"] .sticky-checkout{ background: rgba(18,18,18,.72); border-top-color: rgba(255,27,45,.22); }
-
 .sticky-inner{
-  max-width:520px;
+  max-width:760px;
   margin:0 auto;
   border-radius:20px;
   padding:10px 12px;
@@ -508,10 +526,8 @@ body[data-theme="dark"] .sticky-checkout{ background: rgba(18,18,18,.72); border
   gap:12px;
 }
 body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-color: rgba(255,27,45,.22); }
-
 .sticky-sum{ font-weight:900; line-height:1.1; color: var(--red2); }
 .sticky-sum small{ display:block; font-weight:800; opacity:.70; margin-top:2px; }
-
 .sticky-btn{
   padding:12px 14px;
   border-radius:18px;
@@ -526,7 +542,7 @@ body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-co
 }
 .sticky-btn:active{ transform:scale(.99); }
 
-/* ===== Bottom sheets (burger + subcats) ===== */
+/* ===== bottom sheets ===== */
 .backdrop{
   position:fixed;
   inset:0;
@@ -543,7 +559,7 @@ body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-co
   bottom:-120%;
   transition:.22s;
   padding:10px 12px 14px;
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.95);
   border-top-left-radius:24px;
   border-top-right-radius:24px;
   border:1px solid rgba(0,0,0,.08);
@@ -552,7 +568,7 @@ body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-co
   -webkit-backdrop-filter: blur(12px);
 }
 body[data-theme="dark"] .sheet{
-  background: rgba(28,28,28,.92);
+  background: rgba(28,28,28,.95);
   border-color: rgba(255,255,255,.10);
 }
 .sheet.show{ bottom:0; }
@@ -585,6 +601,7 @@ body[data-theme="dark"] .handle{ background:rgba(255,255,255,.18); }
 }
 body[data-theme="dark"] .sheet-close{ color:#bbb; }
 
+/* burger list */
 .menu-list{ display:flex; flex-direction:column; gap:8px; }
 .menu-item{
   display:flex;
@@ -619,264 +636,305 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
 .menu-sub{ font-size:12px; opacity:.75; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .menu-right{ opacity:.65; font-weight:900; }
 
-/* subcat buttons inside sheet */
+/* ✅ Subcats: иконки (заглушки под фото) */
 .subcat-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:12px;
   padding:6px 2px 2px;
 }
-.subcat-btn{
-  padding:12px 14px;
-  border-radius:999px;
+.subcat-item{
   border:1px solid rgba(0,0,0,.10);
   background:#fff;
-  color:var(--text);
-  font-weight:900;
+  border-radius:20px;
+  padding:10px 8px;
   cursor:pointer;
-  white-space:nowrap;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:96px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  transition:.15s;
 }
-.subcat-btn.active{
+.subcat-item:active{ transform:scale(.98); }
+.subcat-item.active{
   background: linear-gradient(135deg, var(--yellow1), var(--yellow2));
-  border:1px solid rgba(0,0,0,.12);
-  color:#111;
+  border:1px solid rgba(0,0,0,.14);
   box-shadow: 0 14px 30px rgba(255,196,0,.25);
+}
+.subcat-ic{
+  width:52px;
+  height:52px;
+  border-radius:18px;
+  background: rgba(0,0,0,.06); /* сюда потом фото */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+}
+.subcat-item.active .subcat-ic{
+  background: rgba(255,255,255,.55);
+}
+.subcat-name{
+  font-weight:900;
+  font-size:12.6px;
+  text-align:center;
+  line-height:1.15;
 }
 
 @media (max-width:380px){
-  .brand-title{ font-size:21px; transform: translateX(22px); }
+  .header{ min-height:176px; padding:22px 12px 44px; }
+  .brand-title{ font-size:22px; transform: translateX(22px); }
   .brand-phone{ transform: translateX(22px); }
+  .brand-tel{ transform: translateX(22px); }
   .header img{ width:74px; padding:7px; border-radius:16px; }
   .hbtn{ width:32px; height:32px; font-size:15px; }
-  .products{ gap:12px; }
+  .products{ gap:12px; padding:12px; }
   .img{ height:96px; }
   .img img{ max-width:86px; }
   .categories .btn{ min-width:116px; font-size:12.6px; padding:8px 10px; }
   .combo-card{ min-width:210px; }
   .small-card{ min-width:178px; }
+  .subcat-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
+  .subcat-item{ min-height:92px; border-radius:18px; }
+  .subcat-ic{ width:48px; height:48px; border-radius:16px; }
+}
+@media (max-width:330px){
+  .subcat-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+}
+
+/* ✅ Telegram mobile “50% height” fix: растягиваем контент */
+#app{
+  min-height:100vh;
+  min-height:100svh;
+  min-height:100dvh;
 }
 </style>
 </head>
 
 <body data-theme="light">
+<div id="app">
 
-<div class="header">
-  <img src="logo.png" onerror="this.src='logo.png'">
+  <div class="header">
+    <img src="logo.png" onerror="this.src='logo.png'">
 
-  <div style="position:relative; z-index:6;">
-    <div class="brand-top">Fast Food</div>
-    <div class="brand-title">SHASH TOVUQ</div>
-    <div class="brand-phone">Tatib ko'ring mazali !</div>
-  </div>
+    <div style="position:relative; z-index:6;">
+      <div class="brand-top">Fast Food</div>
+      <div class="brand-title">SHASH TOVUQ</div>
 
-  <!-- ✅ справа вертикально -->
-  <div class="header-actions" aria-label="Header actions">
-    <div class="hbtn" onclick="openTopMenu()" title="Меню" aria-label="Меню">
-      <div class="burger-ic"><span></span><span></span><span></span></div>
+      <div class="brand-phone">Tatib ko'ring mazali !</div>
+      <div class="brand-tel">+998 95 410 37 38</div>
     </div>
-    <div class="hbtn" onclick="openMap()" title="Маршрут" aria-label="Локация">📍</div>
-    <div class="hbtn" onclick="toggleSearch()" title="Поиск" aria-label="Поиск">🔍</div>
-  </div>
-</div>
 
-<div class="search-title" id="searchTitle">Результаты поиска</div>
-<div class="search-wrap" id="searchWrap">
-  <input id="searchInput" class="input" placeholder="Поиск блюда..." oninput="searchProducts()" onkeydown="onSearchKey(event)">
-  <div class="search-clear" onclick="clearSearch()" title="Очистить">✖</div>
-</div>
-
-<div class="langs">
-  <button class="btn active" onclick="setLang('ru',this)">🇷🇺 RU</button>
-  <button class="btn" onclick="setLang('uz',this)">🇺🇿 UZ</button>
-  <button class="btn" onclick="setLang('en',this)">🇬🇧 EN</button>
-</div>
-
-<!-- ✅ КАРУСЕЛЬ КОМБО (выше популярного) -->
-<div class="section" id="comboWrap">
-  <div class="section-title" id="comboTitle">🍱 Комбо</div>
-  <div class="row" id="comboRow"></div>
-</div>
-
-<!-- ✅ ПОПУЛЯРНОЕ (с +/-) -->
-<div class="section" id="popularWrap">
-  <div class="section-title" id="popularTitle">🔥 Популярное</div>
-  <div class="row" id="popularRow"></div>
-</div>
-
-<!-- ✅ НОВИНКИ (ниже популярного) -->
-<div class="section" id="newWrap">
-  <div class="section-title" id="newTitle">✨ Новинки</div>
-  <div class="row" id="newRow"></div>
-</div>
-
-<div class="types">
-  <button class="btn active" id="btnDelivery" onclick="setType('delivery',this)"></button>
-  <button class="btn" id="btnPickup" onclick="setType('pickup',this)"></button>
-</div>
-
-<input id="address" class="input">
-<input id="phone" class="input">
-
-<div class="categories" id="cats"></div>
-
-<div class="products" id="products"></div>
-
-<div id="cartAnchor"></div>
-
-<div class="cart" id="cartBlock">
-  <b id="cartTitle"></b>: <span id="total">0</span> сум
-  <textarea id="comment" class="input"></textarea>
-  <div class="payments">
-    <button class="btn active" id="payCash" onclick="setPayment('cash')"></button>
-    <button class="btn" id="payClick" onclick="setPayment('click')"></button>
-  </div>
-  <button class="order-btn" id="orderBtn" onclick="sendOrder()"></button>
-</div>
-
-<div class="sticky-checkout">
-  <div class="sticky-inner">
-    <div class="sticky-sum">
-      <span id="stickyTotal">0</span> <small>сум</small>
+    <div class="header-actions" aria-label="Header actions">
+      <div class="hbtn" onclick="openTopMenu()" title="Меню" aria-label="Меню">
+        <div class="burger-ic"><span></span><span></span><span></span></div>
+      </div>
+      <div class="hbtn" onclick="openMap()" title="Маршрут" aria-label="Локация">📍</div>
+      <div class="hbtn" onclick="toggleSearch()" title="Поиск" aria-label="Поиск">🔍</div>
     </div>
-    <button class="sticky-btn" onclick="scrollToCart()" id="stickyCart">🛒 Корзина</button>
-  </div>
-</div>
-
-<!-- ===== Burger sheet ===== -->
-<div class="backdrop" id="menuBackdrop" onclick="closeTopMenu()" style="z-index:2000;"></div>
-<div class="sheet" id="menuSheet" role="dialog" aria-modal="true" style="z-index:2010;">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <b id="menuTitle">Меню</b>
-    <button class="sheet-close" onclick="closeTopMenu()">×</button>
   </div>
 
-  <div class="menu-list">
-    <div class="menu-item" onclick="toggleReviewWidget()" role="button">
-      <div class="menu-left">
-        <div class="menu-ic">⭐</div>
-        <div class="menu-txt">
-          <div class="menu-name" id="mReviewTitle">Оставить отзыв</div>
-          <div class="menu-sub" id="mReviewSub">Яндекс рейтинг / отзывы</div>
+  <div class="search-title" id="searchTitle">Результаты поиска</div>
+  <div class="search-wrap" id="searchWrap">
+    <input id="searchInput" class="input" placeholder="Поиск блюда..." oninput="searchProducts()" onkeydown="onSearchKey(event)">
+    <div class="search-clear" onclick="clearSearch()" title="Очистить">✖</div>
+  </div>
+
+  <div class="langs">
+    <button class="btn active" onclick="setLang('ru',this)">🇷🇺 RU</button>
+    <button class="btn" onclick="setLang('uz',this)">🇺🇿 UZ</button>
+    <button class="btn" onclick="setLang('en',this)">🇬🇧 EN</button>
+  </div>
+
+  <div class="section" id="comboWrap">
+    <div class="section-title" id="comboTitle">🍱 Комбо</div>
+    <div class="row" id="comboRow"></div>
+  </div>
+
+  <div class="section" id="popularWrap">
+    <div class="section-title" id="popularTitle">🔥 Популярное</div>
+    <div class="row" id="popularRow"></div>
+  </div>
+
+  <div class="section" id="newWrap">
+    <div class="section-title" id="newTitle">✨ Новинки</div>
+    <div class="row" id="newRow"></div>
+  </div>
+
+  <div class="types">
+    <button class="btn active" id="btnDelivery" onclick="setType('delivery',this)"></button>
+    <button class="btn" id="btnPickup" onclick="setType('pickup',this)"></button>
+  </div>
+
+  <input id="address" class="input">
+  <input id="phone" class="input">
+
+  <div class="categories" id="cats"></div>
+
+  <div class="products" id="products"></div>
+
+  <div class="cart" id="cartBlock">
+    <b id="cartTitle"></b>: <span id="total">0</span> сум
+    <textarea id="comment" class="input"></textarea>
+    <div class="payments">
+      <button class="btn active" id="payCash" onclick="setPayment('cash')"></button>
+      <button class="btn" id="payClick" onclick="setPayment('click')"></button>
+    </div>
+    <button class="order-btn" id="orderBtn" onclick="sendOrder()"></button>
+  </div>
+
+  <div class="sticky-checkout">
+    <div class="sticky-inner">
+      <div class="sticky-sum">
+        <span id="stickyTotal">0</span> <small>сум</small>
+      </div>
+      <button class="sticky-btn" onclick="scrollToCart()" id="stickyCart">🛒 Корзина</button>
+    </div>
+  </div>
+
+  <!-- Burger sheet -->
+  <div class="backdrop" id="menuBackdrop" onclick="closeTopMenu()" style="z-index:2000;"></div>
+  <div class="sheet" id="menuSheet" role="dialog" aria-modal="true" style="z-index:2010;">
+    <div class="handle"></div>
+    <div class="sheet-head">
+      <b id="menuTitle">Меню</b>
+      <button class="sheet-close" onclick="closeTopMenu()">×</button>
+    </div>
+
+    <div class="menu-list">
+      <div class="menu-item" onclick="toggleReviewWidget()" role="button">
+        <div class="menu-left">
+          <div class="menu-ic">⭐</div>
+          <div class="menu-txt">
+            <div class="menu-name" id="mReviewTitle">Оставить отзыв</div>
+            <div class="menu-sub" id="mReviewSub">Яндекс рейтинг / отзывы</div>
+          </div>
+        </div>
+        <div class="menu-right">›</div>
+      </div>
+
+      <div id="reviewWidgetWrap" style="display:none; padding:6px 4px 10px;">
+        <div style="border:1px solid rgba(0,0,0,.08); border-radius:18px; overflow:hidden; background:#fff; padding:10px; display:flex; justify-content:center;">
+          <iframe src="https://yandex.ru/sprav/widget/rating-badge/23178318202?type=rating" width="150" height="50" frameborder="0" style="border:0; display:block;"></iframe>
+        </div>
+        <div class="menu-sub" id="mReviewHint" style="margin-top:8px;">
+          Если виджет не открылся в Telegram — нажми «Открыть отзывы».
+        </div>
+        <div style="display:flex; justify-content:center; margin-top:8px;">
+          <button class="btn" style="min-width:auto; padding:10px 14px; border-radius:999px;" id="mOpenReviewsBtn" onclick="openYandexReviews(event)">Открыть отзывы</button>
         </div>
       </div>
-      <div class="menu-right">›</div>
-    </div>
 
-    <div class="review-wrap" id="reviewWidgetWrap" style="display:none; padding:6px 4px 10px;">
-      <div class="review-card" style="border:1px solid rgba(0,0,0,.08); border-radius:18px; overflow:hidden; background:#fff; padding:10px; display:flex; justify-content:center;">
-        <iframe src="https://yandex.ru/sprav/widget/rating-badge/23178318202?type=rating" width="150" height="50" frameborder="0" style="border:0; display:block;"></iframe>
-      </div>
-      <div class="menu-sub" id="mReviewHint" style="margin-top:8px;">
-        Если виджет не открылся в Telegram — нажми «Открыть отзывы».
-      </div>
-      <div style="display:flex; justify-content:center; margin-top:8px;">
-        <button class="btn" style="min-width:auto; padding:10px 14px; border-radius:999px;" id="mOpenReviewsBtn" onclick="openYandexReviews(event)">Открыть отзывы</button>
-      </div>
-    </div>
-
-    <div class="menu-item" onclick="openLegal()" role="button">
-      <div class="menu-left">
-        <div class="menu-ic">🏢</div>
-        <div class="menu-txt">
-          <div class="menu-name" id="mLegalTitle">Для юридических лиц</div>
-          <div class="menu-sub" id="mLegalSub">Связаться с менеджером</div>
+      <div class="menu-item" onclick="openLegal()" role="button">
+        <div class="menu-left">
+          <div class="menu-ic">🏢</div>
+          <div class="menu-txt">
+            <div class="menu-name" id="mLegalTitle">Для юридических лиц</div>
+            <div class="menu-sub" id="mLegalSub">Связаться с менеджером</div>
+          </div>
         </div>
+        <div class="menu-right">›</div>
       </div>
-      <div class="menu-right">›</div>
-    </div>
 
-    <a class="menu-item" href="tel:+998954103738" onclick="closeTopMenu()">
-      <div class="menu-left">
-        <div class="menu-ic">📞</div>
-        <div class="menu-txt">
-          <div class="menu-name" id="mCallTitle">Позвонить</div>
-          <div class="menu-sub">+998 95 410 37 38</div>
+      <a class="menu-item" href="tel:+998954103738" onclick="closeTopMenu()">
+        <div class="menu-left">
+          <div class="menu-ic">📞</div>
+          <div class="menu-txt">
+            <div class="menu-name" id="mCallTitle">Позвонить</div>
+            <div class="menu-sub">+998 95 410 37 38</div>
+          </div>
         </div>
-      </div>
-      <div class="menu-right">›</div>
-    </a>
+        <div class="menu-right">›</div>
+      </a>
 
-    <a class="menu-item" href="#" onclick="openInstagram(event)">
-      <div class="menu-left">
-        <div class="menu-ic">📷</div>
-        <div class="menu-txt">
-          <div class="menu-name" id="mInstaTitle">@shash.tovuq.n1</div>
-          <div class="menu-sub" id="mInstaSub">Открыть Instagram</div>
+      <a class="menu-item" href="#" onclick="openInstagram(event)">
+        <div class="menu-left">
+          <div class="menu-ic">📷</div>
+          <div class="menu-txt">
+            <div class="menu-name" id="mInstaTitle">@shash.tovuq.n1</div>
+            <div class="menu-sub" id="mInstaSub">Открыть Instagram</div>
+          </div>
         </div>
-      </div>
-      <div class="menu-right">›</div>
-    </a>
+        <div class="menu-right">›</div>
+      </a>
 
-    <div class="menu-item" onclick="toggleThemeFromMenu()" role="button">
-      <div class="menu-left">
-        <div class="menu-ic">🌓</div>
-        <div class="menu-txt">
-          <div class="menu-name" id="mThemeTitle">Тема</div>
-          <div class="menu-sub" id="themeMenuSub">Светлая</div>
+      <div class="menu-item" onclick="toggleThemeFromMenu()" role="button">
+        <div class="menu-left">
+          <div class="menu-ic">🌓</div>
+          <div class="menu-txt">
+            <div class="menu-name" id="mThemeTitle">Тема</div>
+            <div class="menu-sub" id="themeMenuSub">Светлая</div>
+          </div>
         </div>
+        <div class="menu-right" id="mThemeAction">Сменить</div>
       </div>
-      <div class="menu-right" id="mThemeAction">Сменить</div>
-    </div>
 
-    <div class="menu-item" onclick="openAbout()" role="button">
-      <div class="menu-left">
-        <div class="menu-ic">ℹ️</div>
-        <div class="menu-txt">
-          <div class="menu-name" id="mAboutTitle">О нас</div>
-          <div class="menu-sub" id="mAboutSub">Адрес и описание</div>
+      <div class="menu-item" onclick="openAbout()" role="button">
+        <div class="menu-left">
+          <div class="menu-ic">ℹ️</div>
+          <div class="menu-txt">
+            <div class="menu-name" id="mAboutTitle">О нас</div>
+            <div class="menu-sub" id="mAboutSub">Адрес и описание</div>
+          </div>
         </div>
+        <div class="menu-right">›</div>
       </div>
-      <div class="menu-right">›</div>
     </div>
   </div>
-</div>
 
-<!-- ===== Subcategories bottom sheet ===== -->
-<div class="backdrop" id="subcatBackdrop" onclick="closeSubcats()" style="z-index:2050;"></div>
-<div class="sheet" id="subcatSheet" role="dialog" aria-modal="true" style="z-index:2060;">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <b id="subcatTitle">Подкатегории</b>
-    <button class="sheet-close" onclick="closeSubcats()">×</button>
+  <!-- ✅ Subcategories bottom sheet (иконки) -->
+  <div class="backdrop" id="subcatBackdrop" onclick="closeSubcats()" style="z-index:2050;"></div>
+  <div class="sheet" id="subcatSheet" role="dialog" aria-modal="true" style="z-index:2060;">
+    <div class="handle"></div>
+    <div class="sheet-head">
+      <b id="subcatTitle">Подкатегории</b>
+      <button class="sheet-close" onclick="closeSubcats()">×</button>
+    </div>
+    <div class="subcat-grid" id="subcatGrid"></div>
   </div>
-  <div class="subcat-grid" id="subcatGrid"></div>
-</div>
 
-<!-- About / Legal (оставил как было по логике, без лишних стилевых блоков) -->
-<div class="backdrop" id="aboutBackdrop" onclick="closeAbout()" style="z-index:2100; display:none; opacity:1;"></div>
-<div class="sheet" id="aboutSheet" style="z-index:2110; display:none;">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <b id="aboutTitle">О нас</b>
-    <button class="sheet-close" onclick="closeAbout()">×</button>
+  <!-- About / Legal sheets -->
+  <div class="backdrop" id="aboutBackdrop" onclick="closeAbout()" style="z-index:2100; display:none; opacity:1;"></div>
+  <div class="sheet" id="aboutSheet" style="z-index:2110; display:none;">
+    <div class="handle"></div>
+    <div class="sheet-head">
+      <b id="aboutTitle">О нас</b>
+      <button class="sheet-close" onclick="closeAbout()">×</button>
+    </div>
+    <div style="display:flex; gap:10px; overflow-x:auto; padding:6px 2px 10px; -webkit-overflow-scrolling:touch;">
+      <button class="btn" id="tabRu" onclick="setAboutLang('ru')" style="min-width:auto;">🇷🇺 RU</button>
+      <button class="btn" id="tabUz" onclick="setAboutLang('uz')" style="min-width:auto;">🇺🇿 UZ</button>
+      <button class="btn" id="tabEn" onclick="setAboutLang('en')" style="min-width:auto;">🇬🇧 EN</button>
+    </div>
+    <div id="aboutBody" style="white-space:pre-wrap; line-height:1.45; padding:2px 4px 6px;"></div>
   </div>
-  <div style="display:flex; gap:10px; overflow-x:auto; padding:6px 2px 10px;">
-    <button class="btn" id="tabRu" onclick="setAboutLang('ru')" style="min-width:auto;">🇷🇺 RU</button>
-    <button class="btn" id="tabUz" onclick="setAboutLang('uz')" style="min-width:auto;">🇺🇿 UZ</button>
-    <button class="btn" id="tabEn" onclick="setAboutLang('en')" style="min-width:auto;">🇬🇧 EN</button>
-  </div>
-  <div id="aboutBody" style="white-space:pre-wrap; line-height:1.45; padding:2px 4px 6px;"></div>
-</div>
 
-<div class="backdrop" id="legalBackdrop" onclick="closeLegal()" style="z-index:2200; display:none; opacity:1;"></div>
-<div class="sheet" id="legalSheet" style="z-index:2210; display:none;">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <b id="legalTitle">Для юридических лиц</b>
-    <button class="sheet-close" onclick="closeLegal()">×</button>
+  <div class="backdrop" id="legalBackdrop" onclick="closeLegal()" style="z-index:2200; display:none; opacity:1;"></div>
+  <div class="sheet" id="legalSheet" style="z-index:2210; display:none;">
+    <div class="handle"></div>
+    <div class="sheet-head">
+      <b id="legalTitle">Для юридических лиц</b>
+      <button class="sheet-close" onclick="closeLegal()">×</button>
+    </div>
+    <div id="legalBody" style="white-space:pre-wrap; line-height:1.45; padding:2px 4px 6px;"></div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+      <button class="btn" onclick="contactManager()" style="flex:1 1 auto; min-width:auto;">Связаться с менеджером</button>
+      <button class="btn" onclick="openTelLegal()" style="flex:1 1 auto; min-width:auto;">Позвонить</button>
+      <button class="btn" onclick="openMailLegal()" style="flex:1 1 auto; min-width:auto;">Почта</button>
+    </div>
   </div>
-  <div id="legalBody" style="white-space:pre-wrap; line-height:1.45; padding:2px 4px 6px;"></div>
-  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-    <button class="btn" onclick="contactManager()" style="flex:1 1 auto; min-width:auto;">Связаться с менеджером</button>
-    <button class="btn" onclick="openTelLegal()" style="flex:1 1 auto; min-width:auto;">Позвонить</button>
-    <button class="btn" onclick="openMailLegal()" style="flex:1 1 auto; min-width:auto;">Почта</button>
-  </div>
-</div>
+
+</div><!-- /#app -->
 
 <script>
+/* ✅ фикс "открывается на 50%": */
 Telegram.WebApp.ready();
-Telegram.WebApp.expand?.();
+Telegram.WebApp.expand();                 // важно без optional
+try{ Telegram.WebApp.requestFullscreen?.(); }catch(_){}
+try{ Telegram.WebApp.disableVerticalSwipes?.(); }catch(_){}
 
 const $ = (id)=>document.getElementById(id);
 
@@ -1016,8 +1074,8 @@ const MENU2 = {
   ]
 };
 
-/* ✅ Наборы для каруселей */
-const COMBO_IDS = ['bf_burger_classic','ch_wings_5','drink_cola_05'];   // пример, можешь поменять
+/* carousels ids */
+const COMBO_IDS = ['bf_burger_classic','ch_wings_5','drink_cola_05'];
 const POPULAR_IDS = ['bf_burger_classic','ch_lavash_classic','ch_wings_10','bf_shawarma_classic'];
 const NEW_IDS = ['ch_pita_spicy','bf_hotdog_cheese','drink_tea','sauce_garlic'];
 
@@ -1043,18 +1101,12 @@ const tg_username = tgUser.username || "";
 const tg_first_name = tgUser.first_name || "";
 const tg_id = tgUser.id || "";
 
-/* ===== sheets open/close ===== */
+/* sheets */
 function openTopMenu(){ $('menuBackdrop').classList.add('show'); $('menuSheet').classList.add('show'); }
 function closeTopMenu(){ $('menuBackdrop').classList.remove('show'); $('menuSheet').classList.remove('show'); }
 
-function openSubcats(){
-  $('subcatBackdrop').classList.add('show');
-  $('subcatSheet').classList.add('show');
-}
-function closeSubcats(){
-  $('subcatBackdrop').classList.remove('show');
-  $('subcatSheet').classList.remove('show');
-}
+function openSubcats(){ $('subcatBackdrop').classList.add('show'); $('subcatSheet').classList.add('show'); }
+function closeSubcats(){ $('subcatBackdrop').classList.remove('show'); $('subcatSheet').classList.remove('show'); }
 
 function toggleReviewWidget(){
   const w = $('reviewWidgetWrap');
@@ -1072,7 +1124,7 @@ function openInstagram(e){
   catch(_){ window.open(IG_URL, "_blank"); }
 }
 
-/* About/Legal sheets (простая версия) */
+/* About/Legal */
 function openAbout(){
   closeTopMenu();
   $('aboutBackdrop').style.display = 'block';
@@ -1145,8 +1197,6 @@ let currentAboutLang = 'ru';
 function setAboutLang(l){
   currentAboutLang = l;
   $('aboutBody').textContent = ABOUT_TEXT[l] || ABOUT_TEXT.ru;
-
-  // подсветим табы "желтым" через .active как у языков
   $('tabRu').classList.toggle('active', l==='ru');
   $('tabUz').classList.toggle('active', l==='uz');
   $('tabEn').classList.toggle('active', l==='en');
@@ -1179,12 +1229,11 @@ function syncThemeLabel(){
   const cur = document.body.getAttribute('data-theme') || 'light';
   $('themeMenuSub').innerText = (cur === 'dark') ? t.theme_dark : t.theme_light;
 }
-
 function getName(it){
   return (it && it.n && it.n[lang]) ? it.n[lang] : (it?.n?.ru || it?.id || '');
 }
 
-/* индекс по id */
+/* index by id */
 const ITEM_BY_ID = {};
 (function indexItems(){
   for(const cat in MENU2){
@@ -1199,7 +1248,7 @@ const ITEM_BY_ID = {};
   }
 })();
 
-/* ===== carousels render with +/- ===== */
+/* carousels render */
 function miniCounterHTML(id, prefix){
   const key = `${prefix}_${id}`;
   return `
@@ -1265,16 +1314,13 @@ function renderNew(){
   });
 }
 function syncCarouselCounts(id){
-  const ids = [
-    `cb_${id}`, `pp_${id}`, `nw_${id}`
-  ];
-  ids.forEach(x=>{
-    const el = document.getElementById(x);
+  ['cb_'+id,'pp_'+id,'nw_'+id].forEach(k=>{
+    const el = document.getElementById(k);
     if(el) el.innerText = cart[id]||0;
   });
 }
 
-/* категории */
+/* categories */
 function renderCats(){
   $('cats').innerHTML='';
   const order = ['chicken','beef','drinks','sauce','garnish'];
@@ -1283,11 +1329,10 @@ function renderCats(){
   });
 }
 
-/* ✅ подкатегории: снизу sheet */
+/* ✅ subcats as icon tiles */
 function renderSubcatsSheet(){
   const grid = $('subcatGrid');
   grid.innerHTML = '';
-
   const list = SUBCATS[category];
   if(!list || list.length === 0){
     closeSubcats();
@@ -1297,7 +1342,13 @@ function renderSubcatsSheet(){
   list.forEach(sc=>{
     const label = (SUBCATS_I18N[lang] && SUBCATS_I18N[lang][sc]) ? SUBCATS_I18N[lang][sc] : sc;
     const active = (sc === subcat) ? 'active' : '';
-    grid.innerHTML += `<button class="subcat-btn ${active}" onclick="setSubcat('${sc}')">${label}</button>`;
+    // ✅ пока "иконка" emoji, потом заменишь на фото внутри .subcat-ic
+    grid.innerHTML += `
+      <div class="subcat-item ${active}" onclick="setSubcat('${sc}')">
+        <div class="subcat-ic">${label.split(' ')[0] || '🍽️'}</div>
+        <div class="subcat-name">${escapeHtml(label.replace(/^[^\s]+\s?/, ''))}</div>
+      </div>
+    `;
   });
 }
 function setCategory(cat){
@@ -1308,7 +1359,6 @@ function setCategory(cat){
   renderSubcatsSheet();
   renderProducts();
 
-  // ✅ если есть подкатегории — показываем снизу
   if(list && list.length) openSubcats();
   else closeSubcats();
 
@@ -1321,7 +1371,7 @@ function setSubcat(sc){
   closeSubcats();
 }
 
-/* карточки товаров */
+/* products */
 function cardHTML(it, q=''){
   const name = getName(it);
   const nameHtml = highlight(name, q);
@@ -1351,13 +1401,11 @@ function renderProducts(){
   });
 }
 
-/* cart ops */
+/* cart */
 function chg(id,v){
   cart[id]=Math.max(0,(cart[id]||0)+v);
-
   const el = document.getElementById('c_'+id);
   if(el) el.innerText=cart[id];
-
   syncCarouselCounts(id);
   updateTotal();
 }
@@ -1369,7 +1417,7 @@ function updateTotal(){
   $('stickyTotal').innerText = formatSum(s);
 }
 
-/* delivery/payment */
+/* type/payment */
 function applyTypeUI(){
   if(type === 'pickup'){
     $('address').style.display = 'none';
@@ -1390,7 +1438,6 @@ function setPayment(p){
   $('payCash').classList.toggle('active',p==='cash');
   $('payClick').classList.toggle('active',p==='click');
 }
-
 function scrollToCart(){
   closeTopMenu();
   const el = $('cartBlock');
