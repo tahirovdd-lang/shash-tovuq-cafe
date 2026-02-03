@@ -259,6 +259,23 @@ body[data-theme="dark"] .input{ background: rgba(28,28,28,.90); }
   font-size:13px;
 }
 
+/* ✅ подкатегории */
+.subcats{
+  display:none;
+  gap:8px;
+  padding:6px 12px 6px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+}
+.subcats.show{ display:flex; }
+.subcats .btn{
+  min-width:110px;
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:12.6px;
+  opacity:.98;
+}
+
 .products{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -417,7 +434,7 @@ body[data-theme="dark"] .pop-card{ border-color: rgba(255,255,255,.10); }
 .pop-price{ font-weight:900; color:var(--atlas-red); margin-top:6px; }
 .pop-badge{ position:absolute; left:10px; top:10px; font-size:18px; pointer-events:none; }
 
-/* ✅ вместо “оформить заказ” внизу — КОРЗИНА */
+/* ✅ нижняя панель */
 .sticky-checkout{
   position:fixed;
   left:0; right:0; bottom:0;
@@ -448,7 +465,6 @@ body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-co
 .sticky-sum{ font-weight:900; line-height:1.1; }
 .sticky-sum small{ display:block; font-weight:800; opacity:.70; margin-top:2px; }
 
-/* ✅ Кнопка теперь “Корзина”, не перекрывает ничего и ведёт к блоку cart */
 .sticky-btn{
   padding:12px 14px;
   border-radius:18px;
@@ -666,6 +682,7 @@ body[data-theme="dark"] .legal-card{
   .img{ height:96px; }
   .img img{ max-width:86px; }
   .categories .btn{ min-width:116px; font-size:12.6px; padding:8px 10px; }
+  .subcats .btn{ min-width:104px; font-size:12.2px; padding:8px 10px; }
 }
 </style>
 </head>
@@ -717,6 +734,8 @@ body[data-theme="dark"] .legal-card{
 <input id="phone" class="input">
 
 <div class="categories" id="cats"></div>
+<div class="subcats" id="subcats"></div>
+
 <div class="products" id="products"></div>
 
 <!-- ✅ Якорь для прокрутки из нижней “Корзины” -->
@@ -894,7 +913,7 @@ const ABOUT_TEXT = {
   ru:`🇷🇺 О нас
 
 Fast Food SHASH TOVUQ — быстро, вкусно и с душой 🔥🐔
-Готовим сочную курицу, шашлык, бургеры и любимые фастфуд-блюда из свежих продуктов.
+Готовим сочную курицу, бургеры, шаурму и любимые фастфуд-блюда из свежих продуктов.
 
 Забрать с собой или заказать доставку — выбирай как удобно.
 SHASH TOVUQ — когда хочется по-настоящему вкусно!
@@ -904,7 +923,7 @@ SHASH TOVUQ — когда хочется по-настоящему вкусно
   uz:`🇺🇿 Biz haqimizda
 
 Fast Food SHASH TOVUQ — tez, mazali va chin dildan 🔥🐔
-Biz shirali tovuq, shashlik, burger va sevimli fastfud taomlarini yangi mahsulotlardan tayyorlaymiz.
+Biz shirali tovuq, burger, shaurma va sevimli fastfud taomlarini yangi mahsulotlardan tayyorlaymiz.
 
 Olib ketish yoki yetkazib berish — o'zingizga qulayini tanlang.
 SHASH TOVUQ — haqiqiy mazani xohlaganda!
@@ -914,7 +933,7 @@ SHASH TOVUQ — haqiqiy mazani xohlaganda!
   en:`🇬🇧 About Us
 
 Fast Food SHASH TOVUQ — fast, tasty, and made with care 🔥🐔
-We cook juicy chicken, shashlik, burgers and your favorite fast food using fresh ingredients.
+We cook juicy chicken, burgers, shawarma and your favorite fast food using fresh ingredients.
 
 Pickup or delivery — choose what’s convenient.
 SHASH TOVUQ — when you want it truly delicious!
@@ -924,80 +943,101 @@ SHASH TOVUQ — when you want it truly delicious!
 };
 
 const TEXT={
-  ru:{delivery:'🚚 Доставка',pickup:'🏃 Самовывоз',address:'📍 Адрес доставки',phone:'📞 Телефон',cart:'🛒 Корзина',order:'Оформить заказ',comment:'✍️ Комментарий к заказу',cash:'💵 Наличные',click:'💳 CLICK',results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина'},
-  uz:{delivery:'🚚 Yetkazish',pickup:'🏃 Olib ketish',address:'📍 Manzil',phone:'📞 Telefon',cart:'🛒 Savat',order:'Buyurtma berish',comment:'✍️ Izoh',cash:'💵 Naqd',click:'💳 CLICK',results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:'Savat bo‘sh',cart_btn:'🛒 Savat'},
-  en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart'}
+  ru:{delivery:'🚚 Доставка',pickup:'🏃 Самовывоз',address:'📍 Адрес доставки',phone:'📞 Телефон',cart:'🛒 Корзина',order:'Оформить заказ',comment:'✍️ Комментарий к заказу',cash:'💵 Наличные',click:'💳 CLICK',results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина',subcats:'Подкатегории'},
+  uz:{delivery:'🚚 Yetkazish',pickup:'🏃 Olib ketish',address:'📍 Manzil',phone:'📞 Telefon',cart:'🛒 Savat',order:'Buyurtma berish',comment:'✍️ Izoh',cash:'💵 Naqd',click:'💳 CLICK',results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:"Savat bo‘sh",cart_btn:'🛒 Savat',subcats:'Bo‘limlar'},
+  en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart',subcats:'Subcategories'}
 };
 
-/* ✅ категории оставил как были — потом под fast food заменим меню/категории */
+/* ✅ Новые категории */
 const CATS={
-  ru:{salads:'🥗 Салаты',cold:'🥒 Холодные закуски',first:'🍜 Первые блюда',second:'🍲 Вторые блюда',drinks:'🥤 Напитки',water:'💧 Минеральная вода',energy:'⚡ Energy drinks'},
-  uz:{salads:'🥗 Salatlar',cold:'🥒 Sovuq zakuskalar',first:'🍜 Birinchi taomlar',second:'🍲 Ikkinchi taomlar',drinks:'🥤 Ichimliklar',water:'💧 Mineral suv',energy:'⚡ Energetik ichimliklar'},
-  en:{salads:'🥗 Salads',cold:'🥒 Cold snacks',first:'🍜 First dishes',second:'🍲 Main dishes',drinks:'🥤 Drinks',water:'💧 Mineral water',energy:'⚡ Energy drinks'}
+  ru:{chicken:'🐔 Курица',beef:'🐮 Говядина',drinks:'🥤 Напитки',sauce:'🥫 Соус',garnish:'🍟 Гарнир'},
+  uz:{chicken:"🐔 Tovuq",beef:"🐮 Mol go‘shti",drinks:'🥤 Ichimliklar',sauce:'🥫 Sous',garnish:'🍟 Garnir'},
+  en:{chicken:'🐔 Chicken',beef:'🐮 Beef',drinks:'🥤 Drinks',sauce:'🥫 Sauce',garnish:'🍟 Side'}
 };
 
-const MENU = {
-  salads:[
-    {id:'chalop', p:15000, img:'images/chalop.jpg', n:{ru:'Чалоп', uz:'Chalop', en:'Chalop'}},
-    {id:'achichuk', p:15000, img:'images/achichuk.jpg', n:{ru:'Ачичук', uz:"Achichuk", en:'Achichuk'}},
-    {id:'svezhiy', p:15000, img:'images/svezhiy.jpg', n:{ru:'Свежий', uz:'Yangi salat', en:'Fresh salad'}}
-  ],
-  cold:[
-    {id:'chakka_zelen_rediska', p:15000, img:'images/chakka_zelen_rediska.jpg', n:{ru:'Чакка (Сюзьма) с зеленью и редиской', uz:"Chakka (Suyzma) ko\'kat va redis bilan", en:'Chakka (Suzma) with herbs & radish'}},
-    {id:'chakka_perets', p:12000, img:'images/chakka_perets.jpg', n:{ru:'Чакка (Сюзьма) с перцем', uz:"Chakka (Suyzma) murch bilan", en:'Chakka (Suzma) with pepper'}},
-    {id:'chakka_zelen', p:12000, img:'images/chakka_zelen.jpg', n:{ru:'Чакка (Сюзьма) с зеленью', uz:"Chakka (Suyzma) ko\'kat bilan", en:'Chakka (Suzma) with herbs'}},
-    {id:'chakka', p:10000, img:'images/chakka.jpg', n:{ru:'Чакка (Сюзьма)', uz:"Chakka (Suyzma)", en:'Chakka (Suzma)'}},
-    {id:'zelen_assorti', p:20000, img:'images/zelen_assorti.jpg', n:{ru:'Зелень ассорти', uz:"Ko\'kat assorti", en:'Herbs assortment'}},
-    {id:'luk_anzur', p:15000, img:'images/luk_anzur.jpg', n:{ru:'Лук Анзур', uz:'Anzur piyoz', en:'Anzur onion'}},
-    {id:'solenya_assorti', p:25000, img:'images/solenya_assorti.jpg', n:{ru:'Соленья ассорти', uz:"Tuzlama assorti", en:'Pickles assortment'}},
-    {id:'marin_pomidory', p:15000, img:'images/marin_pomidory.jpg', n:{ru:'Маринованные помидоры', uz:"Marinad pomidor", en:'Pickled tomatoes'}},
-    {id:'marin_ogurcy', p:15000, img:'images/marin_ogurcy.jpg', n:{ru:'Маринованные огурцы', uz:"Marinad bodring", en:'Pickled cucumbers'}}
-  ],
-  first:[
-    {id:'govyazhiy_bulon', p:60000, img:'images/govyazhiy_bulon.jpg', n:{ru:'Говяжий бульон', uz:"Mol bulyon", en:'Beef broth'}},
-    {id:'lagman', p:50000, img:'images/lagman.jpg', n:{ru:'Лагман', uz:"Lag\'mon", en:'Lagman'}},
-    {id:'shurpa', p:50000, img:'images/shurpa.jpg', n:{ru:'Шурпа', uz:"Sho\'rva", en:'Shurpa'}}
-  ],
-  second:[
-    {id:'zharenyy_lagman', p:60000, img:'images/zharenyy_lagman.jpg', n:{ru:'Жаренный лагман', uz:"Qovurilgan lag\'mon", en:'Fried lagman'}},
-    {id:'kalla_pocha', p:70000, img:'images/kalla_pocha.jpg', n:{ru:'Кала Поча', uz:"Kalla pocha", en:'Kalla pocha'}},
-    {id:'halisa', p:70000, img:'images/halisa.jpg', n:{ru:'Халиса', uz:'Halisa', en:'Halisa'}},
-    {id:'plov_05', p:50000, img:'images/plov_05.jpg', n:{ru:'Плов 0.5', uz:'Osh 0.5', en:'Plov 0.5'}}
-  ],
+/* ✅ Подкатегории (только для Курица/Говядина) */
+const SUBCATS = {
+  chicken: ['pita','lavash','doner','hotdog','wings','sausages'],
+  beef:    ['burger','shawarma','hotdog','pita']
+};
+const SUBCATS_I18N = {
+  ru:{
+    pita:'🥙 Пита', lavash:'🌯 Лаваш', doner:'🌯 Донер', hotdog:'🌭 Хот дог', wings:'🍗 Крылышки', sausages:'🌭 Колбаски',
+    burger:'🍔 Бургер', shawarma:'🌯 Шаурма'
+  },
+  uz:{
+    pita:'🥙 Pita', lavash:'🌯 Lavash', doner:'🌯 Doner', hotdog:'🌭 Hot dog', wings:"🍗 Qanotchalar", sausages:'🌭 Kolbaskalar',
+    burger:'🍔 Burger', shawarma:'🌯 Shaurma'
+  },
+  en:{
+    pita:'🥙 Pita', lavash:'🌯 Lavash', doner:'🌯 Doner', hotdog:'🌭 Hot dog', wings:'🍗 Wings', sausages:'🌭 Sausages',
+    burger:'🍔 Burger', shawarma:'🌯 Shawarma'
+  }
+};
+
+/* ✅ Меню с подкатегориями (в каждой по 2 блюда) */
+const MENU2 = {
+  chicken:{
+    pita:[
+      {id:'ch_pita_classic', p:32000, img:'logo.png', n:{ru:'Пита куриная Classic', uz:'Tovuq pita Classic', en:'Chicken pita Classic'}},
+      {id:'ch_pita_spicy',   p:34000, img:'logo.png', n:{ru:'Пита куриная Spicy',   uz:"Tovuq pita Spicy",   en:'Chicken pita Spicy'}}
+    ],
+    lavash:[
+      {id:'ch_lavash_classic', p:30000, img:'logo.png', n:{ru:'Лаваш куриный Classic', uz:'Tovuq lavash Classic', en:'Chicken lavash Classic'}},
+      {id:'ch_lavash_cheese',  p:33000, img:'logo.png', n:{ru:'Лаваш куриный с сыром', uz:"Tovuq lavash pishloq", en:'Chicken lavash with cheese'}}
+    ],
+    doner:[
+      {id:'ch_doner_small', p:28000, img:'logo.png', n:{ru:'Донер куриный (мал.)', uz:'Tovuq doner (kichik)', en:'Chicken doner (small)'}},
+      {id:'ch_doner_big',   p:35000, img:'logo.png', n:{ru:'Донер куриный (бол.)', uz:'Tovuq doner (katta)',  en:'Chicken doner (large)'}}
+    ],
+    hotdog:[
+      {id:'ch_hotdog_classic', p:22000, img:'logo.png', n:{ru:'Хот-дог куриный Classic', uz:'Tovuq hot-dog Classic', en:'Chicken hot dog Classic'}},
+      {id:'ch_hotdog_spicy',   p:24000, img:'logo.png', n:{ru:'Хот-дог куриный Spicy',   uz:'Tovuq hot-dog Spicy',   en:'Chicken hot dog Spicy'}}
+    ],
+    wings:[
+      {id:'ch_wings_5',  p:30000, img:'logo.png', n:{ru:'Крылышки 5 шт',  uz:'Qanot 5 dona',  en:'Wings 5 pcs'}},
+      {id:'ch_wings_10', p:55000, img:'logo.png', n:{ru:'Крылышки 10 шт', uz:'Qanot 10 dona', en:'Wings 10 pcs'}}
+    ],
+    sausages:[
+      {id:'ch_sausage_grill', p:29000, img:'logo.png', n:{ru:'Колбаски гриль',       uz:"Gril kolbaska",       en:'Grilled sausages'}},
+      {id:'ch_sausage_spicy', p:31000, img:'logo.png', n:{ru:'Колбаски острые',      uz:"Achchiq kolbaska",    en:'Spicy sausages'}}
+    ]
+  },
+  beef:{
+    burger:[
+      {id:'bf_burger_classic', p:42000, img:'logo.png', n:{ru:'Бургер говяжий Classic', uz:"Mol burger Classic", en:'Beef burger Classic'}},
+      {id:'bf_burger_double',  p:52000, img:'logo.png', n:{ru:'Бургер Double',         uz:'Double burger',      en:'Double burger'}}
+    ],
+    shawarma:[
+      {id:'bf_shawarma_classic', p:38000, img:'logo.png', n:{ru:'Шаурма говяжья Classic', uz:"Mol shaurma Classic", en:'Beef shawarma Classic'}},
+      {id:'bf_shawarma_spicy',   p:40000, img:'logo.png', n:{ru:'Шаурма говяжья Spicy',   uz:"Mol shaurma Spicy",   en:'Beef shawarma Spicy'}}
+    ],
+    hotdog:[
+      {id:'bf_hotdog_classic', p:26000, img:'logo.png', n:{ru:'Хот-дог говяжий Classic', uz:"Mol hot-dog Classic", en:'Beef hot dog Classic'}},
+      {id:'bf_hotdog_cheese',  p:29000, img:'logo.png', n:{ru:'Хот-дог говяжий с сыром', uz:"Mol hot-dog pishloq", en:'Beef hot dog with cheese'}}
+    ],
+    pita:[
+      {id:'bf_pita_classic', p:36000, img:'logo.png', n:{ru:'Пита говяжья Classic', uz:"Mol pita Classic", en:'Beef pita Classic'}},
+      {id:'bf_pita_bbq',     p:39000, img:'logo.png', n:{ru:'Пита говяжья BBQ',     uz:"Mol pita BBQ",     en:'Beef pita BBQ'}}
+    ]
+  },
   drinks:[
-    {id:'fanta_025', p:7000, img:'images/fanta_025.jpg', n:{ru:'Fanta 0.25L', uz:'Fanta 0.25L', en:'Fanta 0.25L'}},
-    {id:'sprite_1', p:15000, img:'images/sprite_1.jpg', n:{ru:'Sprite 1L', uz:'Sprite 1L', en:'Sprite 1L'}},
-    {id:'fanta_15', p:20000, img:'images/fanta_15.jpg', n:{ru:'Fanta 1.5L', uz:'Fanta 1.5L', en:'Fanta 1.5L'}},
-    {id:'fanta_1', p:15000, img:'images/fanta_1.jpg', n:{ru:'Fanta 1L', uz:'Fanta 1L', en:'Fanta 1L'}},
-    {id:'bliss_1', p:18000, img:'images/bliss_1.jpg', n:{ru:'Сок Bliss в ассортименте 1L', uz:"Bliss sharbat 1L (assort)", en:'Bliss juice assorted 1L'}},
-    {id:'cola_15', p:20000, img:'images/cola_15.jpg', n:{ru:'Coca Cola 1.5L', uz:'Coca Cola 1.5L', en:'Coca Cola 1.5L'}},
-    {id:'cola_1', p:15000, img:'images/cola_1.jpg', n:{ru:'Coca Cola 1L', uz:'Coca Cola 1L', en:'Coca Cola 1L'}},
-    {id:'ice_tea_125', p:15000, img:'images/ice_tea_125.jpg', n:{ru:'Ice Tea 1.25L', uz:'Ice Tea 1.25L', en:'Ice Tea 1.25L'}},
-    {id:'pepsi_1', p:15000, img:'images/pepsi_1.jpg', n:{ru:'Pepsi 1L', uz:'Pepsi 1L', en:'Pepsi 1L'}},
-    {id:'lipton_1', p:15000, img:'images/lipton_1.jpg', n:{ru:'Lipton 1L', uz:'Lipton 1L', en:'Lipton 1L'}},
-    {id:'pepsi_025', p:10000, img:'images/pepsi_025.jpg', n:{ru:'Pepsi 0.25L', uz:'Pepsi 0.25L', en:'Pepsi 0.25L'}},
-    {id:'pepsi_05', p:12000, img:'images/pepsi_05.jpg', n:{ru:'Pepsi 0.5L', uz:'Pepsi 0.5L', en:'Pepsi 0.5L'}},
-    {id:'pepsi_15', p:20000, img:'images/pepsi_15.jpg', n:{ru:'Pepsi 1.5L', uz:'Pepsi 1.5L', en:'Pepsi 1.5L'}}
+    {id:'drink_cola_05', p:12000, img:'logo.png', n:{ru:'Coca-Cola 0.5L', uz:'Coca-Cola 0.5L', en:'Coca-Cola 0.5L'}},
+    {id:'drink_fanta_05',p:12000, img:'logo.png', n:{ru:'Fanta 0.5L',     uz:'Fanta 0.5L',     en:'Fanta 0.5L'}},
+    {id:'drink_water',   p:6000,  img:'logo.png', n:{ru:'Вода 0.5L',      uz:'Suv 0.5L',       en:'Water 0.5L'}},
+    {id:'drink_tea',     p:8000,  img:'logo.png', n:{ru:'Ice Tea 0.5L',   uz:'Ice Tea 0.5L',   en:'Ice Tea 0.5L'}}
   ],
-  water:[
-    {id:'montella_15', p:10000, img:'images/montella_15.jpg', n:{ru:'Вода Montella 1.5L', uz:'Montella 1.5L', en:'Montella 1.5L'}},
-    {id:'montella_1', p:7000, img:'images/montella_1.jpg', n:{ru:'Вода Montella 1L', uz:'Montella 1L', en:'Montella 1L'}},
-    {id:'chortoq_05', p:15000, img:'images/chortoq_05.jpg', n:{ru:'Минеральная вода Chortoq 0.5L', uz:'Chortoq 0.5L', en:'Chortoq mineral water 0.5L'}},
-    {id:'montella_05', p:5000, img:'images/montella_05.jpg', n:{ru:'Вода Montella 0.5L', uz:'Montella 0.5L', en:'Montella 0.5L'}}
+  sauce:[
+    {id:'sauce_ketchup', p:3000, img:'logo.png', n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'}},
+    {id:'sauce_garlic',  p:4000, img:'logo.png', n:{ru:'Чесночный соус', uz:"Sarimsoq sous", en:'Garlic sauce'}}
   ],
-  energy:[
-    {id:'18plus_05', p:15000, img:'images/18plus_05.jpg', n:{ru:'18+ 0.5L', uz:'18+ 0.5L', en:'18+ 0.5L'}},
-    {id:'18plus_033', p:12000, img:'images/18plus_033.jpg', n:{ru:'18+ 0.33L', uz:'18+ 0.33L', en:'18+ 0.33L'}},
-    {id:'18plus_025', p:10000, img:'images/18plus_025.jpg', n:{ru:'18+ 0.25L', uz:'18+ 0.25L', en:'18+ 0.25L'}},
-    {id:'adrenaline_049', p:15000, img:'images/adrenaline_049.jpg', n:{ru:'Adrenaline 0.49L', uz:'Adrenaline 0.49L', en:'Adrenaline 0.49L'}},
-    {id:'adrenaline_025', p:12000, img:'images/adrenaline_025.jpg', n:{ru:'Adrenaline 0.25L', uz:'Adrenaline 0.25L', en:'Adrenaline 0.25L'}}
+  garnish:[
+    {id:'gar_fries', p:18000, img:'logo.png', n:{ru:'Картофель фри', uz:'Fri kartoshka', en:'French fries'}},
+    {id:'gar_rice',  p:12000, img:'logo.png', n:{ru:'Рис',           uz:'Guruch',        en:'Rice'}}
   ]
 };
 
-const POPULAR_IDS = ['plov_05','lagman','shurpa','achichuk'];
-const ITEM_BY_ID = {};
-for (const cat in MENU){ for (const it of MENU[cat]) ITEM_BY_ID[it.id] = it; }
-
+/* ===== helpers ===== */
 function formatSum(x){
   const n = Number(x) || 0;
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');
@@ -1014,11 +1054,13 @@ function highlight(text, q){
   return safe.slice(0,idx) + `<mark>${safe.slice(idx, idx+q.length)}</mark>` + safe.slice(idx+q.length);
 }
 
+/* Telegram user */
 const tgUser = Telegram.WebApp.initDataUnsafe?.user || {};
 const tg_username = tgUser.username || "";
 const tg_first_name = tgUser.first_name || "";
 const tg_id = tgUser.id || "";
 
+/* menu sheet */
 function openTopMenu(){ $('menuBackdrop').classList.add('show'); $('menuSheet').classList.add('show'); }
 function closeTopMenu(){ $('menuBackdrop').classList.remove('show'); $('menuSheet').classList.remove('show'); }
 
@@ -1072,7 +1114,7 @@ function openMailLegal(){
 }
 
 /* theme */
-let lang='ru', category='salads', type='delivery', payment='cash';
+let lang='ru', category='chicken', subcat='', type='delivery', payment='cash';
 let cart = {};
 
 function applyTheme(theme){
@@ -1106,13 +1148,7 @@ function setAboutLang(l){
   $('tabEn').classList.toggle('active', l==='en');
 }
 
-/* main i18n */
-function setLang(l,b){
-  lang=l;
-  document.querySelectorAll('.langs .btn').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  applyLang();
-}
+/* burger i18n */
 function applyBurgerI18n(){
   const t = MENU_I18N[lang] || MENU_I18N.ru;
   $('menuTitle').innerText = t.menu;
@@ -1140,6 +1176,24 @@ function getName(it){
   return (it && it.n && it.n[lang]) ? it.n[lang] : (it?.n?.ru || it?.id || '');
 }
 
+/* ✅ собрать ITEM_BY_ID из новой структуры */
+const ITEM_BY_ID = {};
+(function indexItems(){
+  for(const cat in MENU2){
+    const node = MENU2[cat];
+    if(Array.isArray(node)){
+      node.forEach(it => ITEM_BY_ID[it.id] = it);
+    }else{
+      for(const sc in node){
+        (node[sc]||[]).forEach(it => ITEM_BY_ID[it.id] = it);
+      }
+    }
+  }
+})();
+
+/* ✅ популярное (можешь менять ids) */
+const POPULAR_IDS = ['bf_burger_classic','ch_lavash_classic','ch_wings_10','bf_shawarma_classic'];
+
 function renderPopular(){
   $('popularRow').innerHTML = '';
   POPULAR_IDS.forEach(id=>{
@@ -1162,12 +1216,50 @@ function addPopular(id){
   if(isSearchOpen()) closeSearch();
 }
 
+/* ✅ категории */
 function renderCats(){
   $('cats').innerHTML='';
-  for(let k in MENU){
-    $('cats').innerHTML+=`<button class="btn ${k===category?'active':''}" onclick="category='${k}';renderCats();renderProducts()">${CATS[lang][k] || k}</button>`;
-  }
+  const order = ['chicken','beef','drinks','sauce','garnish'];
+  order.forEach(k=>{
+    $('cats').innerHTML += `<button class="btn ${k===category?'active':''}" onclick="setCategory('${k}')">${CATS[lang][k] || k}</button>`;
+  });
 }
+
+/* ✅ подкатегории */
+function setCategory(cat){
+  category = cat;
+
+  // сброс подкатегории на первую доступную
+  const sc = SUBCATS[category];
+  subcat = (sc && sc.length) ? sc[0] : '';
+
+  renderCats();
+  renderSubcats();
+  renderProducts();
+}
+function setSubcat(sc){
+  subcat = sc;
+  renderSubcats();
+  renderProducts();
+}
+function renderSubcats(){
+  const wrap = $('subcats');
+  wrap.innerHTML = '';
+
+  const list = SUBCATS[category];
+  if(!list || list.length === 0){
+    wrap.classList.remove('show');
+    return;
+  }
+  wrap.classList.add('show');
+
+  list.forEach(sc=>{
+    const label = (SUBCATS_I18N[lang] && SUBCATS_I18N[lang][sc]) ? SUBCATS_I18N[lang][sc] : sc;
+    wrap.innerHTML += `<button class="btn ${sc===subcat?'active':''}" onclick="setSubcat('${sc}')">${label}</button>`;
+  });
+}
+
+/* ✅ отрисовка карточек */
 function cardHTML(it, q=''){
   const name = getName(it);
   const nameHtml = highlight(name, q);
@@ -1182,13 +1274,24 @@ function cardHTML(it, q=''){
     </div>
   </div>`;
 }
+
+function getCurrentItems(){
+  const node = MENU2[category];
+  if(!node) return [];
+  if(Array.isArray(node)) return node; // drinks/sauce/garnish
+  const list = node[subcat] || [];
+  return list;
+}
+
 function renderProducts(){
   $('products').innerHTML='';
-  (MENU[category] || []).forEach(it=>{
+  const items = getCurrentItems();
+  items.forEach(it=>{
     cart[it.id]=cart[it.id]||0;
     $('products').innerHTML += cardHTML(it,'');
   });
 }
+
 function chg(id,v){
   cart[id]=Math.max(0,(cart[id]||0)+v);
   const el = document.getElementById('c_'+id);
@@ -1203,6 +1306,7 @@ function updateTotal(){
   $('stickyTotal').innerText = formatSum(s);
 }
 
+/* type/payment */
 function applyTypeUI(){
   if(type === 'pickup'){
     $('address').style.display = 'none';
@@ -1231,12 +1335,14 @@ function scrollToCart(){
   el.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
+/* search */
 function isSearchOpen(){ return $('searchWrap').classList.contains('show'); }
 function toggleSearch(){ isSearchOpen() ? closeSearch() : openSearch(); }
 function openSearch(){
   $('searchWrap').classList.add('show');
   $('searchTitle').classList.add('show');
   $('cats').style.display = 'none';
+  $('subcats').style.display = 'none';
   $('popularWrap').style.display = 'none';
   $('searchInput').value = '';
   $('searchInput').focus();
@@ -1247,7 +1353,9 @@ function closeSearch(){
   $('searchTitle').classList.remove('show');
   $('cats').style.display = '';
   $('popularWrap').style.display = '';
+  $('subcats').style.display = ''; // вернём, renderSubcats решит показывать/нет
   $('searchInput').value = '';
+  renderSubcats();
   renderProducts();
 }
 function clearSearch(){ closeSearch(); }
@@ -1258,22 +1366,40 @@ function searchProducts(){
   $('products').innerHTML='';
   if(!q){ renderProducts(); return; }
 
-  for(let c in MENU){
-    MENU[c].forEach(it=>{
-      const name = getName(it);
-      const n_ru = (it.n?.ru||'').toLowerCase();
-      const n_uz = (it.n?.uz||'').toLowerCase();
-      const n_en = (it.n?.en||'').toLowerCase();
-      const n_cur = String(name).toLowerCase();
-
-      if(n_cur.includes(q) || n_ru.includes(q) || n_uz.includes(q) || n_en.includes(q)){
-        cart[it.id]=cart[it.id]||0;
-        $('products').innerHTML += cardHTML(it, q);
+  // пробежка по всем категориям/подкатегориям
+  for(const cat in MENU2){
+    const node = MENU2[cat];
+    if(Array.isArray(node)){
+      node.forEach(it=>{
+        const name = getName(it);
+        const n_ru = (it.n?.ru||'').toLowerCase();
+        const n_uz = (it.n?.uz||'').toLowerCase();
+        const n_en = (it.n?.en||'').toLowerCase();
+        const n_cur = String(name).toLowerCase();
+        if(n_cur.includes(q) || n_ru.includes(q) || n_uz.includes(q) || n_en.includes(q)){
+          cart[it.id]=cart[it.id]||0;
+          $('products').innerHTML += cardHTML(it, q);
+        }
+      });
+    }else{
+      for(const sc in node){
+        (node[sc]||[]).forEach(it=>{
+          const name = getName(it);
+          const n_ru = (it.n?.ru||'').toLowerCase();
+          const n_uz = (it.n?.uz||'').toLowerCase();
+          const n_en = (it.n?.en||'').toLowerCase();
+          const n_cur = String(name).toLowerCase();
+          if(n_cur.includes(q) || n_ru.includes(q) || n_uz.includes(q) || n_en.includes(q)){
+            cart[it.id]=cart[it.id]||0;
+            $('products').innerHTML += cardHTML(it, q);
+          }
+        });
       }
-    });
+    }
   }
 }
 
+/* order payload */
 function genOrderId(){
   const d = new Date();
   const dd = String(d.getDate()).padStart(2,'0');
@@ -1323,11 +1449,20 @@ function sendOrder(){
     address: type === 'pickup' ? '' : $('address').value,
     phone: $('phone').value,
     comment: $('comment').value,
-    order_id: genOrderId()
+    order_id: genOrderId(),
+    ui: { category, subcat }
   };
 
   Telegram.WebApp.sendData(JSON.stringify(payload));
   Telegram.WebApp.close();
+}
+
+/* i18n apply */
+function setLang(l,b){
+  lang=l;
+  document.querySelectorAll('.langs .btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  applyLang();
 }
 
 function applyLang(){
@@ -1346,6 +1481,7 @@ function applyLang(){
 
   renderPopular();
   renderCats();
+  renderSubcats();
   renderProducts();
   updateTotal();
 
@@ -1378,6 +1514,13 @@ function bindSave(){
 
 loadSaved();
 bindSave();
+
+// init category/subcat defaults
+(function initCats(){
+  category = 'chicken';
+  subcat = (SUBCATS[category] && SUBCATS[category].length) ? SUBCATS[category][0] : '';
+})();
+
 applyLang();
 setAboutLang('ru');
 </script>
