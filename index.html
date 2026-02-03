@@ -44,10 +44,18 @@ body{
   padding-bottom:130px;
 }
 
-/* ✅ Header чуть больше */
+/* ✅ Telegram верхние кнопки не перекрывают шапку */
+#app{
+  min-height:100vh;
+  min-height:100svh;
+  min-height:100dvh;
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ✅ Header: минимально уменьшили (не трогая текст/кнопки/лого) */
 .header{
-  padding:22px 14px 40px;      /* было меньше */
-  min-height:170px;            /* добавили высоту */
+  padding:18px 14px 34px;      /* было 22/40 */
+  min-height:158px;            /* было 170 */
   color:#fff;
   position:relative;
   text-align:center;
@@ -62,6 +70,9 @@ body{
 
   box-shadow: 0 16px 34px rgba(0,0,0,.18);
   border-bottom: 1px solid rgba(255,255,255,.16);
+
+  /* ✅ доп. отступ сверху под системные кнопки Telegram */
+  padding-top: calc(18px + env(safe-area-inset-top));
 }
 .header::after{
   content:"";
@@ -108,8 +119,6 @@ body{
   margin-bottom:7px;
   text-shadow: 0 10px 18px rgba(0,0,0,.25);
 }
-
-/* SHASH TOVUQ маленький */
 .brand-title{
   font-family:'Yeseva One', serif;
   font-size:24px;
@@ -121,8 +130,6 @@ body{
   line-height:1.0;
   transform: translateX(28px);
 }
-
-/* Tatib... сдвинут вправо */
 .brand-phone{
   position:relative;
   z-index:50;
@@ -134,8 +141,6 @@ body{
   transform: translateX(28px);
   text-align:left;
 }
-
-/* ✅ номер телефона под Tatib... */
 .brand-tel{
   position:relative;
   z-index:50;
@@ -148,11 +153,11 @@ body{
   text-align:left;
 }
 
-/* ✅ кнопки справа сверху вниз */
+/* кнопки справа сверху вниз */
 .header-actions{
   position:absolute;
   right:10px;
-  top:10px;
+  top: calc(10px + env(safe-area-inset-top)); /* ✅ не под системными кнопками */
   z-index:90;
   display:flex;
   flex-direction:column;
@@ -189,13 +194,12 @@ body{
 .burger-ic span:nth-child(2){ top:5px; }
 .burger-ic span:nth-child(3){ bottom:0; }
 
-/* ===== buttons ===== */
+/* кнопки */
 .langs,.types,.payments{
   display:flex;
   gap:10px;
   padding:12px 12px 6px;
   justify-content:center;
-  flex-wrap:wrap; /* ✅ адаптация */
 }
 .btn{
   padding:12px 16px;
@@ -212,7 +216,16 @@ body{
 }
 .btn:active{ transform:scale(.98); }
 
-/* язык активный желтый */
+/* ✅ язык в одну строку */
+.langs{
+  flex-wrap:nowrap;
+  gap:8px;
+}
+.langs .btn{
+  min-width:0;
+  flex:1 1 0;
+  padding:10px 10px;
+}
 .langs .btn.active{
   background: linear-gradient(135deg, var(--yellow1), var(--yellow2));
   color:#111;
@@ -221,6 +234,9 @@ body{
 }
 
 /* доставка/самовывоз активный красный */
+.types{
+  flex-wrap:wrap;
+}
 .types .btn.active{
   background: linear-gradient(135deg, var(--red1), var(--red2));
   color:#fff;
@@ -229,6 +245,9 @@ body{
 }
 
 /* оплата активный красный */
+.payments{
+  flex-wrap:wrap;
+}
 .payments .btn.active{
   background: linear-gradient(135deg, var(--red1), var(--red2));
   color:#fff;
@@ -302,7 +321,7 @@ body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 .card:active{ transform:scale(.99); }
 
 .img{ height:104px; display:flex; align-items:center; justify-content:center; }
-.img img{ max-width:92px; opacity:.95; }
+.img img{ max-width:92px; opacity:.95; cursor:pointer; }
 
 .price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .price small{ font-weight:800; opacity:.75; margin-left:4px; }
@@ -446,7 +465,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   justify-content:center;
   background: rgba(255,27,45,.10);
 }
-.combo-img img{ width:100%; height:100%; object-fit:cover; }
+.combo-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
 .combo-name{ font-weight:900; margin-top:10px; }
 .combo-price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .badge{ position:absolute; left:10px; top:10px; font-size:18px; pointer-events:none; }
@@ -461,6 +480,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   transition:.15s;
   position:relative;
   overflow:hidden;
+  cursor:pointer;
 }
 .small-card:active{ transform:scale(.99); }
 .small-img{
@@ -472,7 +492,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   justify-content:center;
   background: rgba(255,27,45,.10);
 }
-.small-img img{ width:100%; height:100%; object-fit:cover; }
+.small-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
 .small-name{ font-weight:900; margin-top:10px; }
 .small-price{ font-weight:900; color:var(--red2); margin-top:6px; }
 
@@ -542,7 +562,7 @@ body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-co
 }
 .sticky-btn:active{ transform:scale(.99); }
 
-/* ===== bottom sheets ===== */
+/* bottom sheets */
 .backdrop{
   position:fixed;
   inset:0;
@@ -636,7 +656,7 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
 .menu-sub{ font-size:12px; opacity:.75; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .menu-right{ opacity:.65; font-weight:900; }
 
-/* ✅ Subcats: иконки (заглушки под фото) */
+/* subcats: icon tiles */
 .subcat-grid{
   display:grid;
   grid-template-columns:repeat(3, minmax(0,1fr));
@@ -668,7 +688,7 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
   width:52px;
   height:52px;
   border-radius:18px;
-  background: rgba(0,0,0,.06); /* сюда потом фото */
+  background: rgba(0,0,0,.06);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -684,9 +704,71 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
   line-height:1.15;
 }
 
+/* ✅ image modal */
+.img-modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  opacity:0;
+  pointer-events:none;
+  transition:.18s;
+  z-index:5000;
+}
+.img-modal-backdrop.show{ opacity:1; pointer-events:auto; }
+.img-modal{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(.98);
+  width:min(92vw, 520px);
+  max-height:80vh;
+  background:rgba(255,255,255,.92);
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow: 0 22px 70px rgba(0,0,0,.35);
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none;
+  transition:.18s;
+  z-index:5010;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color: rgba(255,255,255,.12); }
+.img-modal.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translate(-50%,-50%) scale(1);
+}
+.img-modal img{
+  width:100%;
+  height:auto;
+  max-height:80vh;
+  object-fit:contain;
+  display:block;
+  background:rgba(0,0,0,.04);
+}
+.img-modal-close{
+  position:absolute;
+  right:10px;
+  top:10px;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-size:22px;
+  line-height:1;
+  color:#fff;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.img-modal-close:active{ transform:scale(.98); }
+
 @media (max-width:380px){
-  .header{ min-height:176px; padding:22px 12px 44px; }
-  .brand-title{ font-size:22px; transform: translateX(22px); }
+  .header{ min-height:150px; padding:16px 12px 32px; padding-top: calc(16px + env(safe-area-inset-top)); }
+  .brand-title{ font-size:24px; transform: translateX(22px); }
   .brand-phone{ transform: translateX(22px); }
   .brand-tel{ transform: translateX(22px); }
   .header img{ width:74px; padding:7px; border-radius:16px; }
@@ -700,16 +782,10 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
   .subcat-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
   .subcat-item{ min-height:92px; border-radius:18px; }
   .subcat-ic{ width:48px; height:48px; border-radius:16px; }
+  .langs .btn{ padding:10px 8px; font-size:13px; }
 }
 @media (max-width:330px){
   .subcat-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
-}
-
-/* ✅ Telegram mobile “50% height” fix: растягиваем контент */
-#app{
-  min-height:100vh;
-  min-height:100svh;
-  min-height:100dvh;
 }
 </style>
 </head>
@@ -723,7 +799,6 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
     <div style="position:relative; z-index:6;">
       <div class="brand-top">Fast Food</div>
       <div class="brand-title">SHASH TOVUQ</div>
-
       <div class="brand-phone">Tatib ko'ring mazali !</div>
       <div class="brand-tel">+998 95 410 37 38</div>
     </div>
@@ -885,7 +960,7 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
     </div>
   </div>
 
-  <!-- ✅ Subcategories bottom sheet (иконки) -->
+  <!-- Subcategories bottom sheet (иконки) -->
   <div class="backdrop" id="subcatBackdrop" onclick="closeSubcats()" style="z-index:2050;"></div>
   <div class="sheet" id="subcatSheet" role="dialog" aria-modal="true" style="z-index:2060;">
     <div class="handle"></div>
@@ -927,12 +1002,19 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
     </div>
   </div>
 
+  <!-- ✅ Image modal -->
+  <div class="img-modal-backdrop" id="imgModalBackdrop" onclick="closeImgModal()"></div>
+  <div class="img-modal" id="imgModal" role="dialog" aria-modal="true">
+    <button class="img-modal-close" onclick="closeImgModal()">×</button>
+    <img id="imgModalImg" src="" alt="preview" />
+  </div>
+
 </div><!-- /#app -->
 
 <script>
-/* ✅ фикс "открывается на 50%": */
+/* ✅ фикс “50% высоты” и корректная работа в Telegram */
 Telegram.WebApp.ready();
-Telegram.WebApp.expand();                 // важно без optional
+Telegram.WebApp.expand();
 try{ Telegram.WebApp.requestFullscreen?.(); }catch(_){}
 try{ Telegram.WebApp.disableVerticalSwipes?.(); }catch(_){}
 
@@ -949,6 +1031,19 @@ const ADMIN_TG_ID = "6013591658";
 function openMap(){
   try{ Telegram.WebApp.openLink(MAP_URL); }
   catch(_){ window.open(MAP_URL, "_blank"); }
+}
+
+/* ✅ image modal */
+function openImgModal(src){
+  $('imgModalImg').src = src || 'logo.png';
+  $('imgModalBackdrop').classList.add('show');
+  $('imgModal').classList.add('show');
+}
+function closeImgModal(){
+  $('imgModalBackdrop').classList.remove('show');
+  $('imgModal').classList.remove('show');
+  // чуть позже очищаем, чтобы анимация не дергалась
+  setTimeout(()=>{ $('imgModalImg').src=''; }, 120);
 }
 
 /* i18n */
@@ -1125,6 +1220,7 @@ function openInstagram(e){
 }
 
 /* About/Legal */
+let currentAboutLang = 'ru';
 function openAbout(){
   closeTopMenu();
   $('aboutBackdrop').style.display = 'block';
@@ -1192,8 +1288,6 @@ function toggleThemeFromMenu(){
   const cur = document.body.getAttribute('data-theme') || 'light';
   applyTheme(cur === 'dark' ? 'light' : 'dark');
 }
-
-let currentAboutLang = 'ru';
 function setAboutLang(l){
   currentAboutLang = l;
   $('aboutBody').textContent = ABOUT_TEXT[l] || ABOUT_TEXT.ru;
@@ -1259,6 +1353,13 @@ function miniCounterHTML(id, prefix){
     </div>
   `;
 }
+
+/* ✅ клик по фото -> открыть по центру */
+function imgClickAttr(src){
+  const safe = String(src || 'logo.png').replace(/"/g,'&quot;');
+  return `onclick="event.stopPropagation(); openImgModal('${safe}')"`;
+}
+
 function renderCombo(){
   $('comboRow').innerHTML = '';
   COMBO_IDS.forEach(id=>{
@@ -1269,7 +1370,9 @@ function renderCombo(){
     $('comboRow').innerHTML += `
       <div class="combo-card" onclick="chg('${id}',1)">
         <div class="badge">🍱</div>
-        <div class="combo-img"><img src="${it.img}" onerror="this.src='logo.png'"></div>
+        <div class="combo-img">
+          <img src="${it.img}" onerror="this.src='logo.png'" ${imgClickAttr(it.img)}>
+        </div>
         <div class="combo-name">${escapeHtml(name)}</div>
         <div class="combo-price">${formatSum(it.p)} <small>сум</small></div>
         ${miniCounterHTML(id,'cb')}
@@ -1287,7 +1390,9 @@ function renderPopular(){
     $('popularRow').innerHTML += `
       <div class="small-card" onclick="chg('${id}',1)">
         <div class="badge">🔥</div>
-        <div class="small-img"><img src="${it.img}" onerror="this.src='logo.png'"></div>
+        <div class="small-img">
+          <img src="${it.img}" onerror="this.src='logo.png'" ${imgClickAttr(it.img)}>
+        </div>
         <div class="small-name">${escapeHtml(name)}</div>
         <div class="small-price">${formatSum(it.p)} <small>сум</small></div>
         ${miniCounterHTML(id,'pp')}
@@ -1305,7 +1410,9 @@ function renderNew(){
     $('newRow').innerHTML += `
       <div class="small-card" onclick="chg('${id}',1)">
         <div class="badge">✨</div>
-        <div class="small-img"><img src="${it.img}" onerror="this.src='logo.png'"></div>
+        <div class="small-img">
+          <img src="${it.img}" onerror="this.src='logo.png'" ${imgClickAttr(it.img)}>
+        </div>
         <div class="small-name">${escapeHtml(name)}</div>
         <div class="small-price">${formatSum(it.p)} <small>сум</small></div>
         ${miniCounterHTML(id,'nw')}
@@ -1329,7 +1436,7 @@ function renderCats(){
   });
 }
 
-/* ✅ subcats as icon tiles */
+/* subcats sheet */
 function renderSubcatsSheet(){
   const grid = $('subcatGrid');
   grid.innerHTML = '';
@@ -1338,11 +1445,9 @@ function renderSubcatsSheet(){
     closeSubcats();
     return;
   }
-
   list.forEach(sc=>{
     const label = (SUBCATS_I18N[lang] && SUBCATS_I18N[lang][sc]) ? SUBCATS_I18N[lang][sc] : sc;
     const active = (sc === subcat) ? 'active' : '';
-    // ✅ пока "иконка" emoji, потом заменишь на фото внутри .subcat-ic
     grid.innerHTML += `
       <div class="subcat-item ${active}" onclick="setSubcat('${sc}')">
         <div class="subcat-ic">${label.split(' ')[0] || '🍽️'}</div>
@@ -1358,10 +1463,7 @@ function setCategory(cat){
   renderCats();
   renderSubcatsSheet();
   renderProducts();
-
-  if(list && list.length) openSubcats();
-  else closeSubcats();
-
+  if(list && list.length) openSubcats(); else closeSubcats();
   if(isSearchOpen()) closeSearch();
 }
 function setSubcat(sc){
@@ -1376,7 +1478,9 @@ function cardHTML(it, q=''){
   const name = getName(it);
   const nameHtml = highlight(name, q);
   return `<div class="card">
-    <div class="img"><img src="${it.img}" onerror="this.src='logo.png'"></div>
+    <div class="img">
+      <img src="${it.img}" onerror="this.src='logo.png'" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
+    </div>
     <div>${nameHtml}</div>
     <div class="price">${formatSum(it.p)} <small>сум</small></div>
     <div class="counter">
@@ -1632,7 +1736,6 @@ function bindSave(){
 
 loadSaved();
 bindSave();
-
 applyLang();
 setAboutLang('ru');
 </script>
