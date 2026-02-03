@@ -52,10 +52,10 @@ body{
   padding-top: env(safe-area-inset-top);
 }
 
-/* ✅ Header: немного уменьшили (не трогая текст/кнопки/лого) */
+/* ✅ Header: ЕЩЁ немного уменьшили (НЕ трогая текст/кнопки/лого) */
 .header{
-  padding:16px 14px 30px;      /* было 18px 14px 34px */
-  min-height:146px;            /* было 158px */
+  padding:14px 14px 26px;      /* было 16px 14px 30px */
+  min-height:138px;            /* было 146px */
   color:#fff;
   position:relative;
   text-align:center;
@@ -71,7 +71,7 @@ body{
   box-shadow: 0 16px 34px rgba(0,0,0,.18);
   border-bottom: 1px solid rgba(255,255,255,.16);
 
-  padding-top: calc(16px + env(safe-area-inset-top));
+  padding-top: calc(14px + env(safe-area-inset-top)); /* было 16px + inset */
 }
 .header::after{
   content:"";
@@ -85,7 +85,7 @@ body{
   content:"";
   position:absolute;
   left:0; right:0; bottom:0;
-  height:16px;
+  height:14px; /* было 16px */
   background: linear-gradient(90deg, rgba(255,27,45,0), rgba(255,27,45,.90), rgba(255,27,45,0));
   opacity:.95;
   pointer-events:none;
@@ -803,7 +803,7 @@ body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color
 .img-modal-close:active{ transform:scale(.98); }
 
 @media (max-width:380px){
-  .header{ min-height:140px; padding:14px 12px 28px; padding-top: calc(14px + env(safe-area-inset-top)); }
+  .header{ min-height:134px; padding:13px 12px 24px; padding-top: calc(13px + env(safe-area-inset-top)); }
   .brand-title{ font-size:24px; transform: translateX(22px); }
   .brand-phone{ transform: translateX(22px); }
   .brand-tel{ transform: translateX(22px); }
@@ -1126,16 +1126,17 @@ const TEXT={
   en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart'}
 };
 
-/* ✅ Категории: Комбо / Напитки / Соус / Гарнир отдельно + Курица */
+/* ✅ Категории: Курица / Говядина / Комбо / Напитки / Соус / Гарнир */
 const CATS={
-  ru:{chicken:'🐔 Курица',combo:'🍱 Комбо',drinks:'🥤 Напитки',sauce:'🥫 Соус',garnish:'🍟 Гарнир'},
-  uz:{chicken:"🐔 Tovuq",combo:'🍱 Kombo',drinks:'🥤 Ichimliklar',sauce:'🥫 Sous',garnish:'🍟 Garnir'},
-  en:{chicken:'🐔 Chicken',combo:'🍱 Combo',drinks:'🥤 Drinks',sauce:'🥫 Sauce',garnish:'🍟 Side'}
+  ru:{chicken:'🐔 Курица',beef:'🥩 Говядина',combo:'🍱 Комбо',drinks:'🥤 Напитки',sauce:'🥫 Соус',garnish:'🍟 Гарнир'},
+  uz:{chicken:"🐔 Tovuq",beef:"🥩 Mol go‘shti",combo:'🍱 Kombo',drinks:'🥤 Ichimliklar',sauce:'🥫 Sous',garnish:'🍟 Garnir'},
+  en:{chicken:'🐔 Chicken',beef:'🥩 Beef',combo:'🍱 Combo',drinks:'🥤 Drinks',sauce:'🥫 Sauce',garnish:'🍟 Side'}
 };
 
-/* ✅ Подкатегории только внутри Курица */
+/* ✅ Подкатегории только внутри Курица и Говядина */
 const SUBCATS = {
-  chicken: ['combo_sc','lavash','pita','doner','burger','wings','sausages','shashlik','tovuq'],
+  chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','tovuq'], /* ✅ убрали Комбо из Курица */
+  beef: ['beef_shashlik','kufta','burger','hotdog'],
   combo: [],
   drinks: [],
   sauce: [],
@@ -1144,48 +1145,53 @@ const SUBCATS = {
 
 const SUBCATS_I18N = {
   ru:{
-    combo_sc:'🍱 Комбо',
     lavash:'🌯 Лаваш',
     pita:'🥙 Пита курица',
     doner:'🌯 Донер',
-    burger:'🍔 Куриный бургер',
+    burger:'🍔 Бургеры',
     wings:'🍗 Крылышки',
     sausages:'🌭 Колбаски',
     shashlik:'🍢 Шашлычок',
-    tovuq:'🐔 Шаштовук'
+    tovuq:'🐔 Шаштовук',
+
+    beef_shashlik:'🥩 Шашлычок говяжий',
+    kufta:'🧆 Кюфта',
+    hotdog:'🌭 Хот-дог'
   },
   uz:{
-    combo_sc:'🍱 Kombo',
     lavash:'🌯 Lavash',
     pita:'🥙 Tovuq pita',
     doner:'🌯 Doner',
-    burger:'🍔 Tovuq burger',
+    burger:'🍔 Burgerlar',
     wings:'🍗 Qanotchalar',
     sausages:'🌭 Kolbaska',
     shashlik:'🍢 Shashlik',
-    tovuq:'🐔 Shashtovuq'
+    tovuq:'🐔 Shashtovuq',
+
+    beef_shashlik:'🥩 Mol shashlik',
+    kufta:'🧆 Kyufta',
+    hotdog:'🌭 Hot-dog'
   },
   en:{
-    combo_sc:'🍱 Combo',
     lavash:'🌯 Lavash',
     pita:'🥙 Chicken pita',
     doner:'🌯 Doner',
-    burger:'🍔 Chicken burger',
+    burger:'🍔 Burgers',
     wings:'🍗 Wings',
     sausages:'🌭 Sausages',
     shashlik:'🍢 Skewers',
-    tovuq:'🐔 Shashtovuq'
+    tovuq:'🐔 Shashtovuq',
+
+    beef_shashlik:'🥩 Beef skewers',
+    kufta:'🧆 Kefta',
+    hotdog:'🌭 Hot-dog'
   }
 };
 
 /* ✅ Меню: размеры M/L/XL сделаны внутри карточки */
 const MENU2 = {
   chicken:{
-    combo_sc:[
-      {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
-      {id:'combo_burger', p:28000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
-      {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
-    ],
+    /* ✅ Комбо убрано из Курица (осталось только в категории Комбо) */
     lavash:[
       {
         id:'lavash',
@@ -1283,6 +1289,78 @@ const MENU2 = {
     ]
   },
 
+  /* ✅ Говядина: все остальные блюда разнесены по подкатегориям + размеры как chips */
+  beef:{
+    beef_shashlik:[
+      {
+        id:'beef_shashlik_lavash',
+        img:'logo.png',
+        spicy:false,
+        n:{ru:'Шашлычок в лаваше', uz:"Shashlik lavashda", en:'Skewer in lavash'},
+        variants:[
+          {k:'l', label:'L', p:35000},
+          {k:'xl', label:'XL', p:55000}
+        ]
+      },
+      {
+        id:'beef_shashlik_pita',
+        img:'logo.png',
+        spicy:false,
+        n:{ru:'Шашлычок в пите', uz:"Shashlik pitada", en:'Skewer in pita'},
+        variants:[
+          {k:'l', label:'L', p:35000},
+          {k:'xl', label:'XL', p:55000}
+        ]
+      },
+      {id:'beef_shashlik_baton', p:33000, img:'logo.png', spicy:false, n:{ru:'Шашлычок в батоне', uz:"Shashlik batonda", en:'Skewer in bun'}}
+    ],
+
+    kufta:[
+      {id:'kufta_fries', p:40000, img:'logo.png', spicy:false, n:{ru:'Кюфта + Фри', uz:"Kyufta + Fri", en:'Kefta + Fries'}}
+    ],
+
+    burger:[
+      {id:'burger', p:35000, img:'logo.png', spicy:false, n:{ru:'Бургер', uz:'Burger', en:'Burger'}},
+      {id:'cheeseburger', p:38000, img:'logo.png', spicy:false, n:{ru:'Чизбургер', uz:'Chizburger', en:'Cheeseburger'}}
+    ],
+
+    hotdog:[
+      {
+        id:'hotdog_pita',
+        img:'logo.png',
+        spicy:false,
+        n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
+        variants:[
+          {k:'1', label:'1', p:15000},
+          {k:'2', label:'2', p:17000},
+          {k:'3', label:'3', p:19000}
+        ]
+      },
+      {
+        id:'hotdog_king_nishon',
+        img:'logo.png',
+        spicy:false,
+        n:{ru:'Хот-дог Королевский (Нишонбахт)', uz:"Qirollik hot-dog (Nishonbakht)", en:'Royal hot-dog (Nishonbakht)'},
+        variants:[
+          {k:'1', label:'1', p:16000},
+          {k:'2', label:'2', p:19000},
+          {k:'3', label:'3', p:22000}
+        ]
+      },
+      {
+        id:'hotdog_king_halol',
+        img:'logo.png',
+        spicy:false,
+        n:{ru:'Хот-дог Королевский (Халол)', uz:"Qirollik hot-dog (Halol)", en:'Royal hot-dog (Halal)'},
+        variants:[
+          {k:'1', label:'1', p:17000},
+          {k:'2', label:'2', p:21000},
+          {k:'3', label:'3', p:25000}
+        ]
+      }
+    ]
+  },
+
   /* ✅ Отдельная категория Комбо */
   combo:[
     {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
@@ -1298,14 +1376,55 @@ const MENU2 = {
     {id:'village_potato', p:20000, img:'logo.png', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}}
   ],
 
-  /* ✅ Соус отдельно */
+  /* ✅ Соус отдельно (распределили) */
   sauce:[
-    /* (если у тебя нет списка соусов — оставил пустым, можно добавить позже) */
+    {id:'ketchup', p:3000, img:'logo.png', spicy:false, n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'}},
+    {id:'bbq', p:3000, img:'logo.png', spicy:false, n:{ru:'Барбекю', uz:'Barbekyu', en:'BBQ'}},
+    {id:'cheese_sauce', p:3000, img:'logo.png', spicy:false, n:{ru:'Сырный', uz:"Pishloqli", en:'Cheese'}},
+    {id:'garlic_sauce', p:3000, img:'logo.png', spicy:false, n:{ru:'Чесночный', uz:"Sarimsoqli", en:'Garlic'}}
   ],
 
-  /* ✅ Напитки отдельно */
+  /* ✅ Напитки отдельно (распределили). Цены не были указаны — поставил 0, чтобы меню работало. */
   drinks:[
-    /* (если у тебя нет списка напитков — оставил пустым, можно добавить позже) */
+    {id:'tea', p:0, img:'logo.png', spicy:false, n:{ru:'Чай', uz:'Choy', en:'Tea'}},
+    {id:'tea_lemon', p:0, img:'logo.png', spicy:false, n:{ru:'Чай с лимоном', uz:"Limonli choy", en:'Tea with lemon'}},
+    {id:'coffee_black', p:0, img:'logo.png', spicy:false, n:{ru:'Кофе чёрный', uz:"Qora qahva", en:'Black coffee'}},
+    {id:'coffee_3in1', p:0, img:'logo.png', spicy:false, n:{ru:'Кофе 3в1', uz:'3in1 qahva', en:'Coffee 3-in-1'}},
+
+    {id:'coca_025', p:0, img:'logo.png', spicy:false, n:{ru:'Coca Cola 0.25L', uz:'Coca Cola 0.25L', en:'Coca Cola 0.25L'}},
+    {id:'fanta_025', p:0, img:'logo.png', spicy:false, n:{ru:'Fanta 0.25L', uz:'Fanta 0.25L', en:'Fanta 0.25L'}},
+    {id:'sprite_025', p:0, img:'logo.png', spicy:false, n:{ru:'Sprite 0.25L', uz:'Sprite 0.25L', en:'Sprite 0.25L'}},
+    {id:'pepsi_025', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 0.25L', uz:'Pepsi 0.25L', en:'Pepsi 0.25L'}},
+
+    {id:'coca_05', p:0, img:'logo.png', spicy:false, n:{ru:'Coca Cola 0.5L', uz:'Coca Cola 0.5L', en:'Coca Cola 0.5L'}},
+    {id:'fanta_05', p:0, img:'logo.png', spicy:false, n:{ru:'Fanta 0.5L', uz:'Fanta 0.5L', en:'Fanta 0.5L'}},
+    {id:'sprite_05', p:0, img:'logo.png', spicy:false, n:{ru:'Sprite 0.5L', uz:'Sprite 0.5L', en:'Sprite 0.5L'}},
+    {id:'pepsi_05', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 0.5L', uz:'Pepsi 0.5L', en:'Pepsi 0.5L'}},
+
+    {id:'coca_1', p:0, img:'logo.png', spicy:false, n:{ru:'Coca Cola 1L', uz:'Coca Cola 1L', en:'Coca Cola 1L'}},
+    {id:'fanta_1', p:0, img:'logo.png', spicy:false, n:{ru:'Fanta 1L', uz:'Fanta 1L', en:'Fanta 1L'}},
+    {id:'sprite_1', p:0, img:'logo.png', spicy:false, n:{ru:'Sprite 1L', uz:'Sprite 1L', en:'Sprite 1L'}},
+    {id:'pepsi_1', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 1L', uz:'Pepsi 1L', en:'Pepsi 1L'}},
+
+    {id:'coca_15', p:0, img:'logo.png', spicy:false, n:{ru:'Coca Cola 1.5L', uz:'Coca Cola 1.5L', en:'Coca Cola 1.5L'}},
+    {id:'fanta_15', p:0, img:'logo.png', spicy:false, n:{ru:'Fanta 1.5L', uz:'Fanta 1.5L', en:'Fanta 1.5L'}},
+    {id:'sprite_15', p:0, img:'logo.png', spicy:false, n:{ru:'Sprite 1.5L', uz:'Sprite 1.5L', en:'Sprite 1.5L'}},
+    {id:'pepsi_15', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 1.5L', uz:'Pepsi 1.5L', en:'Pepsi 1.5L'}},
+
+    {id:'fuse_05', p:0, img:'logo.png', spicy:false, n:{ru:'Fuse Tea 0.5L', uz:'Fuse Tea 0.5L', en:'Fuse Tea 0.5L'}},
+    {id:'fuse_1', p:0, img:'logo.png', spicy:false, n:{ru:'Fuse Tea 1L', uz:'Fuse Tea 1L', en:'Fuse Tea 1L'}},
+    {id:'lipton_05', p:0, img:'logo.png', spicy:false, n:{ru:'Lipton 0.5L', uz:'Lipton 0.5L', en:'Lipton 0.5L'}},
+    {id:'lipton_1', p:0, img:'logo.png', spicy:false, n:{ru:'Lipton 1L', uz:'Lipton 1L', en:'Lipton 1L'}},
+    {id:'mojito_05', p:0, img:'logo.png', spicy:false, n:{ru:'Mojito 0.5L', uz:'Mojito 0.5L', en:'Mojito 0.5L'}},
+    {id:'dinay_05', p:0, img:'logo.png', spicy:false, n:{ru:'Dinay 0.5L', uz:'Dinay 0.5L', en:'Dinay 0.5L'}},
+    {id:'dinay_1ll', p:0, img:'logo.png', spicy:false, n:{ru:'Dinay 1LL', uz:'Dinay 1LL', en:'Dinay 1LL'}},
+
+    {id:'adrenaline_025', p:0, img:'logo.png', spicy:false, n:{ru:'Adrenaline 0.25L', uz:'Adrenaline 0.25L', en:'Adrenaline 0.25L'}},
+    {id:'adrenaline_049', p:0, img:'logo.png', spicy:false, n:{ru:'Adrenaline 0.49L', uz:'Adrenaline 0.49L', en:'Adrenaline 0.49L'}},
+
+    {id:'bliss_1', p:0, img:'logo.png', spicy:false, n:{ru:'Сок Bliss 1L', uz:'Bliss sharbat 1L', en:'Bliss juice 1L'}},
+    {id:'water_05', p:0, img:'logo.png', spicy:false, n:{ru:'Минеральная вода 0.5L', uz:'Mineral suv 0.5L', en:'Mineral water 0.5L'}},
+    {id:'water_1', p:0, img:'logo.png', spicy:false, n:{ru:'Минеральная вода 1L', uz:'Mineral suv 1L', en:'Mineral water 1L'}}
   ]
 };
 
@@ -1499,7 +1618,7 @@ function price(key){
   const it = ITEM_BY_ID[base];
   if(!it) return 0;
   if(it.variants && v){
-    const vv = it.variants.find(x=>x.k===v);
+    const vv = it.variants.find(x=>String(x.k)===String(v));
     return vv ? vv.p : 0;
   }
   return it.p || 0;
@@ -1602,7 +1721,7 @@ function syncCarouselCounts(key){
 /* categories */
 function renderCats(){
   $('cats').innerHTML='';
-  const order = ['chicken','combo','drinks','sauce','garnish'];
+  const order = ['chicken','beef','combo','drinks','sauce','garnish'];
   order.forEach(k=>{
     $('cats').innerHTML += `<button class="btn ${k===category?'active':''}" onclick="setCategory('${k}')">${CATS[lang][k] || k}</button>`;
   });
@@ -1674,8 +1793,8 @@ function cardHTML(it, q=''){
     shownPrice = price(currentKey);
 
     sizesHtml = `<div class="sizes" onclick="event.stopPropagation()">` + it.variants.map(v=>{
-      const act = (v.k===cur) ? 'active' : '';
-      return `<div class="size-chip ${act}" onclick="setSize('${it.id}','${v.k}')">${escapeHtml(v.label)}</div>`;
+      const act = (String(v.k)===String(cur)) ? 'active' : '';
+      return `<div class="size-chip ${act}" onclick="setSize('${it.id}','${String(v.k)}')">${escapeHtml(v.label)}</div>`;
     }).join('') + `</div>`;
   }
 
@@ -1836,8 +1955,8 @@ function buildOrderLines(){
 
     let nm = getName(it);
     if(it.variants && v){
-      const vv = it.variants.find(x=>x.k===v);
-      const label = vv ? vv.label : v.toUpperCase();
+      const vv = it.variants.find(x=>String(x.k)===String(v));
+      const label = vv ? vv.label : String(v).toUpperCase();
       nm = `${nm} ${label}`;
     }
     if(it.spicy) nm = `🌶️ ${nm}`;
