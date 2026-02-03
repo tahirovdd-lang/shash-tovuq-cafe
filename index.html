@@ -52,10 +52,10 @@ body{
   padding-top: env(safe-area-inset-top);
 }
 
-/* ✅ Header: минимально уменьшили (не трогая текст/кнопки/лого) */
+/* ✅ Header: уменьшили ТОЛЬКО высоту/паддинги, не трогая текст/кнопки/лого */
 .header{
-  padding:18px 14px 34px;      /* было 22/40 */
-  min-height:158px;            /* было 170 */
+  padding:14px 14px 28px;        /* было 18px 14px 34px */
+  min-height:142px;              /* было 158px */
   color:#fff;
   position:relative;
   text-align:center;
@@ -72,7 +72,7 @@ body{
   border-bottom: 1px solid rgba(255,255,255,.16);
 
   /* ✅ доп. отступ сверху под системные кнопки Telegram */
-  padding-top: calc(18px + env(safe-area-inset-top));
+  padding-top: calc(14px + env(safe-area-inset-top)); /* было 18px */
 }
 .header::after{
   content:"";
@@ -86,7 +86,7 @@ body{
   content:"";
   position:absolute;
   left:0; right:0; bottom:0;
-  height:16px;
+  height:14px;                   /* было 16px */
   background: linear-gradient(90deg, rgba(255,27,45,0), rgba(255,27,45,.90), rgba(255,27,45,0));
   opacity:.95;
   pointer-events:none;
@@ -157,7 +157,7 @@ body{
 .header-actions{
   position:absolute;
   right:10px;
-  top: calc(10px + env(safe-area-inset-top)); /* ✅ не под системными кнопками */
+  top: calc(10px + env(safe-area-inset-top));
   z-index:90;
   display:flex;
   flex-direction:column;
@@ -805,7 +805,7 @@ body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color
 .img-modal-close:active{ transform:scale(.98); }
 
 @media (max-width:380px){
-  .header{ min-height:150px; padding:16px 12px 32px; padding-top: calc(16px + env(safe-area-inset-top)); }
+  .header{ min-height:136px; padding:12px 12px 26px; padding-top: calc(12px + env(safe-area-inset-top)); }
   .brand-title{ font-size:24px; transform: translateX(22px); }
   .brand-phone{ transform: translateX(22px); }
   .brand-tel{ transform: translateX(22px); }
@@ -1050,7 +1050,6 @@ body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color
 </div><!-- /#app -->
 
 <script>
-/* ✅ фикс “50% высоты” и корректная работа в Telegram */
 Telegram.WebApp.ready();
 Telegram.WebApp.expand();
 try{ Telegram.WebApp.requestFullscreen?.(); }catch(_){}
@@ -1129,17 +1128,16 @@ const TEXT={
   en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart',sizes:'Size'}
 };
 
-/* ✅ Категории: Комбо/Напитки/Соус/Гарнир — отдельные.
-   ✅ Всё остальное — в Курица (с подкатегориями как просил). */
+/* ✅ Категории */
 const CATS={
   ru:{chicken:'🐔 Курица',combo:'🍱 Комбо',drinks:'🥤 Напитки',sauce:'🥫 Соус',garnish:'🍟 Гарнир'},
   uz:{chicken:"🐔 Tovuq",combo:'🍱 Kombo',drinks:'🥤 Ichimliklar',sauce:'🥫 Sous',garnish:'🍟 Garnir'},
   en:{chicken:'🐔 Chicken',combo:'🍱 Combo',drinks:'🥤 Drinks',sauce:'🥫 Sauce',garnish:'🍟 Side'}
 };
 
-/* ✅ Подкатегории только для Курица */
+/* ✅ Подкатегории для Курица (добавили "Комбо") */
 const SUBCATS = {
-  chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','chicken_sets']
+  chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','chicken_sets','combo']
 };
 const SUBCATS_I18N = {
   ru:{
@@ -1150,7 +1148,8 @@ const SUBCATS_I18N = {
     wings:'🍗 Крылышки',
     sausages:'🌭 Колбаски',
     shashlik:'🍢 Шашлычок',
-    chicken_sets:'🐔 Шаштовук'
+    chicken_sets:'🐔 Шаштовук',
+    combo:'🍱 Комбо'
   },
   uz:{
     lavash:'🌯 Lavash',
@@ -1160,7 +1159,8 @@ const SUBCATS_I18N = {
     wings:"🍗 Qanotchalar",
     sausages:'🌭 Kolbaska',
     shashlik:'🍢 Shashlik',
-    chicken_sets:'🐔 Shash tovuq'
+    chicken_sets:'🐔 Shash tovuq',
+    combo:'🍱 Kombo'
   },
   en:{
     lavash:'🌯 Lavash',
@@ -1170,18 +1170,16 @@ const SUBCATS_I18N = {
     wings:'🍗 Wings',
     sausages:'🌭 Sausages',
     shashlik:'🍢 Skewer',
-    chicken_sets:'🐔 Chicken pieces'
+    chicken_sets:'🐔 Chicken pieces',
+    combo:'🍱 Combo'
   }
 };
 
 /* ✅ МЕНЮ
-   - Варианты размеров делаем красиво через "variants"
-   - Острое: spicy:true -> в карточке сверху 🌶️
-   - Гарнир/Соус/Напитки/Комбо как отдельные категории
+   ✅ Комбо: картинки из /images/
 */
 const MENU2 = {
   chicken:{
-    /* Лаваш (обычный + острый) */
     lavash:[
       {
         id:'lavash_classic',
@@ -1198,7 +1196,6 @@ const MENU2 = {
       }
     ],
 
-    /* Пита курица (обычная + острая) */
     pita:[
       {
         id:'pita_classic',
@@ -1215,7 +1212,6 @@ const MENU2 = {
       }
     ],
 
-    /* Донер: в пите (без размеров) + в тарелке (M/L/XL) */
     doner:[
       {
         id:'doner_pita',
@@ -1245,43 +1241,48 @@ const MENU2 = {
       }
     ],
 
-    /* Бургер */
     burger:[
       {id:'ch_burger', p:25000, img:'logo.png', n:{ru:'Куриный Бургер', uz:'Tovuq burger', en:'Chicken burger'}}
     ],
 
-    /* Крылышки */
     wings:[
       {id:'wings_1kg', p:75000, img:'logo.png', n:{ru:'Крылышки 1 кг', uz:'Qanot 1 kg', en:'Wings 1 kg'}}
     ],
 
-    /* Колбаски */
     sausages:[
       {id:'sausages_fries', p:40000, img:'logo.png', n:{ru:'Колбаски + Фри', uz:'Kolbaska + fri', en:'Sausages + fries'}},
-      {id:'sosiski_fries_pita', p:20000, img:'logo.png', n:{ru:'Сосиськи + Фри + Пита', uz:'Sosiska + fri + pita', en:'Sausage + fries + pita'}}
+      /* ✅ переименовали блюдо */
+      {id:'sosiski_fries_pita', p:20000, img:'logo.png', n:{ru:'Сосиски + Фри + Пита', uz:'Sosiska + fri + pita', en:'Sausage + fries + pita'}}
     ],
 
-    /* Шашлычок */
     shashlik:[
       {id:'shashlik_fries_pita', p:32000, img:'logo.png', n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + fri + pita', en:'Chicken skewer + fries + pita'}}
     ],
 
-    /* Шаштовук (по кускам) */
+    /* ✅ переименовали шаштовук позиции */
     chicken_sets:[
-      {id:'shashtovuq_2', p:22000, img:'logo.png', n:{ru:'Шаштовук 2 куска', uz:'Shash tovuq 2 bo‘lak', en:'Chicken 2 pcs'}},
-      {id:'shashtovuq_3', p:27000, img:'logo.png', n:{ru:'Шаштовук 3 куска', uz:'Shash tovuq 3 bo‘lak', en:'Chicken 3 pcs'}},
-      {id:'shashtovuq_4', p:32000, img:'logo.png', n:{ru:'Шаштовук 4 куска', uz:'Shash tovuq 4 bo‘lak', en:'Chicken 4 pcs'}},
-      {id:'shashtovuq_5', p:37000, img:'logo.png', n:{ru:'Шаштовук 5 кусков', uz:'Shash tovuq 5 bo‘lak', en:'Chicken 5 pcs'}},
-      {id:'shashtovuq_6', p:42000, img:'logo.png', n:{ru:'Шаштовук 6 кусков', uz:'Shash tovuq 6 bo‘lak', en:'Chicken 6 pcs'}}
+      {id:'shashtovuq_2', p:22000, img:'logo.png', n:{ru:'Шаштовук + Пита + 2 куска', uz:"Shash tovuq + pita + 2 bo‘lak", en:'Chicken + pita + 2 pcs'}},
+      {id:'shashtovuq_3', p:27000, img:'logo.png', n:{ru:'Шаштовук + Пита + 3 куска', uz:"Shash tovuq + pita + 3 bo‘lak", en:'Chicken + pita + 3 pcs'}},
+      {id:'shashtovuq_4', p:32000, img:'logo.png', n:{ru:'Шаштовук + Пита + 4 куска', uz:"Shash tovuq + pita + 4 bo‘lak", en:'Chicken + pita + 4 pcs'}},
+      {id:'shashtovuq_5', p:37000, img:'logo.png', n:{ru:'Шаштовук + Пита + 5 кусков', uz:"Shash tovuq + pita + 5 bo‘lak", en:'Chicken + pita + 5 pcs'}},
+      {id:'shashtovuq_6', p:42000, img:'logo.png', n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shash tovuq + pita + 6 bo‘lak", en:'Chicken + pita + 6 pcs'}}
+    ],
+
+    /* ✅ Подкатегория Комбо внутри Курица (как попросил) */
+    combo:[
+      {id:'combo_lavash',  p:28000, img:'images/lavash_combo.jpg',  n:{ru:'Лаваш комбо',   uz:'Lavash kombo',   en:'Lavash combo'}},
+      {id:'combo_burger',  p:28000, img:'images/burger_combo.jpg',  n:{ru:'Бургер комбо',  uz:'Burger kombo',   en:'Burger combo'}},
+      {id:'combo_shashlik',p:32000, img:'images/shashlik_combo.jpg',n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
     ]
   },
 
-  /* ✅ Отдельная категория Комбо */
+  /* ✅ Отдельная категория Комбо (и здесь тоже эти блюда) */
   combo:[
-    {id:'combo_lavash', p:28000, img:'logo.png', n:{ru:'Лаваш Комбо', uz:'Lavash kombo', en:'Lavash combo'}}
+    {id:'combo_lavash',  p:28000, img:'images/lavash_combo.jpg',  n:{ru:'Лаваш комбо',   uz:'Lavash kombo',   en:'Lavash combo'}},
+    {id:'combo_burger',  p:28000, img:'images/burger_combo.jpg',  n:{ru:'Бургер комбо',  uz:'Burger kombo',   en:'Burger combo'}},
+    {id:'combo_shashlik',p:32000, img:'images/shashlik_combo.jpg',n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
   ],
 
-  /* ✅ Отдельная категория Напитки (оставил то, что было) */
   drinks:[
     {id:'drink_cola_05', p:12000, img:'logo.png', n:{ru:'Coca-Cola 0.5L', uz:'Coca-Cola 0.5L', en:'Coca-Cola 0.5L'}},
     {id:'drink_fanta_05',p:12000, img:'logo.png', n:{ru:'Fanta 0.5L',     uz:'Fanta 0.5L',     en:'Fanta 0.5L'}},
@@ -1289,13 +1290,11 @@ const MENU2 = {
     {id:'drink_tea',     p:8000,  img:'logo.png', n:{ru:'Ice Tea 0.5L',   uz:'Ice Tea 0.5L',   en:'Ice Tea 0.5L'}}
   ],
 
-  /* ✅ Отдельная категория Соус (оставил то, что было) */
   sauce:[
     {id:'sauce_ketchup', p:3000, img:'logo.png', n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'}},
     {id:'sauce_garlic',  p:4000, img:'logo.png', n:{ru:'Чесночный соус', uz:"Sarimsoq sous", en:'Garlic sauce'}}
   ],
 
-  /* ✅ Отдельная категория Гарнир (внес твои позиции) */
   garnish:[
     {id:'gar_fries_L',       p:10000, img:'logo.png', n:{ru:'Картофель Фри L',  uz:'Fri kartoshka L',  en:'French fries L'}},
     {id:'gar_fries_XL',      p:15000, img:'logo.png', n:{ru:'Картофель Фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
@@ -1304,8 +1303,8 @@ const MENU2 = {
   ]
 };
 
-/* carousels ids (можешь менять как хочешь) */
-const COMBO_IDS   = ['combo_lavash'];
+/* ✅ Карусель Комбо: все 3 */
+const COMBO_IDS   = ['combo_lavash','combo_burger','combo_shashlik'];
 const POPULAR_IDS = ['lavash_classic_M','pita_classic_M','doner_pita','ch_burger'];
 const NEW_IDS     = ['lavash_spicy_M','pita_spicy_M','doner_plate_spicy_M','wings_1kg'];
 
@@ -1473,7 +1472,6 @@ const BASE_BY_VID = {}; // variantId -> baseId
     if(!it) return;
 
     if(Array.isArray(it.variants) && it.variants.length){
-      // дефолтный размер
       if(!selectedSize[it.id]) selectedSize[it.id] = it.variants[0].k;
 
       it.variants.forEach(v=>{
@@ -1507,7 +1505,6 @@ const BASE_BY_VID = {}; // variantId -> baseId
   }
 })();
 
-/* ✅ получить активный variantId для карточки */
 function getActiveIdForItem(it){
   if(Array.isArray(it.variants) && it.variants.length){
     const k = selectedSize[it.id] || it.variants[0].k;
@@ -1520,7 +1517,6 @@ function getDisplayPriceForItem(it){
   return ITEM_BY_ID[id]?.p || it.p || 0;
 }
 
-/* carousels render */
 function miniCounterHTML(id, prefix){
   const key = `${prefix}_${id}`;
   return `
@@ -1536,6 +1532,7 @@ function imgClickAttr(src){
   return `onclick="event.stopPropagation(); openImgModal('${safe}')"`;
 }
 
+/* carousels render */
 function renderCombo(){
   $('comboRow').innerHTML = '';
   COMBO_IDS.forEach(id=>{
@@ -1562,7 +1559,6 @@ function renderPopular(){
     const it = ITEM_BY_ID[id];
     if(!it) return;
     cart[id] = cart[id] || 0;
-    const baseId = BASE_BY_VID[id] || id;
     const name = getName(it) + (it.vkey ? ` ${it.vkey}` : '');
     $('popularRow').innerHTML += `
       <div class="small-card" onclick="chg('${id}',1)">
@@ -1636,7 +1632,6 @@ function renderSubcatsSheet(){
 function setCategory(cat){
   category = cat;
 
-  // ✅ подкатегории только в chicken
   const list = SUBCATS[category];
   subcat = (list && list.length) ? list[0] : '';
 
@@ -1669,12 +1664,8 @@ function sizeRowHTML(baseItem){
 }
 function setSize(baseId, k){
   selectedSize[baseId] = k;
-
-  // обновить цену на карточке и счетчик для выбранного варианта
   renderProducts();
   if(isSearchOpen()) searchProducts();
-
-  // карусели не трогаем (там уже variantId фиксированный)
   updateTotal();
 }
 
@@ -1715,7 +1706,6 @@ function renderProducts(){
   $('products').innerHTML='';
   const items = getCurrentItems();
   items.forEach(it=>{
-    // для вариантов — показываем базовую карточку, корзина хранит variantId
     $('products').innerHTML += cardHTML(it,'');
   });
 }
@@ -1941,6 +1931,7 @@ function bindSave(){
 })();
 
 /* defaults */
+let category='chicken', subcat='lavash';
 (function initDefaults(){
   category = 'chicken';
   subcat = (SUBCATS[category] && SUBCATS[category].length) ? SUBCATS[category][0] : '';
