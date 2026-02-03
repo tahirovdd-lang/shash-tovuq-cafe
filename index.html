@@ -52,10 +52,10 @@ body{
   padding-top: env(safe-area-inset-top);
 }
 
-/* ✅ Header: уменьшили ТОЛЬКО высоту/паддинги, не трогая текст/кнопки/лого */
+/* ✅ Header: немного уменьшили (не трогая текст/кнопки/лого) */
 .header{
-  padding:14px 14px 28px;        /* было 18px 14px 34px */
-  min-height:142px;              /* было 158px */
+  padding:16px 14px 30px;      /* было 18px 14px 34px */
+  min-height:146px;            /* было 158px */
   color:#fff;
   position:relative;
   text-align:center;
@@ -71,8 +71,7 @@ body{
   box-shadow: 0 16px 34px rgba(0,0,0,.18);
   border-bottom: 1px solid rgba(255,255,255,.16);
 
-  /* ✅ доп. отступ сверху под системные кнопки Telegram */
-  padding-top: calc(14px + env(safe-area-inset-top)); /* было 18px */
+  padding-top: calc(16px + env(safe-area-inset-top));
 }
 .header::after{
   content:"";
@@ -86,7 +85,7 @@ body{
   content:"";
   position:absolute;
   left:0; right:0; bottom:0;
-  height:14px;                   /* было 16px */
+  height:16px;
   background: linear-gradient(90deg, rgba(255,27,45,0), rgba(255,27,45,.90), rgba(255,27,45,0));
   opacity:.95;
   pointer-events:none;
@@ -327,37 +326,36 @@ body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 .price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .price small{ font-weight:800; opacity:.75; margin-left:4px; }
 
-/* 🌶️ острое */
+/* 🌶️ spicy badge */
 .spicy-badge{
   position:absolute;
-  left:10px;
   top:10px;
+  left:10px;
   font-size:18px;
   pointer-events:none;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,.20));
 }
 
-/* размер */
-.size-row{
+/* size selector */
+.sizes{
   display:flex;
-  gap:8px;
+  gap:6px;
   justify-content:center;
-  margin-top:10px;
-  flex-wrap:wrap;
+  margin-top:8px;
 }
 .size-chip{
-  padding:7px 10px;
+  padding:6px 10px;
   border-radius:999px;
-  border:1px solid rgba(0,0,0,.12);
+  border:1px solid rgba(0,0,0,.10);
   background: rgba(255,255,255,.85);
   font-weight:900;
   font-size:12px;
   cursor:pointer;
-  box-shadow: 0 10px 18px rgba(0,0,0,.06);
+  transition:.12s;
+  user-select:none;
 }
 body[data-theme="dark"] .size-chip{
-  background: rgba(28,28,28,.92);
-  border-color: rgba(255,255,255,.12);
+  background: rgba(28,28,28,.90);
+  border-color: rgba(255,255,255,.14);
 }
 .size-chip.active{
   background: linear-gradient(135deg, var(--yellow1), var(--yellow2));
@@ -365,7 +363,7 @@ body[data-theme="dark"] .size-chip{
 }
 
 /* +/- */
-.counter{ display:flex; justify-content:center; gap:10px; margin-top:10px; align-items:center; }
+.counter{ display:flex; justify-content:center; gap:10px; margin-top:8px; align-items:center; }
 .counter button{
   width:34px;
   height:34px;
@@ -805,7 +803,7 @@ body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color
 .img-modal-close:active{ transform:scale(.98); }
 
 @media (max-width:380px){
-  .header{ min-height:136px; padding:12px 12px 26px; padding-top: calc(12px + env(safe-area-inset-top)); }
+  .header{ min-height:140px; padding:14px 12px 28px; padding-top: calc(14px + env(safe-area-inset-top)); }
   .brand-title{ font-size:24px; transform: translateX(22px); }
   .brand-phone{ transform: translateX(22px); }
   .brand-tel{ transform: translateX(22px); }
@@ -1123,190 +1121,198 @@ SHASH TOVUQ — when you want it truly delicious!
 };
 
 const TEXT={
-  ru:{delivery:'🚚 Доставка',pickup:'🏃 Самовывоз',address:'📍 Адрес доставки',phone:'📞 Телефон',cart:'🛒 Корзина',order:'Оформить заказ',comment:'✍️ Комментарий к заказу',cash:'💵 Наличные',click:'💳 CLICK',results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина',sizes:'Размер'},
-  uz:{delivery:'🚚 Yetkazish',pickup:'🏃 Olib ketish',address:'📍 Manzil',phone:'📞 Telefon',cart:'🛒 Savat',order:'Buyurtma berish',comment:'✍️ Izoh',cash:'💵 Naqd',click:'💳 CLICK',results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:"Savat bo‘sh",cart_btn:'🛒 Savat',sizes:'Hajm'},
-  en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart',sizes:'Size'}
+  ru:{delivery:'🚚 Доставка',pickup:'🏃 Самовывоз',address:'📍 Адрес доставки',phone:'📞 Телефон',cart:'🛒 Корзина',order:'Оформить заказ',comment:'✍️ Комментарий к заказу',cash:'💵 Наличные',click:'💳 CLICK',results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина'},
+  uz:{delivery:'🚚 Yetkazish',pickup:'🏃 Olib ketish',address:'📍 Manzil',phone:'📞 Telefon',cart:'🛒 Savat',order:'Buyurtma berish',comment:'✍️ Izoh',cash:'💵 Naqd',click:'💳 CLICK',results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:"Savat bo‘sh",cart_btn:'🛒 Savat'},
+  en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart'}
 };
 
-/* ✅ Категории */
+/* ✅ Категории: Комбо / Напитки / Соус / Гарнир отдельно + Курица */
 const CATS={
   ru:{chicken:'🐔 Курица',combo:'🍱 Комбо',drinks:'🥤 Напитки',sauce:'🥫 Соус',garnish:'🍟 Гарнир'},
   uz:{chicken:"🐔 Tovuq",combo:'🍱 Kombo',drinks:'🥤 Ichimliklar',sauce:'🥫 Sous',garnish:'🍟 Garnir'},
   en:{chicken:'🐔 Chicken',combo:'🍱 Combo',drinks:'🥤 Drinks',sauce:'🥫 Sauce',garnish:'🍟 Side'}
 };
 
-/* ✅ Подкатегории для Курица (добавили "Комбо") */
+/* ✅ Подкатегории только внутри Курица */
 const SUBCATS = {
-  chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','chicken_sets','combo']
+  chicken: ['combo_sc','lavash','pita','doner','burger','wings','sausages','shashlik','tovuq'],
+  combo: [],
+  drinks: [],
+  sauce: [],
+  garnish: []
 };
+
 const SUBCATS_I18N = {
   ru:{
+    combo_sc:'🍱 Комбо',
     lavash:'🌯 Лаваш',
-    pita:'🥙 Пита',
+    pita:'🥙 Пита курица',
     doner:'🌯 Донер',
-    burger:'🍔 Бургер',
+    burger:'🍔 Куриный бургер',
     wings:'🍗 Крылышки',
     sausages:'🌭 Колбаски',
     shashlik:'🍢 Шашлычок',
-    chicken_sets:'🐔 Шаштовук',
-    combo:'🍱 Комбо'
+    tovuq:'🐔 Шаштовук'
   },
   uz:{
+    combo_sc:'🍱 Kombo',
     lavash:'🌯 Lavash',
-    pita:'🥙 Pita',
+    pita:'🥙 Tovuq pita',
     doner:'🌯 Doner',
-    burger:'🍔 Burger',
-    wings:"🍗 Qanotchalar",
+    burger:'🍔 Tovuq burger',
+    wings:'🍗 Qanotchalar',
     sausages:'🌭 Kolbaska',
     shashlik:'🍢 Shashlik',
-    chicken_sets:'🐔 Shash tovuq',
-    combo:'🍱 Kombo'
+    tovuq:'🐔 Shashtovuq'
   },
   en:{
+    combo_sc:'🍱 Combo',
     lavash:'🌯 Lavash',
-    pita:'🥙 Pita',
+    pita:'🥙 Chicken pita',
     doner:'🌯 Doner',
-    burger:'🍔 Burger',
+    burger:'🍔 Chicken burger',
     wings:'🍗 Wings',
     sausages:'🌭 Sausages',
-    shashlik:'🍢 Skewer',
-    chicken_sets:'🐔 Chicken pieces',
-    combo:'🍱 Combo'
+    shashlik:'🍢 Skewers',
+    tovuq:'🐔 Shashtovuq'
   }
 };
 
-/* ✅ МЕНЮ
-   ✅ Комбо: картинки из /images/
-*/
+/* ✅ Меню: размеры M/L/XL сделаны внутри карточки */
 const MENU2 = {
   chicken:{
+    combo_sc:[
+      {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
+      {id:'combo_burger', p:28000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
+      {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
+    ],
     lavash:[
       {
-        id:'lavash_classic',
+        id:'lavash',
         img:'logo.png',
+        spicy:false,
         n:{ru:'Лаваш', uz:'Lavash', en:'Lavash'},
-        variants:[{k:'M',p:25000},{k:'L',p:30000},{k:'XL',p:35000}]
+        variants:[
+          {k:'m', label:'M', p:25000},
+          {k:'l', label:'L', p:30000},
+          {k:'xl', label:'XL', p:35000}
+        ]
       },
       {
         id:'lavash_spicy',
         img:'logo.png',
         spicy:true,
-        n:{ru:'Острый Лаваш', uz:"Achchiq lavash", en:'Spicy lavash'},
-        variants:[{k:'M',p:25000},{k:'L',p:30000},{k:'XL',p:35000}]
+        n:{ru:'Острый лаваш', uz:"Achchiq lavash", en:'Spicy lavash'},
+        variants:[
+          {k:'m', label:'M', p:25000},
+          {k:'l', label:'L', p:30000},
+          {k:'xl', label:'XL', p:35000}
+        ]
       }
     ],
-
     pita:[
       {
-        id:'pita_classic',
+        id:'pita',
         img:'logo.png',
+        spicy:false,
         n:{ru:'Шаурма в пите', uz:"Pitadagi shaurma", en:'Shawarma in pita'},
-        variants:[{k:'M',p:25000},{k:'L',p:30000},{k:'XL',p:35000}]
+        variants:[
+          {k:'m', label:'M', p:25000},
+          {k:'l', label:'L', p:30000},
+          {k:'xl', label:'XL', p:35000}
+        ]
       },
       {
         id:'pita_spicy',
         img:'logo.png',
         spicy:true,
-        n:{ru:'Острая Шаурма в пите', uz:"Achchiq pitadagi shaurma", en:'Spicy shawarma in pita'},
-        variants:[{k:'M',p:25000},{k:'L',p:30000},{k:'XL',p:35000}]
+        n:{ru:'Острая шаурма в пите', uz:"Achchiq pitadagi shaurma", en:'Spicy shawarma in pita'},
+        variants:[
+          {k:'m', label:'M', p:25000},
+          {k:'l', label:'L', p:30000},
+          {k:'xl', label:'XL', p:35000}
+        ]
       }
     ],
-
     doner:[
-      {
-        id:'doner_pita',
-        img:'logo.png',
-        n:{ru:'Донер в пите', uz:"Pitadagi doner", en:'Doner in pita'},
-        p:23000
-      },
-      {
-        id:'doner_pita_spicy',
-        img:'logo.png',
-        spicy:true,
-        n:{ru:'Острый Донер в пите', uz:"Achchiq pitadagi doner", en:'Spicy doner in pita'},
-        p:23000
-      },
+      {id:'doner_pita', p:23000, img:'logo.png', spicy:false, n:{ru:'Донер в пите', uz:'Doner pitada', en:'Doner in pita'}},
+      {id:'doner_pita_spicy', p:23000, img:'logo.png', spicy:true, n:{ru:'Острый донер в пите', uz:'Achchiq doner pitada', en:'Spicy doner in pita'}},
+
       {
         id:'doner_plate',
         img:'logo.png',
-        n:{ru:'Донер в тарелке', uz:"Likopchadagi doner", en:'Doner plate'},
-        variants:[{k:'M',p:25000},{k:'L',p:32000},{k:'XL',p:40000}]
+        spicy:false,
+        n:{ru:'Донер в тарелке', uz:"Doner tarelkada", en:'Doner plate'},
+        variants:[
+          {k:'m', label:'M', p:25000},
+          {k:'l', label:'L', p:32000},
+          {k:'xl', label:'XL', p:40000}
+        ]
       },
       {
         id:'doner_plate_spicy',
         img:'logo.png',
         spicy:true,
-        n:{ru:'Острый Донер в тарелке', uz:"Achchiq doner (likopcha)", en:'Spicy doner plate'},
-        variants:[{k:'M',p:25000},{k:'L',p:32000},{k:'XL',p:40000}]
+        n:{ru:'Острый донер в тарелке', uz:"Achchiq doner tarelkada", en:'Spicy doner plate'},
+        variants:[
+          {k:'m', label:'M', p:25000},
+          {k:'l', label:'L', p:32000},
+          {k:'xl', label:'XL', p:40000}
+        ]
       }
     ],
-
     burger:[
-      {id:'ch_burger', p:25000, img:'logo.png', n:{ru:'Куриный Бургер', uz:'Tovuq burger', en:'Chicken burger'}}
+      {id:'ch_burger', p:25000, img:'logo.png', spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}}
     ],
-
     wings:[
-      {id:'wings_1kg', p:75000, img:'logo.png', n:{ru:'Крылышки 1 кг', uz:'Qanot 1 kg', en:'Wings 1 kg'}}
+      {id:'wings_1kg', p:75000, img:'logo.png', spicy:false, n:{ru:'Крылышки 1 кг', uz:'Qanot 1 kg', en:'Wings 1 kg'}}
     ],
-
     sausages:[
-      {id:'sausages_fries', p:40000, img:'logo.png', n:{ru:'Колбаски + Фри', uz:'Kolbaska + fri', en:'Sausages + fries'}},
-      /* ✅ переименовали блюдо */
-      {id:'sosiski_fries_pita', p:20000, img:'logo.png', n:{ru:'Сосиски + Фри + Пита', uz:'Sosiska + fri + pita', en:'Sausage + fries + pita'}}
+      {id:'sausages_fries', p:40000, img:'logo.png', spicy:false, n:{ru:'Колбаски + Фри', uz:'Kolbaska + Fri', en:'Sausages + Fries'}},
+      {id:'sosiski_fries_pita', p:20000, img:'logo.png', spicy:false, n:{ru:'Сосиски + Фри + Пита', uz:'Sosiska + Fri + Pita', en:'Sausages + Fries + Pita'}}
     ],
-
     shashlik:[
-      {id:'shashlik_fries_pita', p:32000, img:'logo.png', n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + fri + pita', en:'Chicken skewer + fries + pita'}}
+      {id:'shashlik_fries_pita', p:32000, img:'logo.png', spicy:false, n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + Fri + Pita', en:'Skewer + Fries + Pita'}}
     ],
-
-    /* ✅ переименовали шаштовук позиции */
-    chicken_sets:[
-      {id:'shashtovuq_2', p:22000, img:'logo.png', n:{ru:'Шаштовук + Пита + 2 куска', uz:"Shash tovuq + pita + 2 bo‘lak", en:'Chicken + pita + 2 pcs'}},
-      {id:'shashtovuq_3', p:27000, img:'logo.png', n:{ru:'Шаштовук + Пита + 3 куска', uz:"Shash tovuq + pita + 3 bo‘lak", en:'Chicken + pita + 3 pcs'}},
-      {id:'shashtovuq_4', p:32000, img:'logo.png', n:{ru:'Шаштовук + Пита + 4 куска', uz:"Shash tovuq + pita + 4 bo‘lak", en:'Chicken + pita + 4 pcs'}},
-      {id:'shashtovuq_5', p:37000, img:'logo.png', n:{ru:'Шаштовук + Пита + 5 кусков', uz:"Shash tovuq + pita + 5 bo‘lak", en:'Chicken + pita + 5 pcs'}},
-      {id:'shashtovuq_6', p:42000, img:'logo.png', n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shash tovuq + pita + 6 bo‘lak", en:'Chicken + pita + 6 pcs'}}
-    ],
-
-    /* ✅ Подкатегория Комбо внутри Курица (как попросил) */
-    combo:[
-      {id:'combo_lavash',  p:28000, img:'images/lavash_combo.jpg',  n:{ru:'Лаваш комбо',   uz:'Lavash kombo',   en:'Lavash combo'}},
-      {id:'combo_burger',  p:28000, img:'images/burger_combo.jpg',  n:{ru:'Бургер комбо',  uz:'Burger kombo',   en:'Burger combo'}},
-      {id:'combo_shashlik',p:32000, img:'images/shashlik_combo.jpg',n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
+    tovuq:[
+      {id:'shashtovuq_2', p:22000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 2 куска', uz:"Shashtovuq + Pita + 2 dona", en:'Shashtovuq + Pita + 2 pcs'}},
+      {id:'shashtovuq_3', p:27000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 3 куска', uz:"Shashtovuq + Pita + 3 dona", en:'Shashtovuq + Pita + 3 pcs'}},
+      {id:'shashtovuq_4', p:32000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 4 куска', uz:"Shashtovuq + Pita + 4 dona", en:'Shashtovuq + Pita + 4 pcs'}},
+      {id:'shashtovuq_5', p:37000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 5 кусков', uz:"Shashtovuq + Pita + 5 dona", en:'Shashtovuq + Pita + 5 pcs'}},
+      {id:'shashtovuq_6', p:42000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shashtovuq + Pita + 6 dona", en:'Shashtovuq + Pita + 6 pcs'}}
     ]
   },
 
-  /* ✅ Отдельная категория Комбо (и здесь тоже эти блюда) */
+  /* ✅ Отдельная категория Комбо */
   combo:[
-    {id:'combo_lavash',  p:28000, img:'images/lavash_combo.jpg',  n:{ru:'Лаваш комбо',   uz:'Lavash kombo',   en:'Lavash combo'}},
-    {id:'combo_burger',  p:28000, img:'images/burger_combo.jpg',  n:{ru:'Бургер комбо',  uz:'Burger kombo',   en:'Burger combo'}},
-    {id:'combo_shashlik',p:32000, img:'images/shashlik_combo.jpg',n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
+    {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
+    {id:'combo_burger', p:28000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
+    {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
   ],
 
-  drinks:[
-    {id:'drink_cola_05', p:12000, img:'logo.png', n:{ru:'Coca-Cola 0.5L', uz:'Coca-Cola 0.5L', en:'Coca-Cola 0.5L'}},
-    {id:'drink_fanta_05',p:12000, img:'logo.png', n:{ru:'Fanta 0.5L',     uz:'Fanta 0.5L',     en:'Fanta 0.5L'}},
-    {id:'drink_water',   p:6000,  img:'logo.png', n:{ru:'Вода 0.5L',      uz:'Suv 0.5L',       en:'Water 0.5L'}},
-    {id:'drink_tea',     p:8000,  img:'logo.png', n:{ru:'Ice Tea 0.5L',   uz:'Ice Tea 0.5L',   en:'Ice Tea 0.5L'}}
-  ],
-
-  sauce:[
-    {id:'sauce_ketchup', p:3000, img:'logo.png', n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'}},
-    {id:'sauce_garlic',  p:4000, img:'logo.png', n:{ru:'Чесночный соус', uz:"Sarimsoq sous", en:'Garlic sauce'}}
-  ],
-
+  /* ✅ Гарнир отдельно */
   garnish:[
-    {id:'gar_fries_L',       p:10000, img:'logo.png', n:{ru:'Картофель Фри L',  uz:'Fri kartoshka L',  en:'French fries L'}},
-    {id:'gar_fries_XL',      p:15000, img:'logo.png', n:{ru:'Картофель Фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
-    {id:'gar_fries_pita',    p:16000, img:'logo.png', n:{ru:'Картофель Фри + Пита', uz:'Fri + pita', en:'Fries + pita'}},
-    {id:'gar_village',       p:20000, img:'logo.png', n:{ru:'Картофель по-деревенски', uz:'Qishloqcha kartoshka', en:'Country potatoes'}}
+    {id:'fries_l', p:10000, img:'logo.png', spicy:false, n:{ru:'Картофель фри L', uz:'Fri kartoshka L', en:'French fries L'}},
+    {id:'fries_xl', p:15000, img:'logo.png', spicy:false, n:{ru:'Картофель фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
+    {id:'fries_pita', p:16000, img:'logo.png', spicy:false, n:{ru:'Картофель фри + Пита', uz:'Fri + Pita', en:'Fries + Pita'}},
+    {id:'village_potato', p:20000, img:'logo.png', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}}
+  ],
+
+  /* ✅ Соус отдельно */
+  sauce:[
+    /* (если у тебя нет списка соусов — оставил пустым, можно добавить позже) */
+  ],
+
+  /* ✅ Напитки отдельно */
+  drinks:[
+    /* (если у тебя нет списка напитков — оставил пустым, можно добавить позже) */
   ]
 };
 
-/* ✅ Карусель Комбо: все 3 */
-const COMBO_IDS   = ['combo_lavash','combo_burger','combo_shashlik'];
-const POPULAR_IDS = ['lavash_classic_M','pita_classic_M','doner_pita','ch_burger'];
-const NEW_IDS     = ['lavash_spicy_M','pita_spicy_M','doner_plate_spicy_M','wings_1kg'];
+/* ✅ Карусели */
+const COMBO_IDS = ['combo_lavash','combo_burger','combo_shashlik'];
+const POPULAR_IDS = ['lavash__m','doner_pita','ch_burger','fries_l'];
+const NEW_IDS = ['pita_spicy__m','doner_plate_spicy__m','combo_burger','village_potato'];
 
 /* utils */
 function formatSum(x){
@@ -1325,6 +1331,7 @@ function highlight(text, q){
   return safe.slice(0,idx) + `<mark>${safe.slice(idx, idx+q.length)}</mark>` + safe.slice(idx+q.length);
 }
 
+/* Telegram user */
 const tgUser = Telegram.WebApp.initDataUnsafe?.user || {};
 const tg_username = tgUser.username || "";
 const tg_first_name = tgUser.first_name || "";
@@ -1407,9 +1414,7 @@ function openMailLegal(){
 /* theme */
 let lang='ru', category='chicken', subcat='', type='delivery', payment='cash';
 let cart = {};
-
-/* ✅ выбранный размер по базовому блюду */
-const selectedSize = {}; // { baseId: 'M' }
+const selectedSize = {}; // baseId -> variantKey
 
 function applyTheme(theme){
   document.body.setAttribute('data-theme', theme);
@@ -1464,66 +1469,50 @@ function getName(it){
   return (it && it.n && it.n[lang]) ? it.n[lang] : (it?.n?.ru || it?.id || '');
 }
 
-/* ✅ разворачиваем варианты размеров в "виртуальные" позиции */
+/* ✅ key helpers for variants */
+function makeKey(baseId, vKey){
+  return vKey ? `${baseId}__${vKey}` : baseId;
+}
+function parseKey(k){
+  const parts = String(k).split('__');
+  return { base: parts[0], v: parts[1] || '' };
+}
+
+/* index by id (base items) */
 const ITEM_BY_ID = {};
-const BASE_BY_VID = {}; // variantId -> baseId
 (function indexItems(){
-  const pushItem = (it)=>{
-    if(!it) return;
-
-    if(Array.isArray(it.variants) && it.variants.length){
-      if(!selectedSize[it.id]) selectedSize[it.id] = it.variants[0].k;
-
-      it.variants.forEach(v=>{
-        const vid = `${it.id}_${v.k}`;
-        ITEM_BY_ID[vid] = {
-          id: vid,
-          base_id: it.id,
-          vkey: v.k,
-          p: v.p,
-          img: it.img,
-          spicy: !!it.spicy,
-          n: it.n
-        };
-        BASE_BY_VID[vid] = it.id;
-      });
-    }else{
-      ITEM_BY_ID[it.id] = it;
-      BASE_BY_VID[it.id] = it.id;
-    }
-  };
-
   for(const cat in MENU2){
     const node = MENU2[cat];
     if(Array.isArray(node)){
-      node.forEach(pushItem);
+      node.forEach(it => ITEM_BY_ID[it.id] = it);
     }else{
       for(const sc in node){
-        (node[sc]||[]).forEach(pushItem);
+        (node[sc]||[]).forEach(it => ITEM_BY_ID[it.id] = it);
       }
     }
   }
 })();
 
-function getActiveIdForItem(it){
-  if(Array.isArray(it.variants) && it.variants.length){
-    const k = selectedSize[it.id] || it.variants[0].k;
-    return `${it.id}_${k}`;
+/* price for cart key */
+function price(key){
+  const {base, v} = parseKey(key);
+  const it = ITEM_BY_ID[base];
+  if(!it) return 0;
+  if(it.variants && v){
+    const vv = it.variants.find(x=>x.k===v);
+    return vv ? vv.p : 0;
   }
-  return it.id;
-}
-function getDisplayPriceForItem(it){
-  const id = getActiveIdForItem(it);
-  return ITEM_BY_ID[id]?.p || it.p || 0;
+  return it.p || 0;
 }
 
-function miniCounterHTML(id, prefix){
-  const key = `${prefix}_${id}`;
+/* carousels render */
+function miniCounterHTML(key, prefix){
+  const kk = `${prefix}_${key}`.replace(/[^a-zA-Z0-9_]/g,'_');
   return `
     <div class="mini-counter" onclick="event.stopPropagation()">
-      <button onclick="event.stopPropagation(); chg('${id}',-1)">−</button>
-      <div class="mini-count" id="${key}">${cart[id]||0}</div>
-      <button onclick="event.stopPropagation(); chg('${id}',1)">+</button>
+      <button onclick="event.stopPropagation(); chg('${key}',-1)">−</button>
+      <div class="mini-count" id="${kk}">${cart[key]||0}</div>
+      <button onclick="event.stopPropagation(); chg('${key}',1)">+</button>
     </div>
   `;
 }
@@ -1532,71 +1521,81 @@ function imgClickAttr(src){
   return `onclick="event.stopPropagation(); openImgModal('${safe}')"`;
 }
 
-/* carousels render */
+function defaultKeyFor(it){
+  if(it?.variants?.length){
+    return makeKey(it.id, selectedSize[it.id] || it.variants[0].k);
+  }
+  return it.id;
+}
+
 function renderCombo(){
   $('comboRow').innerHTML = '';
   COMBO_IDS.forEach(id=>{
     const it = ITEM_BY_ID[id];
     if(!it) return;
-    cart[id] = cart[id] || 0;
+    const key = defaultKeyFor(it);
+    cart[key] = cart[key] || 0;
     const name = getName(it);
     $('comboRow').innerHTML += `
-      <div class="combo-card" onclick="chg('${id}',1)">
+      <div class="combo-card" onclick="chg('${key}',1)">
         <div class="badge">🍱</div>
         <div class="combo-img">
           <img src="${it.img}" onerror="this.src='logo.png'" ${imgClickAttr(it.img)}>
         </div>
         <div class="combo-name">${escapeHtml(name)}</div>
-        <div class="combo-price">${formatSum(it.p)} <small>сум</small></div>
-        ${miniCounterHTML(id,'cb')}
+        <div class="combo-price">${formatSum(price(key))} <small>сум</small></div>
+        ${miniCounterHTML(key,'cb')}
       </div>
     `;
   });
 }
 function renderPopular(){
   $('popularRow').innerHTML = '';
-  POPULAR_IDS.forEach(id=>{
-    const it = ITEM_BY_ID[id];
+  POPULAR_IDS.forEach(key=>{
+    const {base} = parseKey(key);
+    const it = ITEM_BY_ID[base];
     if(!it) return;
-    cart[id] = cart[id] || 0;
-    const name = getName(it) + (it.vkey ? ` ${it.vkey}` : '');
+    cart[key] = cart[key] || 0;
+    const name = getName(it) + (parseKey(key).v ? ` ${parseKey(key).v.toUpperCase()}` : '');
     $('popularRow').innerHTML += `
-      <div class="small-card" onclick="chg('${id}',1)">
+      <div class="small-card" onclick="chg('${key}',1)">
         <div class="badge">🔥</div>
         <div class="small-img">
           <img src="${it.img}" onerror="this.src='logo.png'" ${imgClickAttr(it.img)}>
         </div>
         <div class="small-name">${escapeHtml(name)}</div>
-        <div class="small-price">${formatSum(it.p)} <small>сум</small></div>
-        ${miniCounterHTML(id,'pp')}
+        <div class="small-price">${formatSum(price(key))} <small>сум</small></div>
+        ${miniCounterHTML(key,'pp')}
       </div>
     `;
   });
 }
 function renderNew(){
   $('newRow').innerHTML = '';
-  NEW_IDS.forEach(id=>{
-    const it = ITEM_BY_ID[id];
+  NEW_IDS.forEach(key=>{
+    const {base} = parseKey(key);
+    const it = ITEM_BY_ID[base];
     if(!it) return;
-    cart[id] = cart[id] || 0;
-    const name = getName(it) + (it.vkey ? ` ${it.vkey}` : '');
+    cart[key] = cart[key] || 0;
+    const name = getName(it) + (parseKey(key).v ? ` ${parseKey(key).v.toUpperCase()}` : '');
     $('newRow').innerHTML += `
-      <div class="small-card" onclick="chg('${id}',1)">
+      <div class="small-card" onclick="chg('${key}',1)">
         <div class="badge">✨</div>
         <div class="small-img">
           <img src="${it.img}" onerror="this.src='logo.png'" ${imgClickAttr(it.img)}>
         </div>
         <div class="small-name">${escapeHtml(name)}</div>
-        <div class="small-price">${formatSum(it.p)} <small>сум</small></div>
-        ${miniCounterHTML(id,'nw')}
+        <div class="small-price">${formatSum(price(key))} <small>сум</small></div>
+        ${miniCounterHTML(key,'nw')}
       </div>
     `;
   });
 }
-function syncCarouselCounts(id){
-  ['cb_'+id,'pp_'+id,'nw_'+id].forEach(k=>{
-    const el = document.getElementById(k);
-    if(el) el.innerText = cart[id]||0;
+function syncCarouselCounts(key){
+  const safe = (s)=>String(s).replace(/[^a-zA-Z0-9_]/g,'_');
+  ['cb_','pp_','nw_'].forEach(pref=>{
+    const el = document.getElementById(safe(pref+key));
+    if(el) el.innerText = cart[key]||0;
   });
 }
 
@@ -1624,21 +1623,18 @@ function renderSubcatsSheet(){
     grid.innerHTML += `
       <div class="subcat-item ${active}" onclick="setSubcat('${sc}')">
         <div class="subcat-ic">${label.split(' ')[0] || '🍽️'}</div>
-        <div class="subcat-name">${escapeHtml(label.replace(/^[^\s]+\s?/, ''))}</div>
+        <div class="subcat-name">${escapeHtml(label.replace(/^[^\\s]+\\s?/, ''))}</div>
       </div>
     `;
   });
 }
 function setCategory(cat){
   category = cat;
-
   const list = SUBCATS[category];
   subcat = (list && list.length) ? list[0] : '';
-
   renderCats();
   renderSubcatsSheet();
   renderProducts();
-
   if(list && list.length) openSubcats(); else closeSubcats();
   if(isSearchOpen()) closeSearch();
 }
@@ -1649,57 +1645,56 @@ function setSubcat(sc){
   closeSubcats();
 }
 
-/* products */
-function sizeRowHTML(baseItem){
-  if(!Array.isArray(baseItem.variants) || !baseItem.variants.length) return '';
-  const cur = selectedSize[baseItem.id] || baseItem.variants[0].k;
-  return `
-    <div class="size-row" onclick="event.stopPropagation()">
-      ${baseItem.variants.map(v=>{
-        const act = (v.k === cur) ? 'active' : '';
-        return `<div class="size-chip ${act}" onclick="event.stopPropagation(); setSize('${baseItem.id}','${v.k}')">${escapeHtml(v.k)}</div>`;
-      }).join('')}
-    </div>
-  `;
-}
-function setSize(baseId, k){
-  selectedSize[baseId] = k;
-  renderProducts();
-  if(isSearchOpen()) searchProducts();
-  updateTotal();
-}
-
-function cardHTML(baseItem, q=''){
-  const name = getName(baseItem);
-  const nameHtml = highlight(name, q);
-
-  const activeId = getActiveIdForItem(baseItem);
-  const priceNow = getDisplayPriceForItem(baseItem);
-  const spicy = !!baseItem.spicy;
-
-  cart[activeId] = cart[activeId] || 0;
-
-  return `<div class="card">
-    ${spicy ? `<div class="spicy-badge">🌶️</div>` : ``}
-    <div class="img">
-      <img src="${baseItem.img}" onerror="this.src='logo.png'" onclick="event.stopPropagation(); openImgModal('${String(baseItem.img||'logo.png').replace(/'/g,"\\'")}')">
-    </div>
-    <div>${nameHtml}</div>
-    ${sizeRowHTML(baseItem)}
-    <div class="price">${formatSum(priceNow)} <small>сум</small></div>
-    <div class="counter">
-      <button onclick="chg('${activeId}',-1)">−</button>
-      <span id="c_${activeId}">${cart[activeId]||0}</span>
-      <button onclick="chg('${activeId}',1)">+</button>
-    </div>
-  </div>`;
-}
-
+/* items for current view */
 function getCurrentItems(){
   const node = MENU2[category];
   if(!node) return [];
-  if(Array.isArray(node)) return node;          // combo/drinks/sauce/garnish
-  return node[subcat] || [];                    // chicken -> subcats
+  if(Array.isArray(node)) return node;
+  return node[subcat] || [];
+}
+
+/* size UI */
+function setSize(baseId, vKey){
+  selectedSize[baseId] = vKey;
+  renderProducts();
+}
+
+function cardHTML(it, q=''){
+  const baseName = getName(it);
+  const nameHtml = highlight(baseName, q);
+  const isSpicy = !!it.spicy;
+
+  let currentKey = it.id;
+  let shownPrice = it.p || 0;
+  let sizesHtml = '';
+
+  if(it.variants && it.variants.length){
+    const cur = selectedSize[it.id] || it.variants[0].k;
+    currentKey = makeKey(it.id, cur);
+    shownPrice = price(currentKey);
+
+    sizesHtml = `<div class="sizes" onclick="event.stopPropagation()">` + it.variants.map(v=>{
+      const act = (v.k===cur) ? 'active' : '';
+      return `<div class="size-chip ${act}" onclick="setSize('${it.id}','${v.k}')">${escapeHtml(v.label)}</div>`;
+    }).join('') + `</div>`;
+  }
+
+  cart[currentKey] = cart[currentKey] || 0;
+
+  return `<div class="card">
+    ${isSpicy ? `<div class="spicy-badge">🌶️</div>` : ``}
+    <div class="img">
+      <img src="${it.img}" onerror="this.src='logo.png'" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
+    </div>
+    <div>${nameHtml}</div>
+    ${sizesHtml}
+    <div class="price">${formatSum(shownPrice)} <small>сум</small></div>
+    <div class="counter">
+      <button onclick="chg('${currentKey}',-1)">−</button>
+      <span id="c_${currentKey.replace(/[^a-zA-Z0-9_]/g,'_')}">${cart[currentKey]||0}</span>
+      <button onclick="chg('${currentKey}',1)">+</button>
+    </div>
+  </div>`;
 }
 
 function renderProducts(){
@@ -1711,17 +1706,17 @@ function renderProducts(){
 }
 
 /* cart */
-function chg(id,v){
-  cart[id]=Math.max(0,(cart[id]||0)+v);
-  const el = document.getElementById('c_'+id);
-  if(el) el.innerText=cart[id];
-  syncCarouselCounts(id);
+function chg(key,v){
+  cart[key]=Math.max(0,(cart[key]||0)+v);
+  const safeId = 'c_'+key.replace(/[^a-zA-Z0-9_]/g,'_');
+  const el = document.getElementById(safeId);
+  if(el) el.innerText=cart[key];
+  syncCarouselCounts(key);
   updateTotal();
 }
-function price(id){ return ITEM_BY_ID[id]?.p || 0; }
 function updateTotal(){
   let s=0;
-  for(let id in cart) s += (cart[id]||0) * price(id);
+  for(let k in cart) s += (cart[k]||0) * price(k);
   $('total').innerText = formatSum(s);
   $('stickyTotal').innerText = formatSum(s);
 }
@@ -1786,26 +1781,29 @@ function searchProducts(){
   $('products').innerHTML='';
   if(!q){ renderProducts(); return; }
 
-  const matchBase = (base)=>{
-    const name = getName(base);
-    const n_ru = (base.n?.ru||'').toLowerCase();
-    const n_uz = (base.n?.uz||'').toLowerCase();
-    const n_en = (base.n?.en||'').toLowerCase();
-    const n_cur = String(name).toLowerCase();
-    return (n_cur.includes(q) || n_ru.includes(q) || n_uz.includes(q) || n_en.includes(q));
+  const pushCard = (it)=>{
+    const baseName = getName(it);
+    const allNames = [
+      String(baseName||'').toLowerCase(),
+      String(it.n?.ru||'').toLowerCase(),
+      String(it.n?.uz||'').toLowerCase(),
+      String(it.n?.en||'').toLowerCase()
+    ];
+    if(it.variants){
+      it.variants.forEach(v=> allNames.push(String(v.label||'').toLowerCase()));
+    }
+    if(allNames.some(x=>x.includes(q))){
+      $('products').innerHTML += cardHTML(it, q);
+    }
   };
 
   for(const cat in MENU2){
     const node = MENU2[cat];
     if(Array.isArray(node)){
-      node.forEach(base=>{
-        if(matchBase(base)) $('products').innerHTML += cardHTML(base, q);
-      });
+      node.forEach(pushCard);
     }else{
       for(const sc in node){
-        (node[sc]||[]).forEach(base=>{
-          if(matchBase(base)) $('products').innerHTML += cardHTML(base, q);
-        });
+        (node[sc]||[]).forEach(pushCard);
       }
     }
   }
@@ -1823,29 +1821,36 @@ function genOrderId(){
 }
 function calcTotalNum(){
   let s = 0;
-  for (const id in cart) s += (Number(cart[id] || 0) * price(id));
+  for (const k in cart) s += (Number(cart[k] || 0) * price(k));
   return s;
 }
 function buildOrderLines(){
   const lines = [];
-  for(const id in cart){
-    const qty = Number(cart[id]||0);
+  for(const k in cart){
+    const qty = Number(cart[k]||0);
     if(qty<=0) continue;
-    const it = ITEM_BY_ID[id];
+
+    const {base, v} = parseKey(k);
+    const it = ITEM_BY_ID[base];
     if(!it) continue;
 
-    const baseName = getName(it);
-    const nameWithSize = it.vkey ? `${baseName} ${it.vkey}` : baseName;
+    let nm = getName(it);
+    if(it.variants && v){
+      const vv = it.variants.find(x=>x.k===v);
+      const label = vv ? vv.label : v.toUpperCase();
+      nm = `${nm} ${label}`;
+    }
+    if(it.spicy) nm = `🌶️ ${nm}`;
 
-    lines.push({ id, name: nameWithSize, qty, price: it.p, sum: it.p * qty, spicy: !!it.spicy });
+    lines.push({ key:k, id: base, variant:v||'', name: nm, qty, price: price(k), sum: price(k) * qty });
   }
   return lines;
 }
 function sendOrder(){
   const cleanOrder = {};
-  for (const id in cart) {
-    const q = Number(cart[id] || 0);
-    if (q > 0) cleanOrder[id] = q;
+  for (const k in cart) {
+    const q = Number(cart[k] || 0);
+    if (q > 0) cleanOrder[k] = q;
   }
   if (Object.keys(cleanOrder).length === 0) {
     alert(TEXT[lang].empty);
@@ -1931,7 +1936,6 @@ function bindSave(){
 })();
 
 /* defaults */
-let category='chicken', subcat='lavash';
 (function initDefaults(){
   category = 'chicken';
   subcat = (SUBCATS[category] && SUBCATS[category].length) ? SUBCATS[category][0] : '';
