@@ -48,7 +48,7 @@ body{
   padding-bottom:120px; /* ✅ запас под нижнюю корзину */
 }
 
-/* ===== header (✅ красный) ===== */
+/* ===== header (✅ ярко красный) ===== */
 .header{
   padding:18px 14px 30px;
   color:#fff;
@@ -58,9 +58,12 @@ body{
   align-items:center;
   justify-content:center;
   overflow:hidden;
+
+  /* ✅ яркий красный (без черного затемнения) */
   background:
-    linear-gradient(180deg, rgba(180,15,24,.56), rgba(0,0,0,.34)),
+    linear-gradient(180deg, rgba(255,0,28,.92), rgba(180,15,24,.92)),
     url("atlas.jpg") center/cover no-repeat;
+
   box-shadow: 0 16px 34px rgba(0,0,0,.18);
   border-bottom: 1px solid rgba(255,255,255,.16);
 }
@@ -68,8 +71,8 @@ body{
   content:"";
   position:absolute;
   inset:0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   pointer-events:none;
 }
 .header::before{
@@ -77,8 +80,8 @@ body{
   position:absolute;
   left:0; right:0; bottom:0;
   height:16px;
-  background: linear-gradient(90deg, rgba(180,15,24,0), rgba(180,15,24,.65), rgba(180,15,24,0));
-  opacity:.85;
+  background: linear-gradient(90deg, rgba(255,0,28,0), rgba(255,0,28,.85), rgba(255,0,28,0));
+  opacity:.95;
   pointer-events:none;
 }
 .header img{
@@ -110,9 +113,10 @@ body{
   text-shadow: 0 10px 18px rgba(0,0,0,.25);
 }
 
+/* ✅ SHASH TOVUQ меньше */
 .brand-title{
   font-family:'Yeseva One', serif;
-  font-size:38px;
+  font-size:30px; /* было 38 */
   letter-spacing:1px;
   text-transform:uppercase;
   text-shadow: 0 12px 22px rgba(0,0,0,.28);
@@ -132,6 +136,7 @@ body{
   opacity:.95;
 }
 
+/* кнопки в шапке */
 .geo-btn{
   position:absolute;
   right:14px;
@@ -147,14 +152,50 @@ body{
   cursor:pointer;
   z-index:80;
   color:#fff;
-  background: rgba(255,255,255,.14);
-  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.26);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 14px 30px rgba(0,0,0,.18);
   transition:.15s;
 }
 .geo-btn:active{ transform:scale(.97); }
+
+/* ✅ бургер в правый верхний угол */
+.burger-btn{
+  position:absolute;
+  right:14px;
+  top:12px;              /* было bottom */
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:85;
+  color:#fff;
+  background: rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.26);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.18);
+  transition:.15s;
+}
+/* ✅ чтобы не конфликтовало с geo-btn — geo уедет левее */
+.geo-btn{ right:62px; top:12px; }
+
+.burger-btn:active{ transform:scale(.97); }
+.burger-ic{ width:18px; height:12px; position:relative; }
+.burger-ic span{
+  position:absolute; left:0; right:0;
+  height:2px; border-radius:8px;
+  background:#fff; opacity:.95;
+}
+.burger-ic span:nth-child(1){ top:0; }
+.burger-ic span:nth-child(2){ top:5px; }
+.burger-ic span:nth-child(3){ bottom:0; }
+
 .search-btn{
   position:absolute;
   right:14px;
@@ -170,44 +211,14 @@ body{
   cursor:pointer;
   z-index:60;
   color:#fff;
-  background: rgba(255,255,255,.14);
-  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.26);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 14px 30px rgba(0,0,0,.18);
   transition:.15s;
 }
 .search-btn:active{ transform:scale(.97); }
-.burger-btn{
-  position:absolute;
-  right:62px;
-  bottom:12px;
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  z-index:65;
-  color:#fff;
-  background: rgba(255,255,255,.14);
-  border:1px solid rgba(255,255,255,.22);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 14px 30px rgba(0,0,0,.18);
-  transition:.15s;
-}
-.burger-btn:active{ transform:scale(.97); }
-.burger-ic{ width:18px; height:12px; position:relative; }
-.burger-ic span{
-  position:absolute; left:0; right:0;
-  height:2px; border-radius:8px;
-  background:#fff; opacity:.95;
-}
-.burger-ic span:nth-child(1){ top:0; }
-.burger-ic span:nth-child(2){ top:5px; }
-.burger-ic span:nth-child(3){ bottom:0; }
 
 /* ===== common ===== */
 .langs,.types,.payments{
@@ -231,7 +242,7 @@ body{
 }
 .btn:active{ transform:scale(.98); }
 
-/* ✅ ЯЗЫК = желтый */
+/* ✅ ЯЗЫК = желтый + флаги в тексте кнопок */
 .langs .btn{
   border-color: rgba(212,160,23,.30);
   background: rgba(255,211,61,.22);
@@ -287,7 +298,7 @@ body[data-theme="dark"] .input{ background: rgba(28,28,28,.90); }
   box-shadow: 0 14px 30px rgba(180,15,24,.12);
 }
 
-/* ✅ категории = желтый */
+/* ✅ категории: активная ярко желтая, неактивная белая */
 .categories{
   display:flex;
   gap:8px;
@@ -300,14 +311,16 @@ body[data-theme="dark"] .input{ background: rgba(28,28,28,.90); }
   padding:9px 12px;
   border-radius:16px;
   font-size:13px;
-  border-color: rgba(212,160,23,.30);
-  background: rgba(255,211,61,.18);
+
+  background:#fff; /* ✅ без выбора белая */
+  border:1px solid rgba(0,0,0,.10);
+  color: var(--text);
 }
 .categories .btn.active{
-  background: linear-gradient(135deg, var(--yellow1), var(--yellow2));
+  background: linear-gradient(135deg, #ffef6a, #ffd33d);
   color:#111;
-  border:1px solid rgba(0,0,0,.10);
-  box-shadow: 0 14px 30px rgba(212,160,23,.16);
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow: 0 14px 30px rgba(212,160,23,.22);
 }
 
 /* ✅ подкатегории = желтый */
@@ -389,8 +402,6 @@ body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
   -webkit-backdrop-filter: blur(10px);
 }
 body[data-theme="dark"] .cart{ background: rgba(28,28,28,.90); border-color: rgba(180,15,24,.22); }
-
-/* ✅ “Корзина:” красным */
 #cartTitle{ color: var(--red2); }
 
 textarea.input{ height:90px; }
@@ -739,7 +750,7 @@ body[data-theme="dark"] .legal-card{
 .legal-actions .tabbtn{ flex:1 1 auto; }
 
 @media (max-width:380px){
-  .brand-title{ font-size:32px; transform: translateX(22px); }
+  .brand-title{ font-size:26px; transform: translateX(22px); }
   .header img{ width:76px; padding:7px; border-radius:16px; }
   .geo-btn,.burger-btn,.search-btn{ width:36px; height:36px; }
   .products{ gap:12px; }
@@ -756,13 +767,9 @@ body[data-theme="dark"] .legal-card{
 <div class="header">
   <img src="logo.png" onerror="this.src='logo.png'">
   <div style="position:relative; z-index:6;">
-    <!-- ✅ Fast Food выше -->
     <div class="brand-top">Fast Food</div>
-
     <div class="brand-title">SHASH TOVUQ</div>
     <div class="brand-sub"></div>
-
-    <!-- ✅ вместо телефона -->
     <div class="brand-phone">Tatib ko'ring mazali !</div>
   </div>
 
@@ -782,9 +789,9 @@ body[data-theme="dark"] .legal-card{
 </div>
 
 <div class="langs">
-  <button class="btn active" onclick="setLang('ru',this)">RU</button>
-  <button class="btn" onclick="setLang('uz',this)">UZ</button>
-  <button class="btn" onclick="setLang('en',this)">EN</button>
+  <button class="btn active" onclick="setLang('ru',this)">🇷🇺 RU</button>
+  <button class="btn" onclick="setLang('uz',this)">🇺🇿 UZ</button>
+  <button class="btn" onclick="setLang('en',this)">🇬🇧 EN</button>
 </div>
 
 <div class="popular-wrap" id="popularWrap">
@@ -870,7 +877,6 @@ body[data-theme="dark"] .legal-card{
       <div class="menu-right">›</div>
     </div>
 
-    <!-- ✅ номер телефона в бургер -->
     <a class="menu-item" href="tel:+998954103738" onclick="closeTopMenu()">
       <div class="menu-left">
         <div class="menu-ic">📞</div>
@@ -882,7 +888,6 @@ body[data-theme="dark"] .legal-card{
       <div class="menu-right">›</div>
     </a>
 
-    <!-- ✅ instagram в бургер -->
     <a class="menu-item" href="#" onclick="openInstagram(event)">
       <div class="menu-left">
         <div class="menu-ic">📷</div>
@@ -957,8 +962,6 @@ Telegram.WebApp.expand?.();
 
 const $ = (id)=>document.getElementById(id);
 
-/* ✅ обновили телефон и инстаграм */
-const PHONE_TEL  = "tel:+998954103738";
 const IG_URL = "https://www.instagram.com/shash.tovuq.n1/";
 const YANDEX_WIDGET_URL = "https://yandex.ru/sprav/widget/rating-badge/23178318202?type=rating";
 const MAP_URL = "https://yandex.uz/maps/org/23178318202/?ll=66.950144%2C39.645189&z=16.65";
