@@ -52,7 +52,7 @@ body{
   padding-top: env(safe-area-inset-top);
 }
 
-/* ✅ Header: ЕЩЁ немного уменьшили (НЕ трогая текст/кнопки/лого) */
+/* ✅ Header: уменьшенный */
 .header{
   padding:14px 14px 26px;
   min-height:138px;
@@ -802,6 +802,53 @@ body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color
 }
 .img-modal-close:active{ transform:scale(.98); }
 
+/* ✅ Splash (Lavash Combo) */
+.splash{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index:9000;
+  opacity:0;
+  pointer-events:none;
+  transition:.22s;
+}
+.splash.show{
+  opacity:1;
+  pointer-events:auto;
+}
+.splash-card{
+  width:min(92vw, 520px);
+  border-radius:26px;
+  overflow:hidden;
+  background: rgba(255,255,255,.92);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow: 0 26px 90px rgba(0,0,0,.40);
+}
+body[data-theme="dark"] .splash-card{
+  background: rgba(18,18,18,.92);
+  border-color: rgba(255,255,255,.12);
+}
+.splash-card img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:cover;
+}
+.splash-caption{
+  padding:12px 14px;
+  font-weight:900;
+  color:var(--red2);
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+}
+
 @media (max-width:380px){
   .header{ min-height:134px; padding:13px 12px 24px; padding-top: calc(13px + env(safe-area-inset-top)); }
   .brand-title{ font-size:24px; transform: translateX(22px); }
@@ -1045,6 +1092,14 @@ body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color
     <img id="imgModalImg" src="" alt="preview" />
   </div>
 
+  <!-- ✅ Splash -->
+  <div class="splash" id="splash">
+    <div class="splash-card">
+      <img src="images/lavash_combo.jpg" onerror="this.src='logo.png'" alt="Lavash Combo">
+      <div class="splash-caption">✨ Lavash Combo</div>
+    </div>
+  </div>
+
 </div><!-- /#app -->
 
 <script>
@@ -1057,9 +1112,11 @@ const $ = (id)=>document.getElementById(id);
 
 const IG_URL = "https://www.instagram.com/shash.tovuq.n1/";
 const YANDEX_WIDGET_URL = "https://yandex.ru/sprav/widget/rating-badge/23178318202?type=rating";
-const MAP_URL = "https://yandex.uz/maps/org/23178318202/?ll=66.950144%2C39.645189&z=16.65";
+/* ✅ новая ссылка на локацию */
+const MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65";
 
-const LEGAL_PHONE = "+998 91 319 70 07";
+/* ✅ Юр. лица: 2 номера */
+const LEGAL_PHONES = ["+998 95 410 37 38", "+998 97 392 00 15"];
 const LEGAL_MAIL  = "shashtovuq@gmail.com";
 const ADMIN_TG_ID = "6013591658";
 
@@ -1080,6 +1137,14 @@ function closeImgModal(){
   setTimeout(()=>{ $('imgModalImg').src=''; }, 120);
 }
 
+/* ✅ Splash show 3 sec */
+function showSplash(){
+  const s = $('splash');
+  if(!s) return;
+  s.classList.add('show');
+  setTimeout(()=>s.classList.remove('show'), 3000);
+}
+
 /* i18n */
 const MENU_I18N = {
   ru:{menu:'Меню',review_title:'Оставить отзыв',review_sub:'Яндекс рейтинг / отзывы',review_hint:'Если виджет не открылся в Telegram — нажми «Открыть отзывы».',open_reviews:'Открыть отзывы',call:'Позвонить',insta_sub:'Открыть Instagram',theme:'Тема',theme_light:'Светлая',theme_dark:'Тёмная',theme_action:'Сменить',about:'О нас',about_sub:'Адрес и описание',about_title:'О нас',legal_title:'Для юридических лиц',legal_sub:'Связаться с менеджером',subcats:'Подкатегории',combo:'🍱 Комбо',new:'✨ Новинки'},
@@ -1087,6 +1152,7 @@ const MENU_I18N = {
   en:{menu:'Menu',review_title:'Leave a review',review_sub:'Yandex rating / reviews',review_hint:'If the widget doesn’t open in Telegram — tap “Open reviews”.',open_reviews:'Open reviews',call:'Call',insta_sub:'Open Instagram',theme:'Theme',theme_light:'Light',theme_dark:'Dark',theme_action:'Switch',about:'About us',about_sub:'Address and info',about_title:'About us',legal_title:'For legal entities',legal_sub:'Contact manager',subcats:'Subcategories',combo:'🍱 Combo',new:'✨ New'}
 };
 
+/* ✅ О нас: добавил адрес */
 const ABOUT_TEXT = {
   ru:`🇷🇺 О нас
 
@@ -1096,8 +1162,7 @@ Fast Food SHASH TOVUQ — быстро, вкусно и с душой 🔥🐔
 Забрать с собой или заказать доставку — выбирай как удобно.
 SHASH TOVUQ — когда хочется по-настоящему вкусно!
 
-📍 Самарканд
-(укажи адрес здесь)`,
+📍 Адрес: г. Самарканд, Ул. Рудаки 234`,
   uz:`🇺🇿 Biz haqimizda
 
 Fast Food SHASH TOVUQ — tez, mazali va chin dildan 🔥🐔
@@ -1106,8 +1171,7 @@ Biz shirali tovuq, burger, shaurma va sevimli fastfud taomlarini yangi mahsulotl
 Olib ketish yoki yetkazib berish — o'zingizga qulayini tanlang.
 SHASH TOVUQ — haqiqiy mazani xohlaganda!
 
-📍 Samarqand
-(manzilni shu yerga yozing)`,
+📍 Manzil: Samarqand sh., Rudakiy ko'chasi 234`,
   en:`🇬🇧 About Us
 
 Fast Food SHASH TOVUQ — fast, tasty, and made with care 🔥🐔
@@ -1116,8 +1180,7 @@ We cook juicy chicken, burgers, shawarma and your favorite fast food using fresh
 Pickup or delivery — choose what’s convenient.
 SHASH TOVUQ — when you want it truly delicious!
 
-📍 Samarkand
-(add your address here)`
+📍 Address: Samarkand, Rudaki str. 234`
 };
 
 const TEXT={
@@ -1126,14 +1189,14 @@ const TEXT={
   en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart'}
 };
 
-/* ✅ Категории: Курица / Говядина / Комбо / Напитки / Соус / Гарнир */
+/* ✅ Категории */
 const CATS={
   ru:{chicken:'🐔 Курица',beef:'🥩 Говядина',combo:'🍱 Комбо',drinks:'🥤 Напитки',sauce:'🥫 Соус',garnish:'🍟 Гарнир'},
   uz:{chicken:"🐔 Tovuq",beef:"🥩 Mol go‘shti",combo:'🍱 Kombo',drinks:'🥤 Ichimliklar',sauce:'🥫 Sous',garnish:'🍟 Garnir'},
   en:{chicken:'🐔 Chicken',beef:'🥩 Beef',combo:'🍱 Combo',drinks:'🥤 Drinks',sauce:'🥫 Sauce',garnish:'🍟 Side'}
 };
 
-/* ✅ Подкатегории только внутри Курица и Говядина */
+/* ✅ Подкатегории */
 const SUBCATS = {
   chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','tovuq'],
   beef: ['beef_shashlik','kufta','burger','hotdog'],
@@ -1179,16 +1242,16 @@ const SUBCATS_I18N = {
     burger:'🍔 Burgers',
     wings:'🍗 Wings',
     sausages:'🌭 Sausages',
-    shashlik:'🍢 Skewers',
+    shashlik:'🍢 Barbecue',
     tovuq:'🐔 Shashtovuq',
 
-    beef_shashlik:'🥩 Beef skewers',
+    beef_shashlik:'🥩 Barbecue (beef)',
     kufta:'🧆 Kefta',
     hotdog:'🌭 Hot-dog'
   }
 };
 
-/* ✅ Меню: размеры M/L/XL сделаны внутри карточки */
+/* ✅ Меню */
 const MENU2 = {
   chicken:{
     lavash:[
@@ -1277,7 +1340,8 @@ const MENU2 = {
       {id:'sosiski_fries_pita', p:20000, img:'logo.png', spicy:false, n:{ru:'Сосиски + Фри + Пита', uz:'Sosiska + Fri + Pita', en:'Sausages + Fries + Pita'}}
     ],
     shashlik:[
-      {id:'shashlik_fries_pita', p:32000, img:'shashlik_fri_pita.jpg', spicy:false, n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + Fri + Pita', en:'Skewer + Fries + Pita'}}
+      /* ✅ EN: Barbecue */
+      {id:'shashlik_fries_pita', p:32000, img:'shashlik_fri_pita.jpg', spicy:false, n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + Fri + Pita', en:'Barbecue + Fries + Pita'}}
     ],
     tovuq:[
       {id:'shashtovuq_2', p:22000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 2 куска', uz:"Shashtovuq + Pita + 2 dona", en:'Shashtovuq + Pita + 2 pcs'}},
@@ -1290,11 +1354,12 @@ const MENU2 = {
 
   beef:{
     beef_shashlik:[
+      /* ✅ EN: Barbecue */
       {
         id:'beef_shashlik_lavash',
         img:'logo.png',
         spicy:false,
-        n:{ru:'Шашлычок в лаваше', uz:"Shashlik lavashda", en:'Skewer in lavash'},
+        n:{ru:'Шашлычок в лаваше', uz:"Shashlik lavashda", en:'Barbecue in lavash'},
         variants:[
           {k:'l', label:'L', p:35000},
           {k:'xl', label:'XL', p:55000}
@@ -1304,13 +1369,13 @@ const MENU2 = {
         id:'beef_shashlik_pita',
         img:'logo.png',
         spicy:false,
-        n:{ru:'Шашлычок в пите', uz:"Shashlik pitada", en:'Skewer in pita'},
+        n:{ru:'Шашлычок в пите', uz:"Shashlik pitada", en:'Barbecue in pita'},
         variants:[
           {k:'l', label:'L', p:35000},
           {k:'xl', label:'XL', p:55000}
         ]
       },
-      {id:'beef_shashlik_baton', p:33000, img:'logo.png', spicy:false, n:{ru:'Шашлычок в батоне', uz:"Shashlik batonda", en:'Skewer in bun'}}
+      {id:'beef_shashlik_baton', p:33000, img:'logo.png', spicy:false, n:{ru:'Шашлычок в батоне', uz:"Shashlik batonda", en:'Barbecue in bun'}}
     ],
 
     kufta:[
@@ -1362,20 +1427,18 @@ const MENU2 = {
   combo:[
     {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
     {id:'combo_burger', p:28000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
-    {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
+    /* ✅ EN: Barbecue */
+    {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Barbecue combo'}}
   ],
 
-  /* ✅ Гарнир: добавили Aviko */
   garnish:[
     {id:'fries_l', p:10000, img:'logo.png', spicy:false, n:{ru:'Картофель фри L', uz:'Fri kartoshka L', en:'French fries L'}},
     {id:'fries_xl', p:15000, img:'logo.png', spicy:false, n:{ru:'Картофель фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
     {id:'fries_pita', p:16000, img:'logo.png', spicy:false, n:{ru:'Картофель фри + Пита', uz:'Fri + Pita', en:'Fries + Pita'}},
     {id:'village_potato', p:20000, img:'logo.png', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}},
-
-    {id:'fries_aviko', p:15000, img:'logo.png', spicy:false, n:{ru:'Картофель Фри Aviko', uz:'Aviko Fri kartoshka', en:'Aviko fries'}}
+    {id:'fries_aviko', p:15000, img:'logo.png', spicy:false, n:{ru:'Картофель Фри Aviko', uz:'Aviko fri kartoshka', en:'Aviko fries'}}
   ],
 
-  /* ✅ Соус: выбор размера L/XL (как chips) */
   sauce:[
     {
       id:'ketchup',
@@ -1383,7 +1446,7 @@ const MENU2 = {
       spicy:false,
       n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'},
       variants:[
-        {k:'l',  label:'L',  p:3000},
+        {k:'l', label:'L', p:3000},
         {k:'xl', label:'XL', p:5000}
       ]
     },
@@ -1393,7 +1456,7 @@ const MENU2 = {
       spicy:true,
       n:{ru:'Чили', uz:'Chili', en:'Chili'},
       variants:[
-        {k:'l',  label:'L',  p:3000},
+        {k:'l', label:'L', p:3000},
         {k:'xl', label:'XL', p:5000}
       ]
     },
@@ -1403,7 +1466,7 @@ const MENU2 = {
       spicy:false,
       n:{ru:'Томатный', uz:'Tomatli', en:'Tomato'},
       variants:[
-        {k:'l',  label:'L',  p:3000},
+        {k:'l', label:'L', p:3000},
         {k:'xl', label:'XL', p:5000}
       ]
     },
@@ -1413,64 +1476,65 @@ const MENU2 = {
       spicy:false,
       n:{ru:'Чесночный', uz:'Sarimsoqli', en:'Garlic'},
       variants:[
-        {k:'l',  label:'L',  p:3000},
+        {k:'l', label:'L', p:3000},
         {k:'xl', label:'XL', p:5000}
       ]
     },
     {
-      id:'spicy_red_sauce',
+      id:'red_hot_sauce',
       img:'logo.png',
       spicy:true,
-      n:{ru:'Острый красный соус', uz:"Achchiq qizil sous", en:'Spicy red sauce'},
+      n:{ru:'Острый красный соус', uz:"Qizil achchiq sous", en:'Hot red sauce'},
       variants:[
-        {k:'l',  label:'L',  p:3000},
+        {k:'l', label:'L', p:3000},
         {k:'xl', label:'XL', p:5000}
       ]
-    }
+    },
+    {id:'bbq', p:3000, img:'logo.png', spicy:false, n:{ru:'Барбекю', uz:'Barbekyu', en:'BBQ'}},
+    {id:'cheese_sauce', p:3000, img:'logo.png', spicy:false, n:{ru:'Сырный', uz:"Pishloqli", en:'Cheese'}}
   ],
 
-  /* ✅ Напитки: обновили цены и позиции по твоему списку */
   drinks:[
     {id:'tea_02', p:2000, img:'logo.png', spicy:false, n:{ru:'Чай 0.2L', uz:'Choy 0.2L', en:'Tea 0.2L'}},
     {id:'tea_05', p:4000, img:'logo.png', spicy:false, n:{ru:'Чай 0.5L', uz:'Choy 0.5L', en:'Tea 0.5L'}},
-
-    {id:'tea_lemon_05', p:20000, img:'logo.png', spicy:false, n:{ru:'Чай с лимоном 0.5L', uz:'Limonli choy 0.5L', en:'Tea with lemon 0.5L'}},
-    {id:'tea_lemon_04', p:12000, img:'logo.png', spicy:false, n:{ru:'Чай с лимоном 0.4L', uz:'Limonli choy 0.4L', en:'Tea with lemon 0.4L'}},
-
-    {id:'coffee_cappuccino', p:6000, img:'logo.png', spicy:false, n:{ru:'Кофе Капучино', uz:'Kapuchino qahva', en:'Cappuccino'}},
-    {id:'coffee_black', p:6000, img:'logo.png', spicy:false, n:{ru:'Кофе чёрный', uz:'Qora qahva', en:'Black coffee'}},
+    {id:'tea_lemon_05', p:20000, img:'logo.png', spicy:false, n:{ru:'Чай с лимоном 0.5L', uz:"Limonli choy 0.5L", en:'Tea with lemon 0.5L'}},
+    {id:'tea_lemon_04', p:12000, img:'logo.png', spicy:false, n:{ru:'Чай с лимоном 0.4L', uz:"Limonli choy 0.4L", en:'Tea with lemon 0.4L'}},
+    {id:'coffee_cappuccino', p:6000, img:'logo.png', spicy:false, n:{ru:'Кофе Капучино', uz:'Kapuchino', en:'Cappuccino'}},
+    {id:'coffee_black', p:6000, img:'logo.png', spicy:false, n:{ru:'Кофе чёрный', uz:"Qora qahva", en:'Black coffee'}},
     {id:'coffee_3in1', p:4000, img:'logo.png', spicy:false, n:{ru:'Кофе 3в1', uz:'3in1 qahva', en:'Coffee 3-in-1'}},
-
     {id:'coca_025', p:7000, img:'logo.png', spicy:false, n:{ru:'Coca Cola 0.25L', uz:'Coca Cola 0.25L', en:'Coca Cola 0.25L'}},
     {id:'fanta_025', p:7000, img:'logo.png', spicy:false, n:{ru:'Fanta 0.25L', uz:'Fanta 0.25L', en:'Fanta 0.25L'}},
     {id:'sprite_025', p:7000, img:'logo.png', spicy:false, n:{ru:'Sprite 0.25L', uz:'Sprite 0.25L', en:'Sprite 0.25L'}},
-
     {id:'coca_05_can', p:10000, img:'logo.png', spicy:false, n:{ru:'Coca Cola 0.5L ЖБ', uz:'Coca Cola 0.5L (JB)', en:'Coca Cola 0.5L (can)'}},
     {id:'coca_05', p:7000, img:'logo.png', spicy:false, n:{ru:'Coca Cola 0.5L', uz:'Coca Cola 0.5L', en:'Coca Cola 0.5L'}},
     {id:'fanta_05', p:7000, img:'logo.png', spicy:false, n:{ru:'Fanta 0.5L', uz:'Fanta 0.5L', en:'Fanta 0.5L'}},
     {id:'sprite_05', p:7000, img:'logo.png', spicy:false, n:{ru:'Sprite 0.5L', uz:'Sprite 0.5L', en:'Sprite 0.5L'}},
-
     {id:'coca_1', p:11000, img:'logo.png', spicy:false, n:{ru:'Coca Cola 1L', uz:'Coca Cola 1L', en:'Coca Cola 1L'}},
     {id:'fanta_1', p:11000, img:'logo.png', spicy:false, n:{ru:'Fanta 1L', uz:'Fanta 1L', en:'Fanta 1L'}},
     {id:'sprite_1', p:11000, img:'logo.png', spicy:false, n:{ru:'Sprite 1L', uz:'Sprite 1L', en:'Sprite 1L'}},
-
     {id:'coca_15', p:16000, img:'logo.png', spicy:false, n:{ru:'Coca Cola 1.5L', uz:'Coca Cola 1.5L', en:'Coca Cola 1.5L'}},
     {id:'fanta_15', p:16000, img:'logo.png', spicy:false, n:{ru:'Fanta 1.5L', uz:'Fanta 1.5L', en:'Fanta 1.5L'}},
     {id:'sprite_15', p:16000, img:'logo.png', spicy:false, n:{ru:'Sprite 1.5L', uz:'Sprite 1.5L', en:'Sprite 1.5L'}},
-
     {id:'fuse_05', p:7000, img:'logo.png', spicy:false, n:{ru:'Fuse Tea 0.5L', uz:'Fuse Tea 0.5L', en:'Fuse Tea 0.5L'}},
     {id:'fuse_1', p:12000, img:'logo.png', spicy:false, n:{ru:'Fuse Tea 1L', uz:'Fuse Tea 1L', en:'Fuse Tea 1L'}},
-
     {id:'dinay_05', p:9000, img:'logo.png', spicy:false, n:{ru:'Dinay 0.5L', uz:'Dinay 0.5L', en:'Dinay 0.5L'}},
     {id:'dinay_1ll', p:13000, img:'logo.png', spicy:false, n:{ru:'Dinay 1LL', uz:'Dinay 1LL', en:'Dinay 1LL'}},
-
     {id:'bliss_1', p:15000, img:'logo.png', spicy:false, n:{ru:'Сок Bliss 1L', uz:'Bliss sharbat 1L', en:'Bliss juice 1L'}},
-
     {id:'bonaqua_05', p:3000, img:'logo.png', spicy:false, n:{ru:'Bonaqua 0.5L', uz:'Bonaqua 0.5L', en:'Bonaqua 0.5L'}},
     {id:'bonaqua_1', p:4000, img:'logo.png', spicy:false, n:{ru:'Bonaqua 1L', uz:'Bonaqua 1L', en:'Bonaqua 1L'}},
-
     {id:'bogi_05', p:3000, img:'logo.png', spicy:false, n:{ru:'Bogi Baland 0.5L', uz:'Bogi Baland 0.5L', en:'Bogi Baland 0.5L'}},
-    {id:'bogi_1', p:4000, img:'logo.png', spicy:false, n:{ru:'Bogi Baland 1L', uz:'Bogi Baland 1L', en:'Bogi Baland 1L'}}
+    {id:'bogi_1', p:4000, img:'logo.png', spicy:false, n:{ru:'Bogi Baland 1L', uz:'Bogi Baland 1L', en:'Bogi Baland 1L'}},
+    {id:'pepsi_025', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 0.25L', uz:'Pepsi 0.25L', en:'Pepsi 0.25L'}},
+    {id:'pepsi_05', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 0.5L', uz:'Pepsi 0.5L', en:'Pepsi 0.5L'}},
+    {id:'pepsi_1', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 1L', uz:'Pepsi 1L', en:'Pepsi 1L'}},
+    {id:'pepsi_15', p:0, img:'logo.png', spicy:false, n:{ru:'Pepsi 1.5L', uz:'Pepsi 1.5L', en:'Pepsi 1.5L'}},
+    {id:'lipton_05', p:0, img:'logo.png', spicy:false, n:{ru:'Lipton 0.5L', uz:'Lipton 0.5L', en:'Lipton 0.5L'}},
+    {id:'lipton_1', p:0, img:'logo.png', spicy:false, n:{ru:'Lipton 1L', uz:'Lipton 1L', en:'Lipton 1L'}},
+    {id:'mojito_05', p:0, img:'logo.png', spicy:false, n:{ru:'Mojito 0.5L', uz:'Mojito 0.5L', en:'Mojito 0.5L'}},
+    {id:'adrenaline_025', p:0, img:'logo.png', spicy:false, n:{ru:'Adrenaline 0.25L', uz:'Adrenaline 0.25L', en:'Adrenaline 0.25L'}},
+    {id:'adrenaline_049', p:0, img:'logo.png', spicy:false, n:{ru:'Adrenaline 0.49L', uz:'Adrenaline 0.49L', en:'Adrenaline 0.49L'}},
+    {id:'water_05', p:0, img:'logo.png', spicy:false, n:{ru:'Минеральная вода 0.5L', uz:'Mineral suv 0.5L', en:'Mineral water 0.5L'}},
+    {id:'water_1', p:0, img:'logo.png', spicy:false, n:{ru:'Минеральная вода 1L', uz:'Mineral suv 1L', en:'Mineral water 1L'}}
   ]
 };
 
@@ -1545,10 +1609,12 @@ function openLegal(){
   closeTopMenu();
   const t = MENU_I18N[lang] || MENU_I18N.ru;
   $('legalTitle').innerText = t.legal_title || 'Для юридических лиц';
+
+  const phonesLine = LEGAL_PHONES.join('\n');
   const body = {
-    ru:`Связаться с менеджером\n\nТел: ${LEGAL_PHONE}\nПочта: ${LEGAL_MAIL}`,
-    uz:`Menejer bilan bog'lanish\n\nTel: ${LEGAL_PHONE}\nPochta: ${LEGAL_MAIL}`,
-    en:`Contact manager\n\nPhone: ${LEGAL_PHONE}\nEmail: ${LEGAL_MAIL}`
+    ru:`Связаться с менеджером\n\nТел:\n${phonesLine}\n\nПочта: ${LEGAL_MAIL}`,
+    uz:`Menejer bilan bog'lanish\n\nTel:\n${phonesLine}\n\nPochta: ${LEGAL_MAIL}`,
+    en:`Contact manager\n\nPhone:\n${phonesLine}\n\nEmail: ${LEGAL_MAIL}`
   };
   $('legalBody').textContent = body[lang] || body.ru;
 
@@ -1568,7 +1634,7 @@ function contactManager(){
   try{ Telegram.WebApp.openLink(link); }catch(_){ window.open(link, "_blank"); }
 }
 function openTelLegal(){
-  const tel = `tel:${LEGAL_PHONE.replace(/\s+/g,'')}`;
+  const tel = `tel:${String(LEGAL_PHONES[0]||'').replace(/\s+/g,'')}`;
   try{ Telegram.WebApp.openLink(tel); }catch(_){ window.location.href = tel; }
 }
 function openMailLegal(){
@@ -1630,8 +1696,28 @@ function syncThemeLabel(){
   const cur = document.body.getAttribute('data-theme') || 'light';
   $('themeMenuSub').innerText = (cur === 'dark') ? t.theme_dark : t.theme_light;
 }
+
+/* ✅ правило: EN если в RU есть "Шашлычок" -> Barbecue */
+function bbqTransformFromRu(ruName){
+  const s = String(ruName||'');
+  if(!s.includes('Шашлычок')) return '';
+  // убираем "Шашлычок" и оставляем хвост (если есть)
+  const tail = s.replace('Шашлычок', '').trim();
+  if(!tail) return 'Barbecue';
+  return ('Barbecue ' + tail).replace(/\s+/g,' ').trim();
+}
+
 function getName(it){
-  return (it && it.n && it.n[lang]) ? it.n[lang] : (it?.n?.ru || it?.id || '');
+  if(it && it.n){
+    if(lang === 'en'){
+      if(it.n.en) return it.n.en;
+      const bb = bbqTransformFromRu(it.n.ru);
+      if(bb) return bb;
+    }
+    if(it.n[lang]) return it.n[lang];
+    return it.n.ru || it.id || '';
+  }
+  return it?.id || '';
 }
 
 /* ✅ key helpers for variants */
@@ -2090,14 +2176,9 @@ function bindSave(){
   $('phone').addEventListener('input', ()=>localStorage.setItem("shashtovuq_phone", $('phone').value));
 }
 
-/* init theme */
+/* ✅ При старте: всегда светлая тема */
 (function initTheme(){
-  const saved = localStorage.getItem('shashtovuq_theme');
-  if(saved === 'dark' || saved === 'light') applyTheme(saved);
-  else{
-    const tgTheme = Telegram.WebApp.colorScheme || 'light';
-    applyTheme(tgTheme === 'dark' ? 'dark' : 'light');
-  }
+  applyTheme('light');
 })();
 
 /* defaults */
@@ -2110,6 +2191,9 @@ loadSaved();
 bindSave();
 applyLang();
 setAboutLang('ru');
+
+/* ✅ splash на запуск */
+showSplash();
 </script>
 </body>
 </html>
