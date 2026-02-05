@@ -5,6 +5,7 @@
 <title>SHASH TOVUQ</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="format-detection" content="telephone=no" />
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet" />
 
@@ -22,6 +23,12 @@
   --card-bg: rgba(255,255,255,.86);
   --line: rgba(0,0,0,.08);
   --shadow: 0 14px 34px rgba(0,0,0,.10);
+
+  --vh: 1vh;
+  --safeT: env(safe-area-inset-top);
+  --safeB: env(safe-area-inset-bottom);
+
+  --stickyH: 98px;
 }
 body[data-theme="dark"]{
   --sand:#121212;
@@ -33,29 +40,29 @@ body[data-theme="dark"]{
 }
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html, body{ width:100%; height:100%; margin:0; padding:0; }
-html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
-
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; scroll-behavior:smooth; }
 body{
   font-family:'Montserrat',sans-serif;
   background:
     radial-gradient(1200px 600px at 50% -120px, rgba(180,15,24,.10), transparent 60%),
     linear-gradient(180deg, #fff, var(--sand));
   color:var(--text);
-  padding-bottom:130px;
+
+  /* ✅ чтобы низ не прятался под sticky + safe-area */
+  padding-bottom: calc(var(--stickyH) + 30px + var(--safeB));
+  overflow-x:hidden;
 }
 
 /* ✅ Telegram верхние кнопки не перекрывают шапку */
 #app{
-  min-height:100vh;
-  min-height:100svh;
-  min-height:100dvh;
-  padding-top: env(safe-area-inset-top);
+  min-height: calc(var(--vh) * 100);
+  padding-top: var(--safeT);
 }
 
-/* ✅ Header: немного уменьшили (не трогая текст/кнопки/лого) */
+/* ✅ Header */
 .header{
-  padding:16px 14px 30px;      /* было 18px 14px 34px */
-  min-height:146px;            /* было 158px */
+  padding:16px 14px 30px;
+  min-height:146px;
   color:#fff;
   position:relative;
   text-align:center;
@@ -71,7 +78,7 @@ body{
   box-shadow: 0 16px 34px rgba(0,0,0,.18);
   border-bottom: 1px solid rgba(255,255,255,.16);
 
-  padding-top: calc(16px + env(safe-area-inset-top));
+  padding-top: calc(16px + var(--safeT));
 }
 .header::after{
   content:"";
@@ -95,8 +102,10 @@ body{
   left:10px;
   top:50%;
   transform:translateY(-50%);
-  width:88px;
-  max-width:30vw;
+
+  /* ✅ ЛОГО увеличено */
+  width:102px;
+  max-width:32vw;
   height:auto;
   z-index:5;
 
@@ -156,12 +165,12 @@ body{
 .header-actions{
   position:absolute;
   right:10px;
-  top: calc(10px + env(safe-area-inset-top));
+  top: calc(10px + var(--safeT));
   z-index:90;
   display:flex;
   flex-direction:column;
   gap:8px;
-  align-items:center;
+  align-items:flex-end;
 }
 .hbtn{
   width:34px;
@@ -180,6 +189,9 @@ body{
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 14px 30px rgba(0,0,0,.18);
   transition:.15s;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
 }
 .hbtn:active{ transform:scale(.97); }
 
@@ -192,6 +204,27 @@ body{
 .burger-ic span:nth-child(1){ top:0; }
 .burger-ic span:nth-child(2){ top:5px; }
 .burger-ic span:nth-child(3){ bottom:0; }
+
+/* ✅ Геолокация в шапке */
+.geo-pill{
+  max-width:160px;
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+  color:#fff;
+  background: rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.26);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.18);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  touch-action:manipulation;
+}
+.geo-pill:active{ transform:scale(.98); }
 
 /* кнопки */
 .langs,.types,.payments{
@@ -212,30 +245,21 @@ body{
   background:#fff;
   box-shadow: 0 10px 24px rgba(0,0,0,.06);
   color:var(--text);
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
 }
 .btn:active{ transform:scale(.98); }
 
-/* ✅ язык в одну строку */
-.langs{
-  flex-wrap:nowrap;
-  gap:8px;
-}
-.langs .btn{
-  min-width:0;
-  flex:1 1 0;
-  padding:10px 10px;
-}
+.langs{ flex-wrap:nowrap; gap:8px; }
+.langs .btn{ min-width:0; flex:1 1 0; padding:10px 10px; }
 .langs .btn.active{
   background: linear-gradient(135deg, var(--yellow1), var(--yellow2));
   color:#111;
   border:1px solid rgba(0,0,0,.12);
   box-shadow: 0 14px 30px rgba(255,196,0,.25);
 }
-
-/* доставка/самовывоз активный красный */
-.types{
-  flex-wrap:wrap;
-}
+.types{ flex-wrap:wrap; }
 .types .btn.active{
   background: linear-gradient(135deg, var(--red1), var(--red2));
   color:#fff;
@@ -243,7 +267,7 @@ body{
   box-shadow: 0 14px 30px rgba(255,27,45,.22);
 }
 
-/* ✅ оплата в ОДНУ строку: Наличные / Click / Онлайн */
+/* ✅ Оплата в одну строку (аккуратно) */
 .payments{
   flex-wrap:nowrap;
   gap:8px;
@@ -266,13 +290,15 @@ body{
   padding:14px 14px;
   width:min(520px, 92%);
   border-radius:18px;
-  font-size:15px;
+  font-size:16px;
   border:1px solid var(--line);
   background: rgba(255,255,255,.92);
   box-shadow: 0 10px 24px rgba(0,0,0,.06);
   outline:none;
   transition:.15s;
   color:var(--text);
+  -webkit-appearance:none;
+  appearance:none;
 }
 body[data-theme="dark"] .input{ background: rgba(28,28,28,.92); }
 .input:focus{
@@ -358,6 +384,7 @@ body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
   cursor:pointer;
   transition:.12s;
   user-select:none;
+  touch-action:manipulation;
 }
 body[data-theme="dark"] .size-chip{
   background: rgba(28,28,28,.90);
@@ -381,6 +408,7 @@ body[data-theme="dark"] .size-chip{
   font-size:16px;
   box-shadow: 0 12px 22px rgba(255,196,0,.25);
   transition:.15s;
+  touch-action:manipulation;
 }
 .counter button:active{ transform:scale(.96); }
 
@@ -395,16 +423,17 @@ body[data-theme="dark"] .size-chip{
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   max-width:760px;
+  scroll-margin-bottom: calc(var(--stickyH) + 18px + var(--safeB));
 }
 body[data-theme="dark"] .cart{ background: rgba(28,28,28,.92); border-color: rgba(255,27,45,.22); }
 #cartTitle{ color: var(--red2); }
-textarea.input{ height:90px; }
+textarea.input{ height:90px; resize:none; }
 
 .order-btn{
   width:100%;
   padding:18px;
   margin-top:14px;
-  margin-bottom:110px;
+  margin-bottom: calc(var(--stickyH) + 16px + var(--safeB));
   border-radius:24px;
   cursor:pointer;
   color:white;
@@ -414,6 +443,7 @@ textarea.input{ height:90px; }
   background: linear-gradient(135deg, var(--red1), var(--red2));
   box-shadow: 0 18px 36px rgba(255,27,45,.22);
   transition:.15s;
+  touch-action:manipulation;
 }
 .order-btn:active{ transform:scale(.99); }
 
@@ -445,6 +475,7 @@ textarea.input{ height:90px; }
   box-shadow: 0 10px 22px rgba(0,0,0,.08);
   transition:.15s;
   color:#111;
+  touch-action:manipulation;
 }
 body[data-theme="dark"] .search-clear{ background: rgba(28,28,28,.92); border-color: rgba(255,255,255,.10); color:#f1f1f1; }
 .search-clear:active{ transform:translateY(-50%) scale(.96); }
@@ -496,6 +527,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   transition:.15s;
   position:relative;
   overflow:hidden;
+  touch-action:manipulation;
 }
 .combo-card:active{ transform:scale(.99); }
 .combo-img{
@@ -523,6 +555,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   position:relative;
   overflow:hidden;
   cursor:pointer;
+  touch-action:manipulation;
 }
 .small-card:active{ transform:scale(.99); }
 .small-img{
@@ -554,6 +587,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   font-weight:900;
   cursor:pointer;
   box-shadow: 0 12px 22px rgba(255,196,0,.25);
+  touch-action:manipulation;
 }
 .mini-counter button:active{ transform:scale(.96); }
 .mini-count{
@@ -566,7 +600,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 .sticky-checkout{
   position:fixed;
   left:0; right:0; bottom:0;
-  padding:10px 12px env(safe-area-inset-bottom);
+  padding:10px 12px calc(10px + var(--safeB));
   background: rgba(251,247,239,.72);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -601,6 +635,7 @@ body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-co
   box-shadow: 0 16px 34px rgba(255,27,45,.20);
   transition:.15s;
   white-space:nowrap;
+  touch-action:manipulation;
 }
 .sticky-btn:active{ transform:scale(.99); }
 
@@ -620,7 +655,7 @@ body[data-theme="dark"] .sticky-inner{ background: rgba(28,28,28,.88); border-co
   left:0; right:0;
   bottom:-120%;
   transition:.22s;
-  padding:10px 12px 14px;
+  padding:10px 12px calc(14px + var(--safeB));
   background: rgba(255,255,255,.95);
   border-top-left-radius:24px;
   border-top-right-radius:24px;
@@ -660,6 +695,7 @@ body[data-theme="dark"] .handle{ background:rgba(255,255,255,.18); }
   font-size:22px;
   line-height:1;
   color:#777;
+  touch-action:manipulation;
 }
 body[data-theme="dark"] .sheet-close{ color:#bbb; }
 
@@ -677,6 +713,7 @@ body[data-theme="dark"] .sheet-close{ color:#bbb; }
   cursor:pointer;
   text-decoration:none;
   color:var(--text);
+  touch-action:manipulation;
 }
 body[data-theme="dark"] .menu-item{
   border-color: rgba(255,255,255,.10);
@@ -719,6 +756,7 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
   min-height:96px;
   box-shadow: 0 10px 22px rgba(0,0,0,.06);
   transition:.15s;
+  touch-action:manipulation;
 }
 .subcat-item:active{ transform:scale(.98); }
 .subcat-item.active{
@@ -805,88 +843,73 @@ body[data-theme="dark"] .img-modal{ background: rgba(18,18,18,.92); border-color
   background: rgba(0,0,0,.35);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  touch-action:manipulation;
 }
 .img-modal-close:active{ transform:scale(.98); }
 
-/* ✅ Splash (Lavash Combo) */
-.splash{
-  position:fixed;
-  inset:0;
-  z-index:9000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  opacity:0;
-  pointer-events:none;
-  transition:.18s;
-}
-.splash.show{ opacity:1; pointer-events:auto; }
-.splash-card{
-  width:min(92vw, 520px);
-  border-radius:26px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.22);
-  box-shadow: 0 24px 90px rgba(0,0,0,.45);
-  background: rgba(255,255,255,.10);
-}
-.splash-card img{
-  width:100%;
-  height:auto;
-  display:block;
-  object-fit:cover;
-}
-
-/* ✅ Click QR sheet content */
-.qr-box{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  padding:2px 4px 6px;
-}
-.qr-img{
-  width:100%;
-  border-radius:18px;
-  overflow:hidden;
+/* ✅ блок реквизитов */
+.pay-box{
   border:1px solid rgba(0,0,0,.08);
+  border-radius:18px;
+  padding:12px;
   background: rgba(0,0,0,.03);
 }
-body[data-theme="dark"] .qr-img{ border-color: rgba(255,255,255,.10); background: rgba(255,255,255,.06); }
-.qr-img img{
-  width:100%;
-  height:auto;
-  display:block;
-  object-fit:contain;
+body[data-theme="dark"] .pay-box{
+  border-color: rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
 }
-.qr-line{
+.pay-row{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  padding:12px;
-  border-radius:18px;
+  padding:10px 8px;
+  border-radius:14px;
+  background: rgba(255,255,255,.70);
   border:1px solid rgba(0,0,0,.08);
-  background: rgba(0,0,0,.03);
 }
-body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); background: rgba(255,255,255,.06); }
-.qr-left{ display:flex; flex-direction:column; gap:4px; min-width:0; }
-.qr-label{ font-size:12px; opacity:.75; font-weight:800; }
-.qr-value{ font-weight:900; word-break:break-all; }
-.qr-copy{
-  min-width:auto;
+body[data-theme="dark"] .pay-row{
+  background: rgba(28,28,28,.80);
+  border-color: rgba(255,255,255,.10);
+}
+.pay-left{ min-width:0; }
+.pay-title{ font-weight:900; }
+.pay-sub{ font-size:12px; opacity:.75; margin-top:3px; word-break:break-word; }
+.copy-btn{
   padding:10px 12px;
-  border-radius:999px;
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.12);
+  background: linear-gradient(135deg, var(--yellow1), var(--yellow2));
   font-weight:900;
+  cursor:pointer;
+  touch-action:manipulation;
+  white-space:nowrap;
+}
+.copy-btn:active{ transform:scale(.98); }
+
+.qr-wrap{
+  display:flex;
+  justify-content:center;
+  padding:10px 0 0;
+}
+.qr-img{
+  width:min(320px, 86vw);
+  height:auto;
+  border-radius:18px;
+  border:1px solid rgba(0,0,0,.10);
+  box-shadow: 0 18px 40px rgba(0,0,0,.12);
+  background:#fff;
 }
 
 @media (max-width:380px){
-  .header{ min-height:140px; padding:14px 12px 28px; padding-top: calc(14px + env(safe-area-inset-top)); }
+  .header{ min-height:140px; padding:14px 12px 28px; padding-top: calc(14px + var(--safeT)); }
   .brand-title{ font-size:24px; transform: translateX(22px); }
   .brand-phone{ transform: translateX(22px); }
   .brand-tel{ transform: translateX(22px); }
-  .header img{ width:74px; padding:7px; border-radius:16px; }
+
+  /* ✅ лого на маленьких чуть меньше */
+  .header img{ width:92px; padding:7px; border-radius:16px; }
+
   .hbtn{ width:32px; height:32px; font-size:15px; }
   .products{ gap:12px; padding:12px; }
   .img{ height:96px; }
@@ -898,7 +921,6 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
   .subcat-item{ min-height:92px; border-radius:18px; }
   .subcat-ic{ width:48px; height:48px; border-radius:16px; }
   .langs .btn{ padding:10px 8px; font-size:13px; }
-  .payments .btn{ padding:10px 8px; font-size:13px; }
 }
 @media (max-width:330px){
   .subcat-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
@@ -908,13 +930,6 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
 
 <body data-theme="light">
 <div id="app">
-
-  <!-- ✅ Splash -->
-  <div class="splash" id="splash">
-    <div class="splash-card">
-      <img src="images/lavash_combo.jpg" onerror="this.src='logo.png'" alt="Lavash Combo">
-    </div>
-  </div>
 
   <div class="header">
     <img src="logo.png" onerror="this.src='logo.png'">
@@ -927,6 +942,9 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
     </div>
 
     <div class="header-actions" aria-label="Header actions">
+      <!-- ✅ Гео в шапке -->
+      <div class="geo-pill" id="geoPill" onclick="geoClick()" title="Геолокация">📍 Геолокация</div>
+
       <div class="hbtn" onclick="openTopMenu()" title="Меню" aria-label="Меню">
         <div class="burger-ic"><span></span><span></span><span></span></div>
       </div>
@@ -978,6 +996,7 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
     <b id="cartTitle"></b>: <span id="total">0</span> сум
     <textarea id="comment" class="input"></textarea>
 
+    <!-- ✅ Оплата в одну строку: Наличные / CLICK / Онлайн -->
     <div class="payments">
       <button class="btn active" id="payCash" onclick="setPayment('cash')"></button>
       <button class="btn" id="payClick" onclick="setPayment('click')"></button>
@@ -1062,6 +1081,18 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
         <div class="menu-right">›</div>
       </a>
 
+      <!-- ✅ Оплата: показать реквизиты/QR -->
+      <div class="menu-item" onclick="openPaymentInfo()" role="button">
+        <div class="menu-left">
+          <div class="menu-ic">💳</div>
+          <div class="menu-txt">
+            <div class="menu-name" id="mPayTitle">Оплата</div>
+            <div class="menu-sub" id="mPaySub">CLICK QR / Онлайн реквизиты</div>
+          </div>
+        </div>
+        <div class="menu-right">›</div>
+      </div>
+
       <div class="menu-item" onclick="toggleThemeFromMenu()" role="button">
         <div class="menu-left">
           <div class="menu-ic">🌓</div>
@@ -1086,7 +1117,7 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
     </div>
   </div>
 
-  <!-- Subcategories bottom sheet (иконки) -->
+  <!-- Subcategories -->
   <div class="backdrop" id="subcatBackdrop" onclick="closeSubcats()" style="z-index:2050;"></div>
   <div class="sheet" id="subcatSheet" role="dialog" aria-modal="true" style="z-index:2060;">
     <div class="handle"></div>
@@ -1097,7 +1128,7 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
     <div class="subcat-grid" id="subcatGrid"></div>
   </div>
 
-  <!-- About / Legal sheets -->
+  <!-- About / Legal -->
   <div class="backdrop" id="aboutBackdrop" onclick="closeAbout()" style="z-index:2100; display:none; opacity:1;"></div>
   <div class="sheet" id="aboutSheet" style="z-index:2110; display:none;">
     <div class="handle"></div>
@@ -1128,40 +1159,25 @@ body[data-theme="dark"] .qr-line{ border-color: rgba(255,255,255,.10); backgroun
     </div>
   </div>
 
-  <!-- ✅ Click QR sheet -->
-  <div class="backdrop" id="clickBackdrop" onclick="closeClickSheet()" style="z-index:2300;"></div>
-  <div class="sheet" id="clickSheet" role="dialog" aria-modal="true" style="z-index:2310;">
+  <!-- ✅ Payment info sheet -->
+  <div class="backdrop" id="payBackdrop" onclick="closePaySheet()" style="z-index:2300;"></div>
+  <div class="sheet" id="paySheet" role="dialog" aria-modal="true" style="z-index:2310;">
     <div class="handle"></div>
     <div class="sheet-head">
-      <b id="clickTitle">CLICK</b>
-      <button class="sheet-close" onclick="closeClickSheet()">×</button>
+      <b id="payTitle">Оплата</b>
+      <button class="sheet-close" onclick="closePaySheet()">×</button>
     </div>
 
-    <div class="qr-box">
-      <div class="qr-img">
-        <!-- ✅ ВАЖНО: если твой QR называется иначе — просто переименуй файл в images/click_qr.png -->
-        <img id="clickQrImg" src="images/click_qr.png" onerror="tryAltQr(this)" alt="QR Click">
-      </div>
-
-      <div class="qr-line">
-        <div class="qr-left">
-          <div class="qr-label" id="cardLabel">Номер карты</div>
-          <div class="qr-value" id="cardValue">9860100126359502</div>
+    <div class="pay-box">
+      <div class="pay-row">
+        <div class="pay-left">
+          <div class="pay-title" id="payMethodTitle">CLICK / Онлайн</div>
+          <div class="pay-sub" id="payMethodSub">Выберите способ оплаты</div>
         </div>
-        <button class="btn qr-copy" onclick="copyText('9860100126359502')">Копировать</button>
+        <button class="copy-btn" onclick="copyPay()">Копировать</button>
       </div>
 
-      <div class="qr-line">
-        <div class="qr-left">
-          <div class="qr-label" id="nameLabel">Получатель</div>
-          <div class="qr-value" id="nameValue">Takhirov Daler</div>
-        </div>
-        <button class="btn qr-copy" onclick="copyText('Takhirov Daler')">Копировать</button>
-      </div>
-
-      <div class="menu-sub" id="clickHint" style="margin-top:2px;">
-        После оплаты нажми «Оформить заказ» — мы увидим способ оплаты в заявке.
-      </div>
+      <div id="payContent" style="margin-top:10px;"></div>
     </div>
   </div>
 
@@ -1182,57 +1198,103 @@ try{ Telegram.WebApp.disableVerticalSwipes?.(); }catch(_){}
 
 const $ = (id)=>document.getElementById(id);
 
+/* ✅ автоопределение iPhone/Android */
+function detectDevice(){
+  const ua = navigator.userAgent || "";
+  const tgPlatform = (Telegram.WebApp.platform || "").toLowerCase();
+  let device = 'unknown';
+
+  if(tgPlatform.includes('ios') || /iphone|ipad|ipod/i.test(ua)) device = 'ios';
+  else if(tgPlatform.includes('android') || /android/i.test(ua)) device = 'android';
+  else if(/mac/i.test(ua) && 'ontouchend' in document) device = 'ios'; // iPadOS часто как Mac
+  document.body.dataset.device = device;
+
+  // Можно использовать в будущем для точечной подстройки:
+  // body[data-device="ios"] ...
+}
+detectDevice();
+
+/* ✅ iOS/Android: фикс высоты */
+function setVH(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', vh + 'px');
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', ()=>setTimeout(setVH, 60));
+
 const IG_URL = "https://www.instagram.com/shash.tovuq.n1/";
 const YANDEX_WIDGET_URL = "https://yandex.ru/sprav/widget/rating-badge/23178318202?type=rating";
+const MAP_URL = "https://yandex.uz/maps/org/23178318202/?ll=66.950144%2C39.645189&z=16.65";
 
-/* ✅ нужная ссылка на карту (по клику на 📍 в шапке) */
-const MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65";
+/* ✅ Реквизиты (онлайн оплата) */
+const CARD_NUMBER = "9860100126359502";
+const CARD_HOLDER = "Takhirov Daler";
 
-/* ✅ юр. лица: 2 номера */
-const LEGAL_PHONES = ["+998 95 410 37 38", "+998 97 392 00 15"];
-const LEGAL_PHONE_PRIMARY = LEGAL_PHONES[0];
+/* ✅ QR для CLICK (файл должен быть в images/) */
+const CLICK_QR_IMG = "images/click_qr.png";
+
+const LEGAL_PHONE = "+998 91 319 70 07";
 const LEGAL_MAIL  = "shashtovuq@gmail.com";
 const ADMIN_TG_ID = "6013591658";
 
-/* ✅ CLICK данные */
-const CARD_NUMBER = "9860100126359502";
-const CARD_OWNER  = "Takhirov Daler";
-
-/* ✅ если QR называется иначе — добавил fallback варианты */
-const CLICK_QR_CANDIDATES = [
-  "images/click_qr.png",
-  "images/click_qr.jpg",
-  "images/click_qr.jpeg",
-  "images/qr_click.png",
-  "images/qr_click.jpg",
-  "images/qr.png",
-  "images/qr.jpg"
-];
-let qrTryIndex = 0;
-
-function tryAltQr(imgEl){
-  qrTryIndex++;
-  if(qrTryIndex < CLICK_QR_CANDIDATES.length){
-    imgEl.src = CLICK_QR_CANDIDATES[qrTryIndex];
-  }else{
-    imgEl.src = "logo.png";
+/* ===== Геолокация ===== */
+let GEO = { lat:null, lon:null };
+function geoText(){
+  if(GEO.lat && GEO.lon) return `📍 ${GEO.lat.toFixed(4)}, ${GEO.lon.toFixed(4)}`;
+  return "📍 Геолокация";
+}
+function setGeoPill(){
+  $('geoPill').innerText = geoText();
+}
+function saveGeo(){
+  try{ localStorage.setItem('shashtovuq_geo', JSON.stringify(GEO)); }catch(_){}
+}
+function loadGeo(){
+  try{
+    const s = localStorage.getItem('shashtovuq_geo');
+    if(!s) return;
+    const o = JSON.parse(s);
+    if(o && typeof o.lat === 'number' && typeof o.lon === 'number') GEO = o;
+  }catch(_){}
+}
+function requestGeo(){
+  if(!navigator.geolocation){
+    setGeoPill();
+    return;
   }
+  $('geoPill').innerText = "📍 Определяем...";
+  navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+      GEO.lat = pos.coords.latitude;
+      GEO.lon = pos.coords.longitude;
+      saveGeo();
+      setGeoPill();
+    },
+    (_err)=>{
+      setGeoPill();
+    },
+    { enableHighAccuracy:true, timeout:8000, maximumAge: 60_000 }
+  );
+}
+function geoClick(){
+  // если нет координат — запросить
+  if(!(GEO.lat && GEO.lon)){
+    requestGeo();
+    return;
+  }
+  // открыть карты с точкой пользователя
+  const ll = `${GEO.lon}%2C${GEO.lat}`;
+  const link = `https://yandex.uz/maps/?ll=${ll}&z=16&pt=${ll},pm2rdm`;
+  try{ Telegram.WebApp.openLink(link); }catch(_){ window.open(link, "_blank"); }
 }
 
-function openMap(){
-  try{ Telegram.WebApp.openLink(MAP_URL); }
-  catch(_){ window.open(MAP_URL, "_blank"); }
-}
+loadGeo();
+setGeoPill();
+/* авто-запрос гео при старте */
+setTimeout(requestGeo, 700);
 
-/* ✅ splash 3 секунды */
-function showSplash(){
-  const s = $('splash');
-  if(!s) return;
-  s.classList.add('show');
-  setTimeout(()=>{ s.classList.remove('show'); }, 3000);
-}
-
-/* ✅ image modal */
+/* ===== image modal ===== */
 function openImgModal(src){
   $('imgModalImg').src = src || 'logo.png';
   $('imgModalBackdrop').classList.add('show');
@@ -1244,32 +1306,11 @@ function closeImgModal(){
   setTimeout(()=>{ $('imgModalImg').src=''; }, 120);
 }
 
-/* ✅ Click sheet */
-function openClickSheet(){
-  $('clickBackdrop').classList.add('show');
-  $('clickSheet').classList.add('show');
-  // обновляем данные (на случай если изменишь)
-  $('cardValue').innerText = CARD_NUMBER;
-  $('nameValue').innerText = CARD_OWNER;
-}
-function closeClickSheet(){
-  $('clickBackdrop').classList.remove('show');
-  $('clickSheet').classList.remove('show');
-}
-async function copyText(txt){
-  try{
-    await navigator.clipboard.writeText(txt);
-    Telegram.WebApp.HapticFeedback?.notificationOccurred?.('success');
-  }catch(_){
-    prompt("Скопируй:", txt);
-  }
-}
-
-/* i18n */
+/* ===== i18n ===== */
 const MENU_I18N = {
-  ru:{menu:'Меню',review_title:'Оставить отзыв',review_sub:'Яндекс рейтинг / отзывы',review_hint:'Если виджет не открылся в Telegram — нажми «Открыть отзывы».',open_reviews:'Открыть отзывы',call:'Позвонить',insta_sub:'Открыть Instagram',theme:'Тема',theme_light:'Светлая',theme_dark:'Тёмная',theme_action:'Сменить',about:'О нас',about_sub:'Адрес и описание',about_title:'О нас',legal_title:'Для юридических лиц',legal_sub:'Связаться с менеджером',subcats:'Подкатегории',combo:'🍱 Комбо',new:'✨ Новинки'},
-  uz:{menu:'Menyu',review_title:'Fikr qoldirish',review_sub:'Yandex reyting / fikrlar',review_hint:'Agar vidjet Telegramda ochilmasa — «Sharhlarni ochish»ni bosing.',open_reviews:"Sharhlarni ochish",call:"Qo'ng'iroq qilish",insta_sub:"Instagramni ochish",theme:"Mavzu",theme_light:"Yorug'",theme_dark:"Qorong'i",theme_action:"Almashtirish",about:"Biz haqimizda",about_sub:"Manzil va ma'lumot",about_title:"Biz haqimizda",legal_title:"Yuridik shaxslar uchun",legal_sub:"Menejer bilan bog'lanish",subcats:"Ichki bo'limlar",combo:"🍱 Kombo",new:"✨ Yangi"},
-  en:{menu:'Menu',review_title:'Leave a review',review_sub:'Yandex rating / reviews',review_hint:'If the widget doesn’t open in Telegram — tap “Open reviews”.',open_reviews:'Open reviews',call:'Call',insta_sub:'Open Instagram',theme:'Theme',theme_light:'Light',theme_dark:'Dark',theme_action:'Switch',about:'About us',about_sub:'Address and info',about_title:'About us',legal_title:'For legal entities',legal_sub:'Contact manager',subcats:'Subcategories',combo:'🍱 Combo',new:'✨ New'}
+  ru:{menu:'Меню',review_title:'Оставить отзыв',review_sub:'Яндекс рейтинг / отзывы',review_hint:'Если виджет не открылся в Telegram — нажми «Открыть отзывы».',open_reviews:'Открыть отзывы',call:'Позвонить',insta_sub:'Открыть Instagram',theme:'Тема',theme_light:'Светлая',theme_dark:'Тёмная',theme_action:'Сменить',about:'О нас',about_sub:'Адрес и описание',about_title:'О нас',legal_title:'Для юридических лиц',legal_sub:'Связаться с менеджером',subcats:'Подкатегории',combo:'🍱 Комбо',new:'✨ Новинки', pay:'Оплата', pay_sub:'CLICK QR / Онлайн реквизиты'},
+  uz:{menu:'Menyu',review_title:'Fikr qoldirish',review_sub:'Yandex reyting / fikrlar',review_hint:'Agar vidjet Telegramda ochilmasa — «Sharhlarni ochish»ni bosing.',open_reviews:"Sharhlarni ochish",call:"Qo'ng'iroq qilish",insta_sub:"Instagramni ochish",theme:"Mavzu",theme_light:"Yorug'",theme_dark:"Qorong'i",theme_action:"Almashtirish",about:"Biz haqimizda",about_sub:"Manzil va ma'lumot",about_title:"Biz haqimizda",legal_title:"Yuridik shaxslar uchun",legal_sub:"Menejer bilan bog'lanish",subcats:"Ichki bo'limlar",combo:"🍱 Kombo",new:"✨ Yangi", pay:"To'lov", pay_sub:"CLICK QR / karta rekvizit"},
+  en:{menu:'Menu',review_title:'Leave a review',review_sub:'Yandex rating / reviews',review_hint:'If the widget doesn’t open in Telegram — tap “Open reviews”.',open_reviews:'Open reviews',call:'Call',insta_sub:'Open Instagram',theme:'Theme',theme_light:'Light',theme_dark:'Dark',theme_action:'Switch',about:'About us',about_sub:'Address and info',about_title:'About us',legal_title:'For legal entities',legal_sub:'Contact manager',subcats:'Subcategories',combo:'🍱 Combo',new:'✨ New', pay:'Payment', pay_sub:'CLICK QR / Card details'}
 };
 
 const ABOUT_TEXT = {
@@ -1281,7 +1322,8 @@ Fast Food SHASH TOVUQ — быстро, вкусно и с душой 🔥🐔
 Забрать с собой или заказать доставку — выбирай как удобно.
 SHASH TOVUQ — когда хочется по-настоящему вкусно!
 
-📍 Адрес: г. Самарканд, Ул. Рудаки 234`,
+📍 Самарканд
+(укажи адрес здесь)`,
   uz:`🇺🇿 Biz haqimizda
 
 Fast Food SHASH TOVUQ — tez, mazali va chin dildan 🔥🐔
@@ -1290,7 +1332,8 @@ Biz shirali tovuq, burger, shaurma va sevimli fastfud taomlarini yangi mahsulotl
 Olib ketish yoki yetkazib berish — o'zingizga qulayini tanlang.
 SHASH TOVUQ — haqiqiy mazani xohlaganda!
 
-📍 Manzil: Samarqand, Rudakiy ko‘chasi 234`,
+📍 Samarqand
+(manzilni shu yerga yozing)`,
   en:`🇬🇧 About Us
 
 Fast Food SHASH TOVUQ — fast, tasty, and made with care 🔥🐔
@@ -1299,38 +1342,22 @@ We cook juicy chicken, burgers, shawarma and your favorite fast food using fresh
 Pickup or delivery — choose what’s convenient.
 SHASH TOVUQ — when you want it truly delicious!
 
-📍 Address: Samarkand, Rudaki street 234`
+📍 Samarkand
+(add your address here)`
 };
 
 const TEXT={
-  ru:{
-    delivery:'🚚 Доставка',pickup:'🏃 Самовывоз',address:'📍 Адрес доставки',phone:'📞 Телефон',
-    cart:'🛒 Корзина',order:'Оформить заказ',comment:'✍️ Комментарий к заказу',
-    cash:'💵 Наличные',click:'💳 CLICK',online:'🌐 Онлайн',
-    results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина'
-  },
-  uz:{
-    delivery:'🚚 Yetkazish',pickup:'🏃 Olib ketish',address:'📍 Manzil',phone:'📞 Telefon',
-    cart:'🛒 Savat',order:'Buyurtma berish',comment:'✍️ Izoh',
-    cash:'💵 Naqd',click:'💳 CLICK',online:'🌐 Onlayn',
-    results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:"Savat bo‘sh",cart_btn:'🛒 Savat'
-  },
-  en:{
-    delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',
-    cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',
-    cash:'💵 Cash',click:'💳 CLICK',online:'🌐 Online',
-    results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart'
-  }
+  ru:{delivery:'🚚 Доставка',pickup:'🏃 Самовывоз',address:'📍 Адрес доставки',phone:'📞 Телефон',cart:'🛒 Корзина',order:'Оформить заказ',comment:'✍️ Комментарий к заказу',cash:'💵 Наличные',click:'💳 CLICK',online:'🌐 Онлайн',results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина'},
+  uz:{delivery:'🚚 Yetkazish',pickup:'🏃 Olib ketish',address:'📍 Manzil',phone:'📞 Telefon',cart:'🛒 Savat',order:'Buyurtma berish',comment:'✍️ Izoh',cash:'💵 Naqd',click:'💳 CLICK',online:'🌐 Onlayn',results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:"Savat bo‘sh",cart_btn:'🛒 Savat'},
+  en:{delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',cash:'💵 Cash',click:'💳 CLICK',online:'🌐 Online',results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart'}
 };
 
-/* ✅ Категории: Комбо / Напитки / Соус / Гарнир отдельно + Курица */
 const CATS={
   ru:{chicken:'🐔 Курица',combo:'🍱 Комбо',drinks:'🥤 Напитки',sauce:'🥫 Соус',garnish:'🍟 Гарнир'},
   uz:{chicken:"🐔 Tovuq",combo:'🍱 Kombo',drinks:'🥤 Ichimliklar',sauce:'🥫 Sous',garnish:'🍟 Garnir'},
   en:{chicken:'🐔 Chicken',combo:'🍱 Combo',drinks:'🥤 Drinks',sauce:'🥫 Sauce',garnish:'🍟 Side'}
 };
 
-/* ✅ Подкатегории только внутри Курица */
 const SUBCATS = {
   chicken: ['combo_sc','lavash','pita','doner','burger','wings','sausages','shashlik','tovuq'],
   combo: [],
@@ -1339,140 +1366,48 @@ const SUBCATS = {
   garnish: []
 };
 
-/* ✅ EN: Шашлычок = Barbecue */
 const SUBCATS_I18N = {
-  ru:{
-    combo_sc:'🍱 Комбо',
-    lavash:'🌯 Лаваш',
-    pita:'🥙 Пита курица',
-    doner:'🌯 Донер',
-    burger:'🍔 Куриный бургер',
-    wings:'🍗 Крылышки',
-    sausages:'🌭 Колбаски',
-    shashlik:'🍢 Шашлычок',
-    tovuq:'🐔 Шаштовук'
-  },
-  uz:{
-    combo_sc:'🍱 Kombo',
-    lavash:'🌯 Lavash',
-    pita:'🥙 Tovuq pita',
-    doner:'🌯 Doner',
-    burger:'🍔 Tovuq burger',
-    wings:'🍗 Qanotchalar',
-    sausages:'🌭 Kolbaska',
-    shashlik:'🍢 Shashlik',
-    tovuq:'🐔 Shashtovuq'
-  },
-  en:{
-    combo_sc:'🍱 Combo',
-    lavash:'🌯 Lavash',
-    pita:'🥙 Chicken pita',
-    doner:'🌯 Doner',
-    burger:'🍔 Chicken burger',
-    wings:'🍗 Wings',
-    sausages:'🌭 Sausages',
-    shashlik:'🍢 Barbecue',
-    tovuq:'🐔 Shashtovuq'
-  }
+  ru:{ combo_sc:'🍱 Комбо', lavash:'🌯 Лаваш', pita:'🥙 Пита курица', doner:'🌯 Донер', burger:'🍔 Куриный бургер', wings:'🍗 Крылышки', sausages:'🌭 Колбаски', shashlik:'🍢 Шашлычок', tovuq:'🐔 Шаштовук' },
+  uz:{ combo_sc:'🍱 Kombo', lavash:'🌯 Lavash', pita:'🥙 Tovuq pita', doner:'🌯 Doner', burger:'🍔 Tovuq burger', wings:'🍗 Qanotchalar', sausages:'🌭 Kolbaska', shashlik:'🍢 Shashlik', tovuq:'🐔 Shashtovuq' },
+  en:{ combo_sc:'🍱 Combo', lavash:'🌯 Lavash', pita:'🥙 Chicken pita', doner:'🌯 Doner', burger:'🍔 Chicken burger', wings:'🍗 Wings', sausages:'🌭 Sausages', shashlik:'🍢 Skewers', tovuq:'🐔 Shashtovuq' }
 };
 
-/* ✅ Меню: размеры M/L/XL сделаны внутри карточки */
+/* ===== Меню (как у тебя) ===== */
 const MENU2 = {
   chicken:{
     combo_sc:[
       {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
       {id:'combo_burger', p:28000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
-      /* ✅ EN: Шашлычок -> Barbecue */
-      {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Barbecue combo'}}
+      {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
     ],
     lavash:[
-      {
-        id:'lavash',
-        img:'logo.png',
-        spicy:false,
-        n:{ru:'Лаваш', uz:'Lavash', en:'Lavash'},
-        variants:[
-          {k:'m', label:'M', p:25000},
-          {k:'l', label:'L', p:30000},
-          {k:'xl', label:'XL', p:35000}
-        ]
-      },
-      {
-        id:'lavash_spicy',
-        img:'logo.png',
-        spicy:true,
-        n:{ru:'Острый лаваш', uz:"Achchiq lavash", en:'Spicy lavash'},
-        variants:[
-          {k:'m', label:'M', p:25000},
-          {k:'l', label:'L', p:30000},
-          {k:'xl', label:'XL', p:35000}
-        ]
-      }
+      { id:'lavash', img:'logo.png', spicy:false, n:{ru:'Лаваш', uz:'Lavash', en:'Lavash'},
+        variants:[{k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000}] },
+      { id:'lavash_spicy', img:'logo.png', spicy:true, n:{ru:'Острый лаваш', uz:"Achchiq lavash", en:'Spicy lavash'},
+        variants:[{k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000}] }
     ],
     pita:[
-      {
-        id:'pita',
-        img:'logo.png',
-        spicy:false,
-        n:{ru:'Шаурма в пите', uz:"Pitadagi shaurma", en:'Shawarma in pita'},
-        variants:[
-          {k:'m', label:'M', p:25000},
-          {k:'l', label:'L', p:30000},
-          {k:'xl', label:'XL', p:35000}
-        ]
-      },
-      {
-        id:'pita_spicy',
-        img:'logo.png',
-        spicy:true,
-        n:{ru:'Острая шаурма в пите', uz:"Achchiq pitadagi shaurma", en:'Spicy shawarma in pita'},
-        variants:[
-          {k:'m', label:'M', p:25000},
-          {k:'l', label:'L', p:30000},
-          {k:'xl', label:'XL', p:35000}
-        ]
-      }
+      { id:'pita', img:'logo.png', spicy:false, n:{ru:'Шаурма в пите', uz:"Pitadagi shaurma", en:'Shawarma in pita'},
+        variants:[{k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000}] },
+      { id:'pita_spicy', img:'logo.png', spicy:true, n:{ru:'Острая шаурма в пите', uz:"Achchiq pitadagi shaurma", en:'Spicy shawarma in pita'},
+        variants:[{k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000}] }
     ],
     doner:[
       {id:'doner_pita', p:23000, img:'logo.png', spicy:false, n:{ru:'Донер в пите', uz:'Doner pitada', en:'Doner in pita'}},
       {id:'doner_pita_spicy', p:23000, img:'logo.png', spicy:true, n:{ru:'Острый донер в пите', uz:'Achchiq doner pitada', en:'Spicy doner in pita'}},
-
-      {
-        id:'doner_plate',
-        img:'logo.png',
-        spicy:false,
-        n:{ru:'Донер в тарелке', uz:"Doner tarelkada", en:'Doner plate'},
-        variants:[
-          {k:'m', label:'M', p:25000},
-          {k:'l', label:'L', p:32000},
-          {k:'xl', label:'XL', p:40000}
-        ]
-      },
-      {
-        id:'doner_plate_spicy',
-        img:'logo.png',
-        spicy:true,
-        n:{ru:'Острый донер в тарелке', uz:"Achchiq doner tarelkada", en:'Spicy doner plate'},
-        variants:[
-          {k:'m', label:'M', p:25000},
-          {k:'l', label:'L', p:32000},
-          {k:'xl', label:'XL', p:40000}
-        ]
-      }
+      { id:'doner_plate', img:'logo.png', spicy:false, n:{ru:'Донер в тарелке', uz:"Doner tarelkada", en:'Doner plate'},
+        variants:[{k:'m', label:'M', p:25000},{k:'l', label:'L', p:32000},{k:'xl', label:'XL', p:40000}] },
+      { id:'doner_plate_spicy', img:'logo.png', spicy:true, n:{ru:'Острый донер в тарелке', uz:"Achchiq doner tarelkada", en:'Spicy doner plate'},
+        variants:[{k:'m', label:'M', p:25000},{k:'l', label:'L', p:32000},{k:'xl', label:'XL', p:40000}] }
     ],
-    burger:[
-      {id:'ch_burger', p:25000, img:'logo.png', spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}}
-    ],
-    wings:[
-      {id:'wings_1kg', p:75000, img:'logo.png', spicy:false, n:{ru:'Крылышки 1 кг', uz:'Qanot 1 kg', en:'Wings 1 kg'}}
-    ],
+    burger:[ {id:'ch_burger', p:25000, img:'logo.png', spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}} ],
+    wings:[ {id:'wings_1kg', p:75000, img:'logo.png', spicy:false, n:{ru:'Крылышки 1 кг', uz:'Qanot 1 kg', en:'Wings 1 kg'}} ],
     sausages:[
       {id:'sausages_fries', p:40000, img:'logo.png', spicy:false, n:{ru:'Колбаски + Фри', uz:'Kolbaska + Fri', en:'Sausages + Fries'}},
       {id:'sosiski_fries_pita', p:20000, img:'logo.png', spicy:false, n:{ru:'Сосиски + Фри + Пита', uz:'Sosiska + Fri + Pita', en:'Sausages + Fries + Pita'}}
     ],
     shashlik:[
-      /* ✅ EN: Шашлычок -> Barbecue */
-      {id:'shashlik_fries_pita', p:32000, img:'logo.png', spicy:false, n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + Fri + Pita', en:'Barbecue + Fries + Pita'}}
+      {id:'shashlik_fries_pita', p:32000, img:'logo.png', spicy:false, n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + Fri + Pita', en:'Skewer + Fries + Pita'}}
     ],
     tovuq:[
       {id:'shashtovuq_2', p:22000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 2 куска', uz:"Shashtovuq + Pita + 2 dona", en:'Shashtovuq + Pita + 2 pcs'}},
@@ -1482,32 +1417,19 @@ const MENU2 = {
       {id:'shashtovuq_6', p:42000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shashtovuq + Pita + 6 dona", en:'Shashtovuq + Pita + 6 pcs'}}
     ]
   },
-
-  /* ✅ Отдельная категория Комбо */
   combo:[
     {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
     {id:'combo_burger', p:28000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
-    /* ✅ EN: Шашлычок -> Barbecue */
-    {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Barbecue combo'}}
+    {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Shashlik combo'}}
   ],
-
-  /* ✅ Гарнир отдельно */
   garnish:[
     {id:'fries_l', p:10000, img:'logo.png', spicy:false, n:{ru:'Картофель фри L', uz:'Fri kartoshka L', en:'French fries L'}},
     {id:'fries_xl', p:15000, img:'logo.png', spicy:false, n:{ru:'Картофель фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
     {id:'fries_pita', p:16000, img:'logo.png', spicy:false, n:{ru:'Картофель фри + Пита', uz:'Fri + Pita', en:'Fries + Pita'}},
     {id:'village_potato', p:20000, img:'logo.png', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}}
   ],
-
-  /* ✅ Соус отдельно */
-  sauce:[
-
-  ],
-
-  /* ✅ Напитки отдельно */
-  drinks:[
-
-  ]
+  sauce:[],
+  drinks:[]
 };
 
 /* ✅ Карусели */
@@ -1560,6 +1482,10 @@ function openInstagram(e){
   try{ Telegram.WebApp.openLink(IG_URL); }
   catch(_){ window.open(IG_URL, "_blank"); }
 }
+function openMap(){
+  try{ Telegram.WebApp.openLink(MAP_URL); }
+  catch(_){ window.open(MAP_URL, "_blank"); }
+}
 
 /* About/Legal */
 let currentAboutLang = 'ru';
@@ -1581,12 +1507,10 @@ function openLegal(){
   closeTopMenu();
   const t = MENU_I18N[lang] || MENU_I18N.ru;
   $('legalTitle').innerText = t.legal_title || 'Для юридических лиц';
-
-  const phonesLine = LEGAL_PHONES.join('\n');
   const body = {
-    ru:`Связаться с менеджером\n\nТел:\n${phonesLine}\n\nПочта: ${LEGAL_MAIL}`,
-    uz:`Menejer bilan bog'lanish\n\nTel:\n${phonesLine}\n\nPochta: ${LEGAL_MAIL}`,
-    en:`Contact manager\n\nPhone:\n${phonesLine}\n\nEmail: ${LEGAL_MAIL}`
+    ru:`Связаться с менеджером\n\nТел: ${LEGAL_PHONE}\nПочта: ${LEGAL_MAIL}`,
+    uz:`Menejer bilan bog'lanish\n\nTel: ${LEGAL_PHONE}\nPochta: ${LEGAL_MAIL}`,
+    en:`Contact manager\n\nPhone: ${LEGAL_PHONE}\nEmail: ${LEGAL_MAIL}`
   };
   $('legalBody').textContent = body[lang] || body.ru;
 
@@ -1606,7 +1530,7 @@ function contactManager(){
   try{ Telegram.WebApp.openLink(link); }catch(_){ window.open(link, "_blank"); }
 }
 function openTelLegal(){
-  const tel = `tel:${LEGAL_PHONE_PRIMARY.replace(/\s+/g,'')}`;
+  const tel = `tel:${LEGAL_PHONE.replace(/\s+/g,'')}`;
   try{ Telegram.WebApp.openLink(tel); }catch(_){ window.location.href = tel; }
 }
 function openMailLegal(){
@@ -1614,10 +1538,100 @@ function openMailLegal(){
   try{ Telegram.WebApp.openLink(mail); }catch(_){ window.location.href = mail; }
 }
 
+/* ✅ Payment sheet */
+function openPaymentInfo(){
+  closeTopMenu();
+  openPaySheet(payment);
+}
+function openPaySheet(mode){
+  $('payBackdrop').classList.add('show');
+  $('paySheet').classList.add('show');
+  renderPaySheet(mode);
+}
+function closePaySheet(){
+  $('payBackdrop').classList.remove('show');
+  $('paySheet').classList.remove('show');
+}
+function renderPaySheet(mode){
+  const t = TEXT[lang] || TEXT.ru;
+  let title = '';
+  let sub = '';
+  let html = '';
+  if(mode === 'click'){
+    title = t.click;
+    sub = 'QR-код для оплаты (нажми, чтобы увеличить)';
+    html = `
+      <div class="qr-wrap">
+        <img class="qr-img" src="${CLICK_QR_IMG}" onerror="this.style.display='none'" onclick="openImgModal('${CLICK_QR_IMG}')">
+      </div>
+      <div style="margin-top:10px; font-size:12px; opacity:.8;">
+        Если QR не отображается — проверь файл: <b>${CLICK_QR_IMG}</b>
+      </div>
+    `;
+    $('payMethodTitle').innerText = title;
+    $('payMethodSub').innerText = sub;
+    $('payContent').innerHTML = html;
+    $('paySheet').dataset.copy = ''; // нечего копировать
+  } else if(mode === 'online'){
+    title = t.online;
+    sub = 'Реквизиты для перевода на карту';
+    html = `
+      <div style="margin-top:10px;">
+        <div class="pay-row" style="margin-top:10px;">
+          <div class="pay-left">
+            <div class="pay-title">Номер карты</div>
+            <div class="pay-sub">${CARD_NUMBER}</div>
+          </div>
+          <button class="copy-btn" onclick="copyText('${CARD_NUMBER}')">Копировать</button>
+        </div>
+
+        <div class="pay-row" style="margin-top:10px;">
+          <div class="pay-left">
+            <div class="pay-title">Получатель</div>
+            <div class="pay-sub">${CARD_HOLDER}</div>
+          </div>
+          <button class="copy-btn" onclick="copyText('${CARD_HOLDER}')">Копировать</button>
+        </div>
+      </div>
+    `;
+    $('payMethodTitle').innerText = title;
+    $('payMethodSub').innerText = sub;
+    $('payContent').innerHTML = html;
+    $('paySheet').dataset.copy = CARD_NUMBER;
+  } else {
+    // cash
+    title = t.cash;
+    sub = 'Оплата при получении';
+    html = `<div style="margin-top:10px; opacity:.85; font-size:13px;">Оплата наличными при получении заказа.</div>`;
+    $('payMethodTitle').innerText = title;
+    $('payMethodSub').innerText = sub;
+    $('payContent').innerHTML = html;
+    $('paySheet').dataset.copy = '';
+  }
+}
+function copyPay(){
+  const v = $('paySheet').dataset.copy || '';
+  if(v) copyText(v);
+}
+function copyText(txt){
+  try{
+    navigator.clipboard.writeText(String(txt));
+    Telegram.WebApp.showPopup?.({message:"Скопировано ✅"});
+  }catch(_){
+    const ta = document.createElement('textarea');
+    ta.value = String(txt);
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); }catch(__){}
+    document.body.removeChild(ta);
+    try{ Telegram.WebApp.showPopup?.({message:"Скопировано ✅"}); }catch(__){}
+  }
+}
+
 /* theme */
 let lang='ru', category='chicken', subcat='', type='delivery', payment='cash';
 let cart = {};
-const selectedSize = {}; // baseId -> variantKey
+const selectedSize = {};
 
 function applyTheme(theme){
   document.body.setAttribute('data-theme', theme);
@@ -1659,6 +1673,9 @@ function applyBurgerI18n(){
   $('mLegalTitle').innerText = t.legal_title;
   $('mLegalSub').innerText = t.legal_sub;
 
+  $('mPayTitle').innerText = t.pay;
+  $('mPaySub').innerText = t.pay_sub;
+
   $('comboTitle').innerText = t.combo;
   $('newTitle').innerText = t.new;
   $('subcatTitle').innerText = t.subcats;
@@ -1672,16 +1689,14 @@ function getName(it){
   return (it && it.n && it.n[lang]) ? it.n[lang] : (it?.n?.ru || it?.id || '');
 }
 
-/* ✅ key helpers for variants */
-function makeKey(baseId, vKey){
-  return vKey ? `${baseId}__${vKey}` : baseId;
-}
+/* key helpers */
+function makeKey(baseId, vKey){ return vKey ? `${baseId}__${vKey}` : baseId; }
 function parseKey(k){
   const parts = String(k).split('__');
   return { base: parts[0], v: parts[1] || '' };
 }
 
-/* index by id (base items) */
+/* index */
 const ITEM_BY_ID = {};
 (function indexItems(){
   for(const cat in MENU2){
@@ -1696,7 +1711,6 @@ const ITEM_BY_ID = {};
   }
 })();
 
-/* price for cart key */
 function price(key){
   const {base, v} = parseKey(key);
   const it = ITEM_BY_ID[base];
@@ -1708,7 +1722,7 @@ function price(key){
   return it.p || 0;
 }
 
-/* carousels render */
+/* carousels */
 function miniCounterHTML(key, prefix){
   const kk = `${prefix}_${key}`.replace(/[^a-zA-Z0-9_]/g,'_');
   return `
@@ -1721,16 +1735,14 @@ function miniCounterHTML(key, prefix){
 }
 function imgClickAttr(src){
   const safe = String(src || 'logo.png').replace(/"/g,'&quot;');
-  return `onclick="event.stopPropagation(); openImgModal('${safe}')"`;
+  return `onclick="event.stopPropagation(); openImgModal('${safe}')"`
 }
-
 function defaultKeyFor(it){
   if(it?.variants?.length){
     return makeKey(it.id, selectedSize[it.id] || it.variants[0].k);
   }
   return it.id;
 }
-
 function renderCombo(){
   $('comboRow').innerHTML = '';
   COMBO_IDS.forEach(id=>{
@@ -1848,7 +1860,7 @@ function setSubcat(sc){
   closeSubcats();
 }
 
-/* items for current view */
+/* current items */
 function getCurrentItems(){
   const node = MENU2[category];
   if(!node) return [];
@@ -1856,7 +1868,7 @@ function getCurrentItems(){
   return node[subcat] || [];
 }
 
-/* size UI */
+/* size */
 function setSize(baseId, vKey){
   selectedSize[baseId] = vKey;
   renderProducts();
@@ -1903,9 +1915,7 @@ function cardHTML(it, q=''){
 function renderProducts(){
   $('products').innerHTML='';
   const items = getCurrentItems();
-  items.forEach(it=>{
-    $('products').innerHTML += cardHTML(it,'');
-  });
+  items.forEach(it=>{ $('products').innerHTML += cardHTML(it,''); });
 }
 
 /* cart */
@@ -1946,10 +1956,9 @@ function setPayment(p){
   $('payClick').classList.toggle('active',p==='click');
   $('payOnline').classList.toggle('active',p==='online');
 
-  /* ✅ при нажатии на CLICK показываем QR */
-  if(p === 'click'){
-    openClickSheet();
-  }
+  /* ✅ при выборе CLICK/Онлайн показываем инфо аккуратно */
+  if(p === 'click') openPaySheet('click');
+  if(p === 'online') openPaySheet('online');
 }
 function scrollToCart(){
   closeTopMenu();
@@ -1998,9 +2007,7 @@ function searchProducts(){
       String(it.n?.uz||'').toLowerCase(),
       String(it.n?.en||'').toLowerCase()
     ];
-    if(it.variants){
-      it.variants.forEach(v=> allNames.push(String(v.label||'').toLowerCase()));
-    }
+    if(it.variants){ it.variants.forEach(v=> allNames.push(String(v.label||'').toLowerCase())); }
     if(allNames.some(x=>x.includes(q))){
       $('products').innerHTML += cardHTML(it, q);
     }
@@ -2008,12 +2015,9 @@ function searchProducts(){
 
   for(const cat in MENU2){
     const node = MENU2[cat];
-    if(Array.isArray(node)){
-      node.forEach(pushCard);
-    }else{
-      for(const sc in node){
-        (node[sc]||[]).forEach(pushCard);
-      }
+    if(Array.isArray(node)){ node.forEach(pushCard); }
+    else{
+      for(const sc in node){ (node[sc]||[]).forEach(pushCard); }
     }
   }
 }
@@ -2073,13 +2077,15 @@ function sendOrder(){
     order: cleanOrder,
     total: $('total').innerText,
     total_num: calcTotalNum(),
-    payment,
+    payment, // cash / click / online
     type,
     address: type === 'pickup' ? '' : $('address').value,
     phone: $('phone').value,
     comment: $('comment').value,
     order_id: genOrderId(),
-    ui: { category, subcat }
+    ui: { category, subcat },
+    device: document.body.dataset.device || 'unknown',
+    geo: (GEO.lat && GEO.lon) ? GEO : null
   };
 
   Telegram.WebApp.sendData(JSON.stringify(payload));
@@ -2110,17 +2116,6 @@ function applyLang(){
   $('popularTitle').innerText= TEXT[lang].popular;
   $('stickyCart').innerText  = TEXT[lang].cart_btn;
 
-  /* click sheet labels */
-  $('cardLabel').innerText = (lang==='en' ? 'Card number' : (lang==='uz' ? 'Karta raqami' : 'Номер карты'));
-  $('nameLabel').innerText = (lang==='en' ? 'Recipient' : (lang==='uz' ? 'Qabul qiluvchi' : 'Получатель'));
-  $('clickHint').innerText = (lang==='en'
-    ? 'After payment, tap “Place order” — we will see the payment method in your order.'
-    : (lang==='uz'
-      ? 'To‘lovdan so‘ng “Buyurtma berish”ni bosing — to‘lov turi buyurtmada ko‘rinadi.'
-      : 'После оплаты нажми «Оформить заказ» — мы увидим способ оплаты в заявке.'
-    )
-  );
-
   applyBurgerI18n();
   syncThemeLabel();
 
@@ -2134,6 +2129,9 @@ function applyLang(){
 
   updateTotal();
   applyTypeUI();
+
+  // если открыт payment sheet — перерисовать на выбранный язык
+  if($('paySheet').classList.contains('show')) renderPaySheet(payment);
 }
 
 /* saved inputs */
@@ -2148,11 +2146,14 @@ function bindSave(){
   $('phone').addEventListener('input', ()=>localStorage.setItem("shashtovuq_phone", $('phone').value));
 }
 
-/* ✅ init theme: по умолчанию СВЕТЛАЯ */
+/* init theme */
 (function initTheme(){
   const saved = localStorage.getItem('shashtovuq_theme');
   if(saved === 'dark' || saved === 'light') applyTheme(saved);
-  else applyTheme('light');
+  else{
+    const tgTheme = Telegram.WebApp.colorScheme || 'light';
+    applyTheme(tgTheme === 'dark' ? 'dark' : 'light');
+  }
 })();
 
 /* defaults */
@@ -2165,9 +2166,6 @@ loadSaved();
 bindSave();
 applyLang();
 setAboutLang('ru');
-
-/* ✅ запуск splash (Lavash Combo) */
-showSplash();
 </script>
 </body>
 </html>
