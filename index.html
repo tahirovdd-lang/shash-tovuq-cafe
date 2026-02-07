@@ -233,7 +233,7 @@ body{
 
 /* ✅ payments: ONE ROW */
 .payments{
-  flex-wrap:nowrap;         /* one row */
+  flex-wrap:nowrap;
   gap:8px;
   padding:10px 0 0;
 }
@@ -992,7 +992,6 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
     <b id="cartTitle"></b>: <span id="total">0</span> сум
     <textarea id="comment" class="input"></textarea>
 
-    <!-- ✅ payments in one row: Cash / Click / Online -->
     <div class="payments">
       <button class="btn active" id="payCash" onclick="setPayment('cash')"></button>
       <button class="btn" id="payClick" onclick="setPayment('click')"></button>
@@ -1174,9 +1173,6 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
       </div>
 
       <div class="qr-wrap">
-        <!-- ✅ ВАЖНО: поставь имя файла как у тебя в папке images.
-             Если у тебя другой файл — просто переименуй его в click_qr.png
-             или измени путь ниже на свой. -->
         <img id="payQr" src="images/click_qr.png" onerror="this.src='images/click_qr.jpg'">
       </div>
 
@@ -1193,10 +1189,10 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
     <img id="imgModalImg" src="" alt="preview" />
   </div>
 
-  <!-- Splash -->
+  <!-- Splash (✅ изменил images.jpg на нормальное имя) -->
   <div class="splash" id="splash">
     <div class="splash-card">
-      <img src="images/lavash_combo.jpg" onerror="this.src='logo.png'" alt="Lavash Combo">
+      <img src="images/splash.jpg" onerror="this.src='images/splash.png'; if(this.src.includes('splash.png')) this.onerror=function(){this.src='logo.png'}" alt="Promo">
       <div class="splash-caption">✨ Lavash Combo</div>
     </div>
   </div>
@@ -1221,7 +1217,7 @@ const CARD_NUMBER = "9860100126359502";
 const CARD_NAME   = "Takhirov Daler";
 
 /* ✅ QR path (Click) */
-const CLICK_QR_SRC = "images/click_qr.png"; // (fallback: .jpg в html)
+const CLICK_QR_SRC = "images/click_qr.png";
 
 /* legal */
 const LEGAL_PHONES = ["+998 95 410 37 38", "+998 97 392 00 15"];
@@ -1260,7 +1256,6 @@ async function copyText(txt){
     await navigator.clipboard.writeText(String(txt));
     Telegram?.WebApp?.showToast?.("Скопировано");
   }catch(_){
-    // fallback
     const ta = document.createElement('textarea');
     ta.value = String(txt);
     document.body.appendChild(ta);
@@ -1273,9 +1268,6 @@ async function copyText(txt){
 
 /* ✅ Pay sheet open/close */
 function openPaySheet(mode){
-  // mode: 'click' or 'online'
-  const t = MENU_I18N[lang] || MENU_I18N.ru;
-
   $('payTitle').innerText = (lang==='en') ? 'Payment' : (lang==='uz' ? 'To‘lov' : 'Оплата');
   $('paySubtitle').innerText =
     (mode==='click')
@@ -1285,7 +1277,6 @@ function openPaySheet(mode){
   $('cardNumber').innerText = CARD_NUMBER.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
   $('cardName').innerText = CARD_NAME;
 
-  // QR only for Click (как ты просил)
   if(mode === 'click'){
     $('payQr').style.display = 'block';
     $('payQr').src = CLICK_QR_SRC;
@@ -1415,62 +1406,73 @@ const SUBCATS_I18N = {
   }
 };
 
-/* ✅ MENU (укороченно/как было у тебя) */
+/* ✅ helper: правильный путь к картинкам (все блюда -> images/<id>.jpg/.png) */
+function imgOf(id){
+  return `images/${id}.jpg`;
+}
+
+/* ✅ MENU (✅ исправлены названия блюд + ✅ всем блюдам поставлены правильные имена картинок) */
 const MENU2 = {
   chicken:{
     lavash:[
-      { id:'lavash', img:'logo.png', spicy:false, n:{ru:'Лаваш', uz:'Lavash', en:'Lavash'},
+      { id:'lavash', img:imgOf('lavash'), spicy:false, n:{ru:'Лаваш', uz:'Lavash', en:'Lavash'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000} ] },
-      { id:'lavash_spicy', img:'logo.png', spicy:true, n:{ru:'Острый лаваш', uz:"Achchiq lavash", en:'Spicy lavash'},
+      { id:'lavash_spicy', img:imgOf('lavash_spicy'), spicy:true, n:{ru:'Острый лаваш', uz:"Achchiq lavash", en:'Spicy lavash'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000} ] }
     ],
     pita:[
-      { id:'pita', img:'logo.png', spicy:false, n:{ru:'Шаурма в пите', uz:"Pitadagi shaurma", en:'Shawarma in pita'},
+      { id:'pita', img:imgOf('pita'), spicy:false, n:{ru:'Шаурма в пите', uz:"Pitadagi shaurma", en:'Shawarma in pita'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000} ] },
-      { id:'pita_spicy', img:'logo.png', spicy:true, n:{ru:'Острая шаурма в пите', uz:"Achchiq pitadagi shaurma", en:'Spicy shawarma in pita'},
+      { id:'pita_spicy', img:imgOf('pita_spicy'), spicy:true, n:{ru:'Острая шаурма в пите', uz:"Achchiq pitadagi shaurma", en:'Spicy shawarma in pita'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:30000},{k:'xl', label:'XL', p:35000} ] }
     ],
     doner:[
-      {id:'doner_pita', p:23000, img:'logo.png', spicy:false, n:{ru:'Донер в пите', uz:'Doner pitada', en:'Doner in pita'}},
-      {id:'doner_pita_spicy', p:23000, img:'logo.png', spicy:true, n:{ru:'Острый донер в пите', uz:'Achchiq doner pitada', en:'Spicy doner in pita'}},
-      { id:'doner_plate', img:'logo.png', spicy:false, n:{ru:'Донер в тарелке', uz:"Doner tarelkada", en:'Doner plate'},
+      {id:'doner_pita', p:23000, img:imgOf('doner_pita'), spicy:false, n:{ru:'Донер в пите', uz:'Doner pitada', en:'Doner in pita'}},
+      {id:'doner_pita_spicy', p:23000, img:imgOf('doner_pita_spicy'), spicy:true, n:{ru:'Острый донер в пите', uz:'Achchiq doner pitada', en:'Spicy doner in pita'}},
+      { id:'doner_plate', img:imgOf('doner_plate'), spicy:false, n:{ru:'Донер в тарелке', uz:"Doner tarelkada", en:'Doner plate'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:32000},{k:'xl', label:'XL', p:40000} ] },
-      { id:'doner_plate_spicy', img:'logo.png', spicy:true, n:{ru:'Острый донер в тарелке', uz:"Achchiq doner tarelkada", en:'Spicy doner plate'},
+      { id:'doner_plate_spicy', img:imgOf('doner_plate_spicy'), spicy:true, n:{ru:'Острый донер в тарелке', uz:"Achchiq doner tarelkada", en:'Spicy doner plate'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:32000},{k:'xl', label:'XL', p:40000} ] }
     ],
-    burger:[ {id:'ch_burger', p:25000, img:'logo.png', spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}} ],
-    wings:[ {id:'wings_1kg', p:75000, img:'logo.png', spicy:false, n:{ru:'Крылышки 1 кг', uz:'Qanot 1 kg', en:'Wings 1 kg'}} ],
+    burger:[
+      {id:'ch_burger', p:25000, img:imgOf('ch_burger'), spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}}
+    ],
+    wings:[
+      {id:'wings_1kg', p:75000, img:imgOf('wings_1kg'), spicy:false, n:{ru:'Крылышки (1 кг)', uz:'Qanot (1 kg)', en:'Wings (1 kg)'}}
+    ],
     sausages:[
-      {id:'sausages_fries', p:40000, img:'kolbaski_fri.jpg', spicy:false, n:{ru:'Колбаски + Фри', uz:'Kolbaska + Fri', en:'Sausages + Fries'}},
-      {id:'sosiski_fries_pita', p:20000, img:'logo.png', spicy:false, n:{ru:'Сосиски + Фри + Пита', uz:'Sosiska + Fri + Pita', en:'Sausages + Fries + Pita'}}
+      {id:'sausages_fries', p:40000, img:imgOf('sausages_fries'), spicy:false, n:{ru:'Колбаски с фри', uz:'Kolbaska fri bilan', en:'Sausages with fries'}},
+      {id:'sosiski_fries_pita', p:20000, img:imgOf('sosiski_fries_pita'), spicy:false, n:{ru:'Сосиски с фри и питой', uz:'Sosiska fri va pita bilan', en:'Sausages with fries & pita'}}
     ],
     shashlik:[
-      {id:'shashlik_fries_pita', p:32000, img:'shashlik_fri_pita.jpg', spicy:false, n:{ru:'Шашлычок + Фри + Пита', uz:'Shashlik + Fri + Pita', en:'Barbecue + Fries + Pita'}}
+      {id:'shashlik_fries_pita', p:32000, img:imgOf('shashlik_fries_pita'), spicy:false, n:{ru:'Шашлычок с фри и питой', uz:'Shashlik fri va pita bilan', en:'Barbecue with fries & pita'}}
     ],
     tovuq:[
-      {id:'shashtovuq_2', p:22000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 2 куска', uz:"Shashtovuq + Pita + 2 dona", en:'Shashtovuq + Pita + 2 pcs'}},
-      {id:'shashtovuq_3', p:27000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 3 куска', uz:"Shashtovuq + Pita + 3 dona", en:'Shashtovuq + Pita + 3 pcs'}},
-      {id:'shashtovuq_4', p:32000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 4 куска', uz:"Shashtovuq + Pita + 4 dona", en:'Shashtovuq + Pita + 4 pcs'}},
-      {id:'shashtovuq_5', p:37000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 5 кусков', uz:"Shashtovuq + Pita + 5 dona", en:'Shashtovuq + Pita + 5 pcs'}},
-      {id:'shashtovuq_6', p:42000, img:'logo.png', spicy:false, n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shashtovuq + Pita + 6 dona", en:'Shashtovuq + Pita + 6 pcs'}}
+      {id:'shashtovuq_2', p:22000, img:imgOf('shashtovuq_2'), spicy:false, n:{ru:'Шаштовук с питой (2 куска)', uz:"Shashtovuq pita bilan (2 dona)", en:'Shashtovuq with pita (2 pcs)'}},
+      {id:'shashtovuq_3', p:27000, img:imgOf('shashtovuq_3'), spicy:false, n:{ru:'Шаштовук с питой (3 куска)', uz:"Shashtovuq pita bilan (3 dona)", en:'Shashtovuq with pita (3 pcs)'}},
+      {id:'shashtovuq_4', p:32000, img:imgOf('shashtovuq_4'), spicy:false, n:{ru:'Шаштовук с питой (4 куска)', uz:"Shashtovuq pita bilan (4 dona)", en:'Shashtovuq with pita (4 pcs)'}},
+      {id:'shashtovuq_5', p:37000, img:imgOf('shashtovuq_5'), spicy:false, n:{ru:'Шаштовук с питой (5 кусков)', uz:"Shashtovuq pita bilan (5 dona)", en:'Shashtovuq with pita (5 pcs)'}},
+      {id:'shashtovuq_6', p:42000, img:imgOf('shashtovuq_6'), spicy:false, n:{ru:'Шаштовук с питой (6 кусков)', uz:"Shashtovuq pita bilan (6 dona)", en:'Shashtovuq with pita (6 pcs)'}}
     ]
   },
 
   beef:{
     beef_shashlik:[
-      { id:'beef_shashlik_lavash', img:'logo.png', spicy:false, n:{ru:'Шашлычок в лаваше', uz:"Shashlik lavashda", en:'Barbecue in lavash'},
+      { id:'beef_shashlik_lavash', img:imgOf('beef_shashlik_lavash'), spicy:false, n:{ru:'Говяжий шашлычок в лаваше', uz:"Mol shashlik lavashda", en:'Beef barbecue in lavash'},
         variants:[ {k:'l', label:'L', p:35000},{k:'xl', label:'XL', p:55000} ] },
-      { id:'beef_shashlik_pita', img:'logo.png', spicy:false, n:{ru:'Шашлычок в пите', uz:"Shashlik pitada", en:'Barbecue in pita'},
+      { id:'beef_shashlik_pita', img:imgOf('beef_shashlik_pita'), spicy:false, n:{ru:'Говяжий шашлычок в пите', uz:"Mol shashlik pitada", en:'Beef barbecue in pita'},
         variants:[ {k:'l', label:'L', p:35000},{k:'xl', label:'XL', p:55000} ] },
-      {id:'beef_shashlik_baton', p:33000, img:'logo.png', spicy:false, n:{ru:'Шашлычок в батоне', uz:"Shashlik batonda", en:'Barbecue in bun'}}
+      {id:'beef_shashlik_baton', p:33000, img:imgOf('beef_shashlik_baton'), spicy:false, n:{ru:'Говяжий шашлычок в батоне', uz:"Mol shashlik batonda", en:'Beef barbecue in bun'}}
     ],
-    kufta:[ {id:'kufta_fries', p:40000, img:'logo.png', spicy:false, n:{ru:'Кюфта + Фри', uz:"Kyufta + Fri", en:'Kefta + Fries'}} ],
+    kufta:[
+      {id:'kufta_fries', p:40000, img:imgOf('kufta_fries'), spicy:false, n:{ru:'Кюфта с фри', uz:"Kyufta fri bilan", en:'Kefta with fries'}}
+    ],
     burger:[
-      {id:'burger', p:35000, img:'logo.png', spicy:false, n:{ru:'Бургер', uz:'Burger', en:'Burger'}},
-      {id:'cheeseburger', p:38000, img:'logo.png', spicy:false, n:{ru:'Чизбургер', uz:'Chizburger', en:'Cheeseburger'}}
+      {id:'burger', p:35000, img:imgOf('burger'), spicy:false, n:{ru:'Бургер', uz:'Burger', en:'Burger'}},
+      {id:'cheeseburger', p:38000, img:imgOf('cheeseburger'), spicy:false, n:{ru:'Чизбургер', uz:'Chizburger', en:'Cheeseburger'}}
     ],
     hotdog:[
-      { id:'hotdog_pita', img:'logo.png', spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
+      { id:'hotdog_pita', img:imgOf('hotdog_pita'), spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
         variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] }
     ]
   },
@@ -1482,20 +1484,20 @@ const MENU2 = {
   ],
 
   garnish:[
-    {id:'fries_l', p:10000, img:'logo.png', spicy:false, n:{ru:'Картофель фри L', uz:'Fri kartoshka L', en:'French fries L'}},
-    {id:'fries_xl', p:15000, img:'logo.png', spicy:false, n:{ru:'Картофель фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
-    {id:'fries_pita', p:16000, img:'logo.png', spicy:false, n:{ru:'Картофель фри + Пита', uz:'Fri + Pita', en:'Fries + Pita'}},
-    {id:'village_potato', p:20000, img:'logo.png', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}}
+    {id:'fries_l', p:10000, img:imgOf('fries_l'), spicy:false, n:{ru:'Картофель фри (L)', uz:'Fri (L)', en:'French fries (L)'}},
+    {id:'fries_xl', p:15000, img:imgOf('fries_xl'), spicy:false, n:{ru:'Картофель фри (XL)', uz:'Fri (XL)', en:'French fries (XL)'}},
+    {id:'fries_pita', p:16000, img:imgOf('fries_pita'), spicy:false, n:{ru:'Фри с питой', uz:'Fri pita bilan', en:'Fries with pita'}},
+    {id:'village_potato', p:20000, img:imgOf('village_potato'), spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Country-style potato'}}
   ],
 
   sauce:[
-    {id:'bbq', p:3000, img:'logo.png', spicy:false, n:{ru:'Барбекю', uz:'Barbekyu', en:'BBQ'}},
-    {id:'cheese_sauce', p:3000, img:'logo.png', spicy:false, n:{ru:'Сырный', uz:"Pishloqli", en:'Cheese'}}
+    {id:'bbq', p:3000, img:imgOf('bbq'), spicy:false, n:{ru:'Соус барбекю', uz:'Barbekyu sous', en:'BBQ sauce'}},
+    {id:'cheese_sauce', p:3000, img:imgOf('cheese_sauce'), spicy:false, n:{ru:'Сырный соус', uz:"Pishloqli sous", en:'Cheese sauce'}}
   ],
 
   drinks:[
-    {id:'tea_02', p:2000, img:'logo.png', spicy:false, n:{ru:'Чай 0.2L', uz:'Choy 0.2L', en:'Tea 0.2L'}},
-    {id:'coca_05', p:7000, img:'logo.png', spicy:false, n:{ru:'Coca Cola 0.5L', uz:'Coca Cola 0.5L', en:'Coca Cola 0.5L'}}
+    {id:'tea_02', p:2000, img:imgOf('tea_02'), spicy:false, n:{ru:'Чай 0.2 л', uz:'Choy 0.2 l', en:'Tea 0.2 L'}},
+    {id:'coca_05', p:7000, img:imgOf('coca_05'), spicy:false, n:{ru:'Coca-Cola 0.5 л', uz:'Coca-Cola 0.5 l', en:'Coca-Cola 0.5 L'}}
   ]
 };
 
@@ -1709,6 +1711,20 @@ function price(key){
   return it.p || 0;
 }
 
+/* ✅ image fallback (jpg -> png -> logo) */
+function imgTagSrc(src){
+  const s = String(src||'');
+  return s;
+}
+function fixImg(el){
+  const src = el.getAttribute('data-src') || el.getAttribute('src') || '';
+  if(src.endsWith('.jpg')){
+    el.src = src.replace(/\.jpg$/i,'.png');
+  }else{
+    el.src = 'logo.png';
+  }
+}
+
 /* carousels render */
 function miniCounterHTML(key, prefix){
   const kk = `${prefix}_${key}`.replace(/[^a-zA-Z0-9_]/g,'_');
@@ -1738,7 +1754,7 @@ function renderCombo(){
       <div class="combo-card" onclick="chg('${key}',1)">
         <div class="badge">🍱</div>
         <div class="combo-img">
-          <img src="${it.img}" onerror="this.src='logo.png'" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
+          <img src="${imgTagSrc(it.img)}" data-src="${imgTagSrc(it.img)}" onerror="fixImg(this)" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
         </div>
         <div class="combo-name">${escapeHtml(getName(it))}</div>
         <div class="combo-price">${formatSum(price(key))} <small>сум</small></div>
@@ -1759,7 +1775,7 @@ function renderPopular(){
       <div class="small-card" onclick="chg('${key}',1)">
         <div class="badge">🔥</div>
         <div class="small-img">
-          <img src="${it.img}" onerror="this.src='logo.png'" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
+          <img src="${imgTagSrc(it.img)}" data-src="${imgTagSrc(it.img)}" onerror="fixImg(this)" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
         </div>
         <div class="small-name">${escapeHtml(nm)}</div>
         <div class="small-price">${formatSum(price(key))} <small>сум</small></div>
@@ -1780,7 +1796,7 @@ function renderNew(){
       <div class="small-card" onclick="chg('${key}',1)">
         <div class="badge">✨</div>
         <div class="small-img">
-          <img src="${it.img}" onerror="this.src='logo.png'" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
+          <img src="${imgTagSrc(it.img)}" data-src="${imgTagSrc(it.img)}" onerror="fixImg(this)" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
         </div>
         <div class="small-name">${escapeHtml(nm)}</div>
         <div class="small-price">${formatSum(price(key))} <small>сум</small></div>
@@ -1877,7 +1893,7 @@ function cardHTML(it, q=''){
   return `<div class="card">
     ${isSpicy ? `<div class="spicy-badge">🌶️</div>` : ``}
     <div class="img">
-      <img src="${it.img}" onerror="this.src='logo.png'" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
+      <img src="${imgTagSrc(it.img)}" data-src="${imgTagSrc(it.img)}" onerror="fixImg(this)" onclick="event.stopPropagation(); openImgModal('${String(it.img||'logo.png').replace(/'/g,"\\'")}')">
     </div>
     <div>${nameHtml}</div>
     ${sizesHtml}
@@ -1935,14 +1951,8 @@ function setPayment(p){
   $('payClick').classList.toggle('active',p==='click');
   $('payOnline').classList.toggle('active',p==='online');
 
-  // ✅ по нажатию на Click показываем QR (как просил)
-  if(p === 'click'){
-    openPaySheet('click');
-  }
-  // ✅ Онлайн: покажем реквизиты (без QR)
-  if(p === 'online'){
-    openPaySheet('online');
-  }
+  if(p === 'click'){ openPaySheet('click'); }
+  if(p === 'online'){ openPaySheet('online'); }
 }
 
 function scrollToCart(){
@@ -2061,14 +2071,14 @@ function sendOrder(){
     order: cleanOrder,
     total: $('total').innerText,
     total_num: calcTotalNum(),
-    payment, // ✅ cash / click / online
+    payment,
     type,
     address: type === 'pickup' ? '' : $('address').value,
     phone: $('phone').value,
     comment: $('comment').value,
     order_id: genOrderId(),
     ui: { category, subcat },
-    pay_details: { card_number: CARD_NUMBER, card_name: CARD_NAME } // ✅ чтобы админу тоже ушло
+    pay_details: { card_number: CARD_NUMBER, card_name: CARD_NAME }
   };
 
   Telegram.WebApp.sendData(JSON.stringify(payload));
@@ -2091,7 +2101,6 @@ function applyLang(){
   $('orderBtn').innerText    = TEXT[lang].order;
   $('comment').placeholder   = TEXT[lang].comment;
 
-  // ✅ payments labels
   $('payCash').innerText     = TEXT[lang].cash;
   $('payClick').innerText    = TEXT[lang].click;
   $('payOnline').innerText   = TEXT[lang].online;
@@ -2103,7 +2112,6 @@ function applyLang(){
   applyBurgerI18n();
   syncThemeLabel();
 
-  // pay sheet labels
   $('cardLabel').innerText = (lang==='en') ? 'Card number' : (lang==='uz' ? 'Karta raqami' : 'Номер карты');
   $('nameLabel').innerText = (lang==='en') ? 'Receiver' : (lang==='uz' ? 'Qabul qiluvchi' : 'Получатель');
 
