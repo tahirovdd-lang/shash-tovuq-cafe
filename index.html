@@ -43,7 +43,6 @@ body{
   color:var(--text);
   padding-bottom:130px;
 
-  /* ✅ better iOS/Android scroll behavior */
   overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -77,8 +76,6 @@ body{
 
   padding-top: calc(14px + env(safe-area-inset-top));
 }
-
-/* ✅ extra safe for iOS notch */
 body[data-platform="ios"] .header{
   padding-top: calc(16px + env(safe-area-inset-top));
 }
@@ -242,7 +239,7 @@ body[data-platform="ios"] .header{
   box-shadow: 0 14px 30px rgba(255,27,45,.22);
 }
 
-/* ✅ payments: ONE ROW */
+/* payments: ONE ROW */
 .payments{
   flex-wrap:nowrap;
   gap:8px;
@@ -328,21 +325,13 @@ body[data-theme="dark"] .input{ background: rgba(28,28,28,.92); }
 body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 .card:active{ transform:scale(.99); }
 
-/* ✅ УВЕЛИЧИЛ ФОТО В КАРТОЧКАХ */
+/* ✅ УВЕЛИЧИЛ ФОТО В КАРТОЧКАХ + ЗАКРУГЛЕНИЕ УГЛОВ */
 .img{ height:128px; display:flex; align-items:center; justify-content:center; }
-/* ✅ FIX: rounded corners for dish icons */
 .img img{
-  max-width:128px;
-  max-height:120px;
-  width:auto;
-  height:auto;
-  opacity:.98;
-  cursor:pointer;
-  border-radius:18px;
-  overflow:hidden;
+  max-width:128px; max-height:120px; width:auto; height:auto; opacity:.98; cursor:pointer;
+  border-radius:18px; /* ✅ rounded corners */
 }
 
-/* make images crisp on mobile */
 img{ image-rendering:auto; }
 
 .price{ font-weight:900; color:var(--red2); margin-top:6px; }
@@ -515,7 +504,6 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 }
 .combo-card:active{ transform:scale(.99); }
 
-/* ✅ УВЕЛИЧИЛ ФОТО В КАРУСЕЛЯХ */
 .combo-img{
   height:150px;
   border-radius:18px;
@@ -525,8 +513,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   justify-content:center;
   background: rgba(255,27,45,.10);
 }
-/* ✅ already rounded by container, but keep safe */
-.combo-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; border-radius:18px; }
+.combo-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
 
 .combo-name{ font-weight:900; margin-top:10px; }
 .combo-price{ font-weight:900; color:var(--red2); margin-top:6px; }
@@ -554,7 +541,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   justify-content:center;
   background: rgba(255,27,45,.10);
 }
-.small-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; border-radius:18px; }
+.small-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
 .small-name{ font-weight:900; margin-top:10px; }
 .small-price{ font-weight:900; color:var(--red2); margin-top:6px; }
 
@@ -867,7 +854,7 @@ body[data-theme="dark"] .splash-card{
   justify-content:center;
 }
 
-/* ✅ payment QR sheet content */
+/* payment QR sheet content */
 .pay-box{
   border:1px solid rgba(0,0,0,.08);
   border-radius:18px;
@@ -941,9 +928,8 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
 
   .products{ gap:12px; padding:12px; }
 
-  /* ✅ bigger but fit small screens */
   .img{ height:118px; }
-  .img img{ max-width:118px; max-height:110px; border-radius:18px; }
+  .img img{ max-width:118px; max-height:110px; border-radius:16px; }
 
   .categories .btn{ min-width:116px; font-size:12.6px; padding:8px 10px; }
 
@@ -993,9 +979,10 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
     <div class="search-clear" onclick="clearSearch()" title="Очистить">✖</div>
   </div>
 
+  <!-- ✅ DEFAULT: UZ active -->
   <div class="langs">
-    <button class="btn active" onclick="setLang('ru',this)">🇷🇺 RU</button>
-    <button class="btn" onclick="setLang('uz',this)">🇺🇿 UZ</button>
+    <button class="btn" onclick="setLang('ru',this)">🇷🇺 RU</button>
+    <button class="btn active" onclick="setLang('uz',this)">🇺🇿 UZ</button>
     <button class="btn" onclick="setLang('en',this)">🇬🇧 EN</button>
   </div>
 
@@ -1014,9 +1001,10 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
     <div class="row" id="newRow"></div>
   </div>
 
+  <!-- ✅ DEFAULT: Pickup active -->
   <div class="types">
-    <button class="btn active" id="btnDelivery" onclick="setType('delivery',this)"></button>
-    <button class="btn" id="btnPickup" onclick="setType('pickup',this)"></button>
+    <button class="btn" id="btnDelivery" onclick="setType('delivery',this)"></button>
+    <button class="btn active" id="btnPickup" onclick="setType('pickup',this)"></button>
   </div>
 
   <input id="address" class="input">
@@ -1214,7 +1202,7 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
       </div>
 
       <div style="margin-top:10px; font-size:12.5px; opacity:.75; line-height:1.35;" id="payHint">
-        Наведи камеру на QR-код или открой приложение Click и оплати по реквизитам.
+        Navedi kameru na QR-kod ili otkroy prilozheniye Click i oplati po rekvizitam.
       </div>
     </div>
   </div>
@@ -1242,15 +1230,15 @@ Telegram.WebApp.expand();
 try{ Telegram.WebApp.requestFullscreen?.(); }catch(_){}
 try{ Telegram.WebApp.disableVerticalSwipes?.(); }catch(_){}
 
-/* ✅ platform detect (iOS / Android) */
+/* platform detect (iOS / Android) */
 try{
   const plat = (Telegram.WebApp.platform || '').toLowerCase();
-  document.body.dataset.platform = plat; // ios / android / web / etc
+  document.body.dataset.platform = plat;
 }catch(_){}
 
 const $ = (id)=>document.getElementById(id);
 
-/* ✅ FIX: auto try .jpg.jpg when your repo has files like name.jpg.jpg */
+/* auto try .jpg.jpg when repo has name.jpg.jpg */
 function imgFix(el){
   try{
     if(!el || !el.getAttribute) return;
@@ -1258,7 +1246,7 @@ function imgFix(el){
       el.dataset.fixTry = "1";
       const src = el.getAttribute('src') || '';
       if(src.toLowerCase().endsWith('.jpg')){
-        el.src = src + '.jpg'; // -> .jpg.jpg
+        el.src = src + '.jpg';
         return;
       }
     }
@@ -1268,7 +1256,7 @@ function imgFix(el){
 
 /* links */
 const IG_URL = "https://www.instagram.com/shash.tovuq.n1/";
-/* ✅ CHANGED: reviews button link */
+/* ✅ UPDATED/CONFIRMED: reviews button link */
 const YANDEX_REVIEWS_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=17.08";
 const MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65";
 
@@ -1276,7 +1264,7 @@ const MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.6690
 const CARD_NUMBER = "9860100126359502";
 const CARD_NAME   = "Takhirov Daler";
 
-/* ✅ QR path (Click) */
+/* QR path (Click) */
 const CLICK_QR_SRC = "images/click_qr.png";
 
 /* legal */
@@ -1434,7 +1422,7 @@ const SUBCATS_I18N = {
   en:{lavash:'🌯 Lavash',pita:'🥙 Chicken pita',doner:'🌯 Doner',burger:'🍔 Burgers',wings:'🍗 Wings',sausages:'🌭 Sausages',shashlik:'🍢 Barbecue',tovuq:'🐔 Shashtovuq',beef_shashlik:'🥩 Barbecue (beef)',kufta:'🧆 Kefta',hotdog:'🌭 Hot-dog'}
 };
 
-/* ✅ MENU with JPG photos */
+/* MENU */
 const MENU2 = {
   chicken:{
     lavash:[
@@ -1457,7 +1445,6 @@ const MENU2 = {
       { id:'doner_plate_spicy', img:'images/doner_plate_spicy.jpg', spicy:true, n:{ru:'Острый донер в тарелке', uz:"Achchiq doner tarelkada", en:'Spicy doner plate'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:32000},{k:'xl', label:'XL', p:40000} ] }
     ],
-    /* ✅ chicken burgers: added Long Chesse 25 000 */
     burger:[
       {id:'ch_burger', p:25000, img:'images/chicken_burger.jpg', spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}},
       {id:'long_chesse', p:25000, img:'images/long_chesse.jpg', spicy:false, n:{ru:'Long Chesse', uz:'Long Chesse', en:'Long Chesse'}}
@@ -1495,8 +1482,6 @@ const MENU2 = {
     hotdog:[
       { id:'hotdog_pita', img:'images/hotdog_pita.jpg', spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
         variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] },
-
-      /* ✅ NEW: Хот-дог Королевский (как выбор у хот-дога в пите) */
       { id:'hotdog_king_nishon', img:'images/hotdog_king_nishonbaxt.jpg', spicy:false, n:{ru:'Хот-дог Королевский (Нишонбахт)', uz:'Qirollik hot-dog (Nishonbaxt)', en:'Royal hot-dog (Nishonbaxt)'},
         variants:[ {k:'1', label:'1', p:16000},{k:'2', label:'2', p:19000},{k:'3', label:'3', p:22000} ] },
       { id:'hotdog_king_halol', img:'images/hotdog_king_halol.jpg', spicy:false, n:{ru:'Хот-дог Королевский (Халол)', uz:'Qirollik hot-dog (Halol)', en:'Royal hot-dog (Halal)'},
@@ -1515,31 +1500,27 @@ const MENU2 = {
     {id:'fries_xl', p:15000, img:'images/fries_xl.jpg', spicy:false, n:{ru:'Картофель фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
     {id:'fries_pita', p:16000, img:'images/fries_pita.jpg', spicy:false, n:{ru:'Картофель фри + Пита', uz:'Fri + Pita', en:'Fries + Pita'}},
     {id:'village_potato', p:20000, img:'images/village_potato.jpg', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}},
-
-    /* ✅ NEW */
     {id:'fries_aviko', p:15000, img:'images/fries_aviko.jpg', spicy:false, n:{ru:'Картофель фри Aviko', uz:'Fri kartoshka Aviko', en:'French fries Aviko'}}
   ],
 
   sauce:[
-    /* ✅ REMOVED: bbq and cheese_sauce */
+    /* ✅ BBQ + Сырный соус УДАЛЕНЫ */
     { id:'ketchup', img:'images/ketchup.jpg', spicy:false, n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'},
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
-
     { id:'chili_sauce', img:'images/chili_sauce.jpg', spicy:true, n:{ru:'Чили', uz:'Chili', en:'Chili'},
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
-
     { id:'tomato_sauce', img:'images/tomato_sauce.jpg', spicy:false, n:{ru:'Томатный соус', uz:'Tomat sous', en:'Tomato sauce'},
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
-
     { id:'garlic_sauce', img:'images/garlic_sauce.jpg', spicy:false, n:{ru:'Чесночный соус', uz:'Sarimsoqli sous', en:'Garlic sauce'},
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
-
     { id:'red_hot_sauce', img:'images/red_hot_sauce.jpg', spicy:true, n:{ru:'Острый красный соус', uz:'Qizil achchiq sous', en:'Hot red sauce'},
-      variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] }
+      variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
+
+    /* ✅ NEW: Сыр Hochland 4000 */
+    {id:'hochland_cheese', p:4000, img:'images/hochland.jpg', spicy:false, n:{ru:'Сыр Hochland', uz:'Hochland pishloq', en:'Hochland cheese'}}
   ],
 
   drinks:[
-    /* ✅ NEW full drinks list (jpg names). You will rename photos later. */
     {id:'tea_02', p:2000, img:'images/tea_02.jpg', spicy:false, n:{ru:'Чай 0.2L', uz:'Choy 0.2L', en:'Tea 0.2L'}},
     {id:'tea_05', p:4000, img:'images/tea_05.jpg', spicy:false, n:{ru:'Чай 0.5L', uz:'Choy 0.5L', en:'Tea 0.5L'}},
     {id:'tea_lemon_05', p:20000, img:'images/tea_lemon_05.jpg', spicy:false, n:{ru:'Чай с лимоном 0.5L', uz:'Limonli choy 0.5L', en:'Tea with lemon 0.5L'}},
@@ -1582,7 +1563,7 @@ const MENU2 = {
   ]
 };
 
-/* ✅ carousels (ОБЪЯВЛЕНО ОДИН РАЗ!) */
+/* carousels */
 const COMBO_IDS   = ['combo_lavash','combo_burger','combo_shashlik'];
 const POPULAR_IDS = ['lavash__m','doner_pita','ch_burger','fries_l'];
 const NEW_IDS     = ['pita_spicy__m','doner_plate_spicy__m','combo_burger','village_potato'];
@@ -1634,7 +1615,7 @@ function openInstagram(e){
 }
 
 /* About/Legal */
-let currentAboutLang = 'ru';
+let currentAboutLang = 'uz'; /* ✅ start UZ */
 function openAbout(){
   closeTopMenu();
   $('aboutBackdrop').style.display = 'block';
@@ -1685,7 +1666,7 @@ function openMailLegal(){
 }
 
 /* theme */
-let lang='ru', category='chicken', subcat='', type='delivery', payment='cash';
+let lang='uz', category='chicken', subcat='', type='pickup', payment='cash'; /* ✅ start UZ + Pickup */
 let cart = {};
 const selectedSize = {};
 
@@ -1739,7 +1720,7 @@ function syncThemeLabel(){
   $('themeMenuSub').innerText = (cur === 'dark') ? t.theme_dark : t.theme_light;
 }
 
-/* EN: if RU has "Шашлычок" => Barbecue */
+/* EN transform */
 function bbqTransformFromRu(ruName){
   const s = String(ruName||'');
   if(!s.includes('Шашлычок')) return '';
@@ -2214,12 +2195,18 @@ function bindSave(){
 (function initDefaults(){
   category = 'chicken';
   subcat = (SUBCATS[category] && SUBCATS[category].length) ? SUBCATS[category][0] : '';
+
+  /* ✅ force Pickup UI on start */
+  try{
+    const pickupBtn = document.getElementById('btnPickup');
+    if(pickupBtn) setType('pickup', pickupBtn);
+  }catch(_){}
 })();
 
 loadSaved();
 bindSave();
 applyLang();
-setAboutLang('ru');
+setAboutLang('uz');
 
 /* splash on start */
 showSplash();
