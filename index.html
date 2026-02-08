@@ -330,7 +330,17 @@ body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 
 /* ✅ УВЕЛИЧИЛ ФОТО В КАРТОЧКАХ */
 .img{ height:128px; display:flex; align-items:center; justify-content:center; }
-.img img{ max-width:128px; max-height:120px; width:auto; height:auto; opacity:.98; cursor:pointer; }
+/* ✅ FIX: rounded corners for dish icons */
+.img img{
+  max-width:128px;
+  max-height:120px;
+  width:auto;
+  height:auto;
+  opacity:.98;
+  cursor:pointer;
+  border-radius:18px;
+  overflow:hidden;
+}
 
 /* make images crisp on mobile */
 img{ image-rendering:auto; }
@@ -515,7 +525,8 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   justify-content:center;
   background: rgba(255,27,45,.10);
 }
-.combo-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
+/* ✅ already rounded by container, but keep safe */
+.combo-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; border-radius:18px; }
 
 .combo-name{ font-weight:900; margin-top:10px; }
 .combo-price{ font-weight:900; color:var(--red2); margin-top:6px; }
@@ -543,7 +554,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   justify-content:center;
   background: rgba(255,27,45,.10);
 }
-.small-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
+.small-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; border-radius:18px; }
 .small-name{ font-weight:900; margin-top:10px; }
 .small-price{ font-weight:900; color:var(--red2); margin-top:6px; }
 
@@ -932,7 +943,7 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
 
   /* ✅ bigger but fit small screens */
   .img{ height:118px; }
-  .img img{ max-width:118px; max-height:110px; }
+  .img img{ max-width:118px; max-height:110px; border-radius:18px; }
 
   .categories .btn{ min-width:116px; font-size:12.6px; padding:8px 10px; }
 
@@ -1510,10 +1521,7 @@ const MENU2 = {
   ],
 
   sauce:[
-    {id:'bbq', p:3000, img:'images/bbq.jpg', spicy:false, n:{ru:'Барбекю', uz:'Barbekyu', en:'BBQ'}},
-    {id:'cheese_sauce', p:3000, img:'images/cheese_sauce.jpg', spicy:false, n:{ru:'Сырный', uz:"Pishloqli", en:'Cheese'}},
-
-    /* ✅ NEW sauces with L/XL selector */
+    /* ✅ REMOVED: bbq and cheese_sauce */
     { id:'ketchup', img:'images/ketchup.jpg', spicy:false, n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'},
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
 
