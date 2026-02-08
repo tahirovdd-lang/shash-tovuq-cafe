@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <title>SHASH TOVUQ</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet" />
 
@@ -42,6 +42,11 @@ body{
     linear-gradient(180deg, #fff, var(--sand));
   color:var(--text);
   padding-bottom:130px;
+
+  /* ✅ better iOS/Android scroll behavior */
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 #app{
@@ -72,6 +77,12 @@ body{
 
   padding-top: calc(14px + env(safe-area-inset-top));
 }
+
+/* ✅ extra safe for iOS notch */
+body[data-platform="ios"] .header{
+  padding-top: calc(16px + env(safe-area-inset-top));
+}
+
 .header::after{
   content:"";
   position:absolute;
@@ -317,8 +328,12 @@ body[data-theme="dark"] .input{ background: rgba(28,28,28,.92); }
 body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 .card:active{ transform:scale(.99); }
 
-.img{ height:104px; display:flex; align-items:center; justify-content:center; }
-.img img{ max-width:92px; opacity:.95; cursor:pointer; }
+/* ✅ УВЕЛИЧИЛ ФОТО В КАРТОЧКАХ */
+.img{ height:128px; display:flex; align-items:center; justify-content:center; }
+.img img{ max-width:128px; max-height:120px; width:auto; height:auto; opacity:.98; cursor:pointer; }
+
+/* make images crisp on mobile */
+img{ image-rendering:auto; }
 
 .price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .price small{ font-weight:800; opacity:.75; margin-left:4px; }
@@ -489,8 +504,10 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   overflow:hidden;
 }
 .combo-card:active{ transform:scale(.99); }
+
+/* ✅ УВЕЛИЧИЛ ФОТО В КАРУСЕЛЯХ */
 .combo-img{
-  height:130px;
+  height:150px;
   border-radius:18px;
   overflow:hidden;
   display:flex;
@@ -499,6 +516,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
   background: rgba(255,27,45,.10);
 }
 .combo-img img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
+
 .combo-name{ font-weight:900; margin-top:10px; }
 .combo-price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .badge{ position:absolute; left:10px; top:10px; font-size:18px; pointer-events:none; }
@@ -517,7 +535,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 }
 .small-card:active{ transform:scale(.99); }
 .small-img{
-  height:110px;
+  height:130px;
   border-radius:18px;
   overflow:hidden;
   display:flex;
@@ -909,12 +927,21 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
   .brand-tel{ transform: translateX(22px); }
   .header img{ width:74px; padding:7px; border-radius:16px; }
   .hbtn{ width:32px; height:32px; font-size:15px; }
+
   .products{ gap:12px; padding:12px; }
-  .img{ height:96px; }
-  .img img{ max-width:86px; }
+
+  /* ✅ bigger but fit small screens */
+  .img{ height:118px; }
+  .img img{ max-width:118px; max-height:110px; }
+
   .categories .btn{ min-width:116px; font-size:12.6px; padding:8px 10px; }
+
   .combo-card{ min-width:210px; }
+  .combo-img{ height:140px; }
+
   .small-card{ min-width:178px; }
+  .small-img{ height:122px; }
+
   .subcat-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
   .subcat-item{ min-height:92px; border-radius:18px; }
   .subcat-ic{ width:48px; height:48px; border-radius:16px; }
@@ -1204,6 +1231,12 @@ Telegram.WebApp.expand();
 try{ Telegram.WebApp.requestFullscreen?.(); }catch(_){}
 try{ Telegram.WebApp.disableVerticalSwipes?.(); }catch(_){}
 
+/* ✅ platform detect (iOS / Android) */
+try{
+  const plat = (Telegram.WebApp.platform || '').toLowerCase();
+  document.body.dataset.platform = plat; // ios / android / web / etc
+}catch(_){}
+
 const $ = (id)=>document.getElementById(id);
 
 /* ✅ FIX: auto try .jpg.jpg when your repo has files like name.jpg.jpg */
@@ -1224,7 +1257,8 @@ function imgFix(el){
 
 /* links */
 const IG_URL = "https://www.instagram.com/shash.tovuq.n1/";
-const YANDEX_WIDGET_URL = "https://yandex.ru/sprav/widget/rating-badge/23178318202?type=rating";
+/* ✅ CHANGED: reviews button link */
+const YANDEX_REVIEWS_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=17.08";
 const MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65";
 
 /* card data */
@@ -1412,7 +1446,11 @@ const MENU2 = {
       { id:'doner_plate_spicy', img:'images/doner_plate_spicy.jpg', spicy:true, n:{ru:'Острый донер в тарелке', uz:"Achchiq doner tarelkada", en:'Spicy doner plate'},
         variants:[ {k:'m', label:'M', p:25000},{k:'l', label:'L', p:32000},{k:'xl', label:'XL', p:40000} ] }
     ],
-    burger:[ {id:'ch_burger', p:25000, img:'images/chicken_burger.jpg', spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}} ],
+    /* ✅ chicken burgers: added Long Chesse 25 000 */
+    burger:[
+      {id:'ch_burger', p:25000, img:'images/chicken_burger.jpg', spicy:false, n:{ru:'Куриный бургер', uz:'Tovuq burger', en:'Chicken burger'}},
+      {id:'long_chesse', p:25000, img:'images/long_chesse.jpg', spicy:false, n:{ru:'Long Chesse', uz:'Long Chesse', en:'Long Chesse'}}
+    ],
     wings:[ {id:'wings_1kg', p:75000, img:'images/wings_1kg.jpg', spicy:false, n:{ru:'Крылышки 1 кг', uz:'Qanot 1 kg', en:'Wings 1 kg'}} ],
     sausages:[
       {id:'sausages_fries', p:40000, img:'images/kolbaski_fri.jpg', spicy:false, n:{ru:'Колбаски + Фри', uz:'Kolbaska + Fri', en:'Sausages + Fries'}},
@@ -1577,8 +1615,8 @@ function toggleReviewWidget(){
 }
 function openYandexReviews(e){
   try{ e.preventDefault(); e.stopPropagation(); }catch(_){}
-  try{ Telegram.WebApp.openLink(YANDEX_WIDGET_URL); }
-  catch(_){ window.open(YANDEX_WIDGET_URL, "_blank"); }
+  try{ Telegram.WebApp.openLink(YANDEX_REVIEWS_URL); }
+  catch(_){ window.open(YANDEX_REVIEWS_URL, "_blank"); }
 }
 function openInstagram(e){
   try{ e.preventDefault(); e.stopPropagation(); }catch(_){}
@@ -1625,7 +1663,6 @@ function closeLegal(){
   $('legalSheet').classList.remove('show');
 }
 function contactManager(){
-  // tg://user?id=... работает в Telegram лучше, чем t.me/<id>
   const deep = `tg://user?id=${ADMIN_TG_ID}`;
   try{ Telegram.WebApp.openTelegramLink?.(deep); }
   catch(_){ try{ Telegram.WebApp.openLink(deep); }catch(__){ window.location.href = deep; } }
