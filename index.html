@@ -317,8 +317,9 @@ body[data-theme="dark"] .input{ background: rgba(28,28,28,.92); }
 body[data-theme="dark"] .card{ border-color: rgba(255,255,255,.10); }
 .card:active{ transform:scale(.99); }
 
-.img{ height:104px; display:flex; align-items:center; justify-content:center; }
-.img img{ max-width:92px; opacity:.95; cursor:pointer; }
+/* ✅ УВЕЛИЧИЛ ФОТО БЛЮД */
+.img{ height:120px; display:flex; align-items:center; justify-content:center; }
+.img img{ max-width:108px; opacity:.95; cursor:pointer; }
 
 .price{ font-weight:900; color:var(--red2); margin-top:6px; }
 .price small{ font-weight:800; opacity:.75; margin-left:4px; }
@@ -490,7 +491,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 }
 .combo-card:active{ transform:scale(.99); }
 .combo-img{
-  height:130px;
+  height:150px; /* ✅ было 130 */
   border-radius:18px;
   overflow:hidden;
   display:flex;
@@ -517,7 +518,7 @@ mark{ background:rgba(255,230,0,.40); padding:0 .14em; border-radius:8px; }
 }
 .small-card:active{ transform:scale(.99); }
 .small-img{
-  height:110px;
+  height:125px; /* ✅ было 110 */
   border-radius:18px;
   overflow:hidden;
   display:flex;
@@ -718,14 +719,14 @@ body[data-theme="dark"] .menu-ic{ background: rgba(255,27,45,.16); }
   box-shadow: 0 14px 30px rgba(255,196,0,.25);
 }
 .subcat-ic{
-  width:52px;
-  height:52px;
-  border-radius:18px;
+  width:58px;   /* ✅ было 52 */
+  height:58px;  /* ✅ было 52 */
+  border-radius:20px;
   background: rgba(0,0,0,.06);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
+  font-size:24px; /* ✅ было 22 */
 }
 .subcat-item.active .subcat-ic{
   background: rgba(255,255,255,.55);
@@ -910,16 +911,18 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
   .header img{ width:74px; padding:7px; border-radius:16px; }
   .hbtn{ width:32px; height:32px; font-size:15px; }
   .products{ gap:12px; padding:12px; }
-  .img{ height:96px; }
-  .img img{ max-width:86px; }
+  .img{ height:112px; }        /* ✅ было 96 */
+  .img img{ max-width:102px; } /* ✅ было 86 */
   .categories .btn{ min-width:116px; font-size:12.6px; padding:8px 10px; }
   .combo-card{ min-width:210px; }
   .small-card{ min-width:178px; }
   .subcat-grid{ grid-template-columns:repeat(3, minmax(0,1fr)); gap:10px; }
   .subcat-item{ min-height:92px; border-radius:18px; }
-  .subcat-ic{ width:48px; height:48px; border-radius:16px; }
+  .subcat-ic{ width:54px; height:54px; border-radius:18px; font-size:23px; } /* ✅ чуть больше */
   .langs .btn{ padding:10px 8px; font-size:13px; }
   .payments .btn{ font-size:12.5px; padding:11px 8px; }
+  .combo-img{ height:142px; }  /* ✅ адаптив */
+  .small-img{ height:118px; }  /* ✅ адаптив */
 }
 @media (max-width:330px){
   .subcat-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
@@ -1448,7 +1451,19 @@ const MENU2 = {
     ],
     hotdog:[
       { id:'hotdog_pita', img:'images/hotdog_pita.jpg', spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
-        variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] }
+        variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] },
+
+      /* ✅ ДОБАВЛЕНО: Хот-Дог Королевский (красивый выбор как размеры) */
+      { id:'hotdog_king', img:'images/hotdog_king.jpg', spicy:false, n:{ru:'Хот-Дог Королевский', uz:'Qirollik hot-dog', en:'Royal hot-dog'},
+        variants:[
+          {k:'nb1', label:'Нишонбахт • 1', p:16000},
+          {k:'nb2', label:'Нишонбахт • 2', p:19000},
+          {k:'nb3', label:'Нишонбахт • 3', p:22000},
+          {k:'h1',  label:'Халол • 1',     p:17000},
+          {k:'h2',  label:'Халол • 2',     p:21000},
+          {k:'h3',  label:'Халол • 3',     p:25000}
+        ]
+      }
     ]
   },
 
@@ -1462,17 +1477,72 @@ const MENU2 = {
     {id:'fries_l', p:10000, img:'images/fries_l.jpg', spicy:false, n:{ru:'Картофель фри L', uz:'Fri kartoshka L', en:'French fries L'}},
     {id:'fries_xl', p:15000, img:'images/fries_xl.jpg', spicy:false, n:{ru:'Картофель фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
     {id:'fries_pita', p:16000, img:'images/fries_pita.jpg', spicy:false, n:{ru:'Картофель фри + Пита', uz:'Fri + Pita', en:'Fries + Pita'}},
-    {id:'village_potato', p:20000, img:'images/village_potato.jpg', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}}
+    {id:'village_potato', p:20000, img:'images/village_potato.jpg', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}},
+
+    /* ✅ ДОБАВЛЕНО */
+    {id:'fries_aviko', p:15000, img:'images/fries_aviko.jpg', spicy:false, n:{ru:'Картофель Фри Aviko', uz:'Fri kartoshka Aviko', en:'French fries Aviko'}}
   ],
 
   sauce:[
     {id:'bbq', p:3000, img:'images/bbq.jpg', spicy:false, n:{ru:'Барбекю', uz:'Barbekyu', en:'BBQ'}},
-    {id:'cheese_sauce', p:3000, img:'images/cheese_sauce.jpg', spicy:false, n:{ru:'Сырный', uz:"Pishloqli", en:'Cheese'}}
+    {id:'cheese_sauce', p:3000, img:'images/cheese_sauce.jpg', spicy:false, n:{ru:'Сырный', uz:"Pishloqli", en:'Cheese'}},
+
+    /* ✅ ДОБАВЛЕНО: Соусы с размерами L / XL */
+    { id:'ketchup', img:'images/ketchup.jpg', spicy:false, n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'},
+      variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
+    { id:'chili_sauce', img:'images/chili_sauce.jpg', spicy:true, n:{ru:'Чили', uz:'Chili', en:'Chili'},
+      variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
+    { id:'tomato_sauce', img:'images/tomato_sauce.jpg', spicy:false, n:{ru:'Томатный', uz:'Tomatli', en:'Tomato'},
+      variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
+    { id:'garlic_sauce', img:'images/garlic_sauce.jpg', spicy:false, n:{ru:'Чесночный', uz:'Sarimsoqli', en:'Garlic'},
+      variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
+    { id:'red_hot_sauce', img:'images/red_hot_sauce.jpg', spicy:true, n:{ru:'Острый красный соус', uz:"Qizil achchiq sous", en:'Hot red sauce'},
+      variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] }
   ],
 
   drinks:[
+    /* ✅ ДОБАВЛЕНО: полный список напитков */
     {id:'tea_02', p:2000, img:'images/tea_02.jpg', spicy:false, n:{ru:'Чай 0.2L', uz:'Choy 0.2L', en:'Tea 0.2L'}},
-    {id:'coca_05', p:7000, img:'images/coca_05.jpg', spicy:false, n:{ru:'Coca Cola 0.5L', uz:'Coca Cola 0.5L', en:'Coca Cola 0.5L'}}
+    {id:'tea_05', p:4000, img:'images/tea_05.jpg', spicy:false, n:{ru:'Чай 0.5L', uz:'Choy 0.5L', en:'Tea 0.5L'}},
+
+    {id:'tea_lemon_05', p:20000, img:'images/tea_lemon_05.jpg', spicy:false, n:{ru:'Чай с лимоном 0.5L', uz:'Limonli choy 0.5L', en:'Tea with lemon 0.5L'}},
+    {id:'tea_lemon_04', p:12000, img:'images/tea_lemon_04.jpg', spicy:false, n:{ru:'Чай с лимоном 0.4L', uz:'Limonli choy 0.4L', en:'Tea with lemon 0.4L'}},
+
+    {id:'coffee_cappuccino', p:6000, img:'images/coffee_cappuccino.jpg', spicy:false, n:{ru:'Кофе Капучино', uz:'Kappuchino', en:'Cappuccino'}},
+    {id:'coffee_black', p:6000, img:'images/coffee_black.jpg', spicy:false, n:{ru:'Кофе чёрный', uz:'Qora qahva', en:'Black coffee'}},
+    {id:'coffee_3in1', p:4000, img:'images/coffee_3in1.jpg', spicy:false, n:{ru:'Кофе 3в1', uz:'Qahva 3in1', en:'Coffee 3 in 1'}},
+
+    {id:'coca_025', p:7000, img:'images/coca_025.jpg', spicy:false, n:{ru:'Coca Cola 0.25L', uz:'Coca Cola 0.25L', en:'Coca Cola 0.25L'}},
+    {id:'fanta_025', p:7000, img:'images/fanta_025.jpg', spicy:false, n:{ru:'Fanta 0.25L', uz:'Fanta 0.25L', en:'Fanta 0.25L'}},
+    {id:'sprite_025', p:7000, img:'images/sprite_025.jpg', spicy:false, n:{ru:'Sprite 0.25L', uz:'Sprite 0.25L', en:'Sprite 0.25L'}},
+
+    {id:'coca_can_05', p:10000, img:'images/coca_can_05.jpg', spicy:false, n:{ru:'Coca Cola 0.5L ЖБ', uz:'Coca Cola 0.5L (bank)', en:'Coca Cola 0.5L (can)'}},
+
+    {id:'coca_05', p:7000, img:'images/coca_05.jpg', spicy:false, n:{ru:'Coca Cola 0.5L', uz:'Coca Cola 0.5L', en:'Coca Cola 0.5L'}},
+    {id:'fanta_05', p:7000, img:'images/fanta_05.jpg', spicy:false, n:{ru:'Fanta 0.5L', uz:'Fanta 0.5L', en:'Fanta 0.5L'}},
+    {id:'sprite_05', p:7000, img:'images/sprite_05.jpg', spicy:false, n:{ru:'Sprite 0.5L', uz:'Sprite 0.5L', en:'Sprite 0.5L'}},
+
+    {id:'coca_1', p:11000, img:'images/coca_1.jpg', spicy:false, n:{ru:'Coca Cola 1L', uz:'Coca Cola 1L', en:'Coca Cola 1L'}},
+    {id:'fanta_1', p:11000, img:'images/fanta_1.jpg', spicy:false, n:{ru:'Fanta 1L', uz:'Fanta 1L', en:'Fanta 1L'}},
+    {id:'sprite_1', p:11000, img:'images/sprite_1.jpg', spicy:false, n:{ru:'Sprite 1L', uz:'Sprite 1L', en:'Sprite 1L'}},
+
+    {id:'coca_15', p:16000, img:'images/coca_15.jpg', spicy:false, n:{ru:'Coca Cola 1.5L', uz:'Coca Cola 1.5L', en:'Coca Cola 1.5L'}},
+    {id:'fanta_15', p:16000, img:'images/fanta_15.jpg', spicy:false, n:{ru:'Fanta 1.5L', uz:'Fanta 1.5L', en:'Fanta 1.5L'}},
+    {id:'sprite_15', p:16000, img:'images/sprite_15.jpg', spicy:false, n:{ru:'Sprite 1.5L', uz:'Sprite 1.5L', en:'Sprite 1.5L'}},
+
+    {id:'fuse_tea_05', p:7000, img:'images/fuse_tea_05.jpg', spicy:false, n:{ru:'Fuse Tea 0.5L', uz:'Fuse Tea 0.5L', en:'Fuse Tea 0.5L'}},
+    {id:'fuse_tea_1', p:12000, img:'images/fuse_tea_1.jpg', spicy:false, n:{ru:'Fuse Tea 1L', uz:'Fuse Tea 1L', en:'Fuse Tea 1L'}},
+
+    {id:'dinay_05', p:9000, img:'images/dinay_05.jpg', spicy:false, n:{ru:'Dinay 0.5L', uz:'Dinay 0.5L', en:'Dinay 0.5L'}},
+    {id:'dinay_1', p:13000, img:'images/dinay_1.jpg', spicy:false, n:{ru:'Dinay 1L', uz:'Dinay 1L', en:'Dinay 1L'}},
+
+    {id:'bliss_1', p:15000, img:'images/bliss_1.jpg', spicy:false, n:{ru:'Сок Bliss 1L', uz:'Bliss sharbat 1L', en:'Bliss juice 1L'}},
+
+    {id:'bonaqua_05', p:3000, img:'images/bonaqua_05.jpg', spicy:false, n:{ru:'Bonaqua 0.5L', uz:'Bonaqua 0.5L', en:'Bonaqua 0.5L'}},
+    {id:'bonaqua_1', p:4000, img:'images/bonaqua_1.jpg', spicy:false, n:{ru:'Bonaqua 1L', uz:'Bonaqua 1L', en:'Bonaqua 1L'}},
+
+    {id:'bogi_baland_05', p:3000, img:'images/bogi_baland_05.jpg', spicy:false, n:{ru:'Bogi Baland 0.5L', uz:'Bogi Baland 0.5L', en:'Bogi Baland 0.5L'}},
+    {id:'bogi_baland_1', p:4000, img:'images/bogi_baland_1.jpg', spicy:false, n:{ru:'Bogi Baland 1L', uz:'Bogi Baland 1L', en:'Bogi Baland 1L'}}
   ]
 };
 
