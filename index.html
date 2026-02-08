@@ -1185,8 +1185,7 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
   <div class="img-modal-backdrop" id="imgModalBackdrop" onclick="closeImgModal()"></div>
   <div class="img-modal" id="imgModal" role="dialog" aria-modal="true">
     <button class="img-modal-close" onclick="closeImgModal()">×</button>
-    <!-- ✅ FIX: добавил onerror="imgFix(this)" чтобы модалка тоже автоматически искала .jpg.jpg -->
-    <img id="imgModalImg" src="" alt="preview" onerror="imgFix(this)" />
+    <img id="imgModalImg" src="" alt="preview" />
   </div>
 
   <!-- Splash -->
@@ -1250,10 +1249,7 @@ function openMap(){
 
 /* image modal */
 function openImgModal(src){
-  // ✅ FIX: сбрасываем флаг, чтобы imgFix снова мог попробовать .jpg.jpg именно в модалке
-  const im = $('imgModalImg');
-  try{ if(im) im.dataset.fixTry = ""; }catch(_){}
-  im.src = src || 'images/lavash_combo.jpg';
+  $('imgModalImg').src = src || 'images/lavash_combo.jpg';
   $('imgModalBackdrop').classList.add('show');
   $('imgModal').classList.add('show');
 }
@@ -1689,11 +1685,6 @@ function price(key){
   }
   return it.p || 0;
 }
-
-/* carousels */
-const COMBO_IDS = ['combo_lavash','combo_burger','combo_shashlik'];
-const POPULAR_IDS = ['lavash__m','doner_pita','ch_burger','fries_l'];
-const NEW_IDS = ['pita_spicy__m','doner_plate_spicy__m','combo_burger','village_potato'];
 
 /* carousels render */
 function miniCounterHTML(key, prefix){
