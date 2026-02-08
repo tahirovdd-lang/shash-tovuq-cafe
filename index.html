@@ -1185,7 +1185,7 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
   <div class="img-modal-backdrop" id="imgModalBackdrop" onclick="closeImgModal()"></div>
   <div class="img-modal" id="imgModal" role="dialog" aria-modal="true">
     <button class="img-modal-close" onclick="closeImgModal()">×</button>
-    <img id="imgModalImg" src="" alt="preview" />
+    <img id="imgModalImg" src="" alt="preview" onerror="imgFix(this)" />
   </div>
 
   <!-- Splash -->
@@ -1213,14 +1213,12 @@ function imgFix(el){
     if(!el.dataset.fixTry){
       el.dataset.fixTry = "1";
       const src = el.getAttribute('src') || '';
-      // if requested .jpg but repo has .jpg.jpg
       if(src.toLowerCase().endsWith('.jpg')){
         el.src = src + '.jpg'; // -> .jpg.jpg
         return;
       }
     }
   }catch(_){}
-  // fallback
   try{ el.src = 'images/lavash_combo.jpg'; }catch(__){}
 }
 
@@ -1249,7 +1247,9 @@ function openMap(){
 
 /* image modal */
 function openImgModal(src){
-  $('imgModalImg').src = src || 'images/lavash_combo.jpg';
+  const im = $('imgModalImg');
+  try{ if(im) im.dataset.fixTry = ""; }catch(_){}
+  im.src = src || 'images/lavash_combo.jpg';
   $('imgModalBackdrop').classList.add('show');
   $('imgModal').classList.add('show');
 }
@@ -1263,11 +1263,8 @@ function closeImgModal(){
 function showSplash(){
   const s = $('splash');
   if(!s) return;
-
-  // на случай если кто-то переименовал — ставим дефолт
   const img = $('splashImg');
   if(img && !img.getAttribute('src')) img.src = "images/lavash_combo.jpg";
-
   s.classList.add('show');
   setTimeout(()=>s.classList.remove('show'), 3000);
 }
@@ -1476,10 +1473,10 @@ const MENU2 = {
   ]
 };
 
-/* carousels */
-const COMBO_IDS = ['combo_lavash','combo_burger','combo_shashlik'];
+/* ✅ carousels (ОБЪЯВЛЕНО ОДИН РАЗ!) */
+const COMBO_IDS   = ['combo_lavash','combo_burger','combo_shashlik'];
 const POPULAR_IDS = ['lavash__m','doner_pita','ch_burger','fries_l'];
-const NEW_IDS = ['pita_spicy__m','doner_plate_spicy__m','combo_burger','village_potato'];
+const NEW_IDS     = ['pita_spicy__m','doner_plate_spicy__m','combo_burger','village_potato'];
 
 /* utils */
 function formatSum(x){
@@ -1565,8 +1562,10 @@ function closeLegal(){
   $('legalSheet').classList.remove('show');
 }
 function contactManager(){
-  const link = `https://t.me/${ADMIN_TG_ID}`;
-  try{ Telegram.WebApp.openLink(link); }catch(_){ window.open(link, "_blank"); }
+  // tg://user?id=... работает в Telegram лучше, чем t.me/<id>
+  const deep = `tg://user?id=${ADMIN_TG_ID}`;
+  try{ Telegram.WebApp.openTelegramLink?.(deep); }
+  catch(_){ try{ Telegram.WebApp.openLink(deep); }catch(__){ window.location.href = deep; } }
 }
 function openTelLegal(){
   const tel = `tel:${String(LEGAL_PHONES[0]||'').replace(/\s+/g,'')}`;
