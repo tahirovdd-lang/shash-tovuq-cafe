@@ -1408,8 +1408,9 @@ const CATS={
 };
 
 const SUBCATS = {
-  chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','tovuq'],
-  beef: ['beef_shashlik','kufta','burger','hotdog'],
+  /* ✅ MOVE hotdog FROM beef -> chicken */
+  chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','tovuq','hotdog'],
+  beef: ['beef_shashlik','kufta','burger'],
   combo: [],
   drinks: [],
   sauce: [],
@@ -1463,6 +1464,16 @@ const MENU2 = {
       {id:'shashtovuq_4', p:32000, img:'images/shashtovuq_4.jpg', spicy:false, n:{ru:'Шаштовук + Пита + 4 куска', uz:"Shashtovuq + Pita + 4 dona", en:'Shashtovuq + Pita + 4 pcs'}},
       {id:'shashtovuq_5', p:37000, img:'images/shashtovuq_5.jpg', spicy:false, n:{ru:'Шаштовук + Пита + 5 кусков', uz:"Shashtovuq + Pita + 5 dona", en:'Shashtovuq + Pita + 5 pcs'}},
       {id:'shashtovuq_6', p:42000, img:'images/shashtovuq_6.jpg', spicy:false, n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shashtovuq + Pita + 6 dona", en:'Shashtovuq + Pita + 6 pcs'}}
+    ],
+
+    /* ✅ MOVED: hotdog subcategory from beef -> chicken (data kept the same) */
+    hotdog:[
+      { id:'hotdog_pita', img:'images/hotdog_pita.jpg', spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
+        variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] },
+      { id:'hotdog_king_nishon', img:'images/hotdog_king_nishonbaxt.jpg', spicy:false, n:{ru:'Хот-дог Королевский (Нишонбахт)', uz:'Qirollik hot-dog (Nishonbaxt)', en:'Royal hot-dog (Nishonbaxt)'},
+        variants:[ {k:'1', label:'1', p:16000},{k:'2', label:'2', p:19000},{k:'3', label:'3', p:22000} ] },
+      { id:'hotdog_king_halol', img:'images/hotdog_king_halol.jpg', spicy:false, n:{ru:'Хот-дог Королевский (Халол)', uz:'Qirollik hot-dog (Halol)', en:'Royal hot-dog (Halal)'},
+        variants:[ {k:'1', label:'1', p:17000},{k:'2', label:'2', p:21000},{k:'3', label:'3', p:25000} ] }
     ]
   },
 
@@ -1478,21 +1489,14 @@ const MENU2 = {
     burger:[
       {id:'burger', p:35000, img:'images/burger.jpg', spicy:false, n:{ru:'Бургер', uz:'Burger', en:'Burger'}},
       {id:'cheeseburger', p:38000, img:'images/cheeseburger.jpg', spicy:false, n:{ru:'Чизбургер', uz:'Chizburger', en:'Cheeseburger'}}
-    ],
-    hotdog:[
-      { id:'hotdog_pita', img:'images/hotdog_pita.jpg', spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
-        variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] },
-      { id:'hotdog_king_nishon', img:'images/hotdog_king_nishonbaxt.jpg', spicy:false, n:{ru:'Хот-дог Королевский (Нишонбахт)', uz:'Qirollik hot-dog (Nishonbaxt)', en:'Royal hot-dog (Nishonbaxt)'},
-        variants:[ {k:'1', label:'1', p:16000},{k:'2', label:'2', p:19000},{k:'3', label:'3', p:22000} ] },
-      { id:'hotdog_king_halol', img:'images/hotdog_king_halol.jpg', spicy:false, n:{ru:'Хот-дог Королевский (Халол)', uz:'Qirollik hot-dog (Halol)', en:'Royal hot-dog (Halal)'},
-        variants:[ {k:'1', label:'1', p:17000},{k:'2', label:'2', p:21000},{k:'3', label:'3', p:25000} ] }
     ]
+    /* ✅ removed hotdog from beef */
   },
 
   combo:[
     {id:'combo_lavash', p:28000, img:'images/lavash_combo.jpg', spicy:false, n:{ru:'Лаваш комбо', uz:'Lavash kombo', en:'Lavash combo'}},
-    {id:'combo_burger', p:28000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
-    {id:'combo_shashlik', p:32000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Barbecue combo'}}
+    {id:'combo_burger', p:42000, img:'images/burger_combo.jpg', spicy:false, n:{ru:'Бургер комбо', uz:'Burger kombo', en:'Burger combo'}},
+    {id:'combo_shashlik', p:40000, img:'images/shashlik_combo.jpg', spicy:false, n:{ru:'Шашлычок комбо', uz:'Shashlik kombo', en:'Barbecue combo'}}
   ],
 
   garnish:[
