@@ -8,7 +8,10 @@ from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import CommandStart, Command
 from aiogram.filters.command import CommandObject
 from aiogram.client.default import DefaultBotProperties
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
+from aiogram.types import (
+    ReplyKeyboardMarkup, KeyboardButton, WebAppInfo,
+    InlineKeyboardMarkup, InlineKeyboardButton
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,7 +22,12 @@ if not BOT_TOKEN:
 # ====== НАСТРОЙКИ ======
 BOT_USERNAME = "shash_tovuq_bot"          # без @
 ADMIN_ID = 6013591658
+
+# WebApp (GitHub Pages)
 WEBAPP_URL = "https://tahirovdd-lang.github.io/shash-tovuq-cafe/?v=1"
+
+# Канал
+CHANNEL_USERNAME = "@shashtovuqfastfood"
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
@@ -35,7 +43,7 @@ WELCOME_3LANG = (
     "Choose your favorite dishes and place an order — just tap “Open” below."
 )
 
-# ====== КНОПКА (НИЖНЯЯ) ======
+# ====== КНОПКА (НИЖНЯЯ) ДЛЯ ЛИЧКИ ======
 MENU_BTN_TEXT = "Ochish / Открыть / Open"
 
 def menu_kb() -> ReplyKeyboardMarkup:
@@ -47,6 +55,16 @@ def menu_kb() -> ReplyKeyboardMarkup:
 async def send_welcome(message: types.Message):
     await message.answer(WELCOME_3LANG, reply_markup=menu_kb())
 
+# ====== КНОПКА ДЛЯ КАНАЛА (INLINE) ======
+def channel_webapp_kb() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(
+            text="🔵 Ochish / Открыть / Open",
+            web_app=WebAppInfo(url=WEBAPP_URL)
+        )
+    ]])
+
+# ====== УТИЛИТЫ ======
 def safe_html(s) -> str:
     if s is None:
         return ""
@@ -70,6 +88,8 @@ def payment_label(val: str) -> str:
         return "Наличные"
     if v in ("card", "карта", "karta", "plastik", "plastic", "click"):
         return "Карта / CLICK"
+    if v in ("online", "перевод", "transfer"):
+        return "Онлайн / Перевод"
     return val or "—"
 
 def type_label(val: str) -> str:
@@ -96,6 +116,9 @@ def build_phone_html(phone: str) -> str:
         return "📞 Телефон: <b>—</b>"
     return f'📞 Телефон: <a href="tel:{safe_html(p)}"><b>{safe_html(p)}</b></a>'
 
+def is_admin(message: types.Message) -> bool:
+    return bool(message.from_user and message.from_user.id == ADMIN_ID)
+
 # ========= START =========
 @dp.message(CommandStart())
 async def start(message: types.Message, command: CommandObject):
@@ -107,7 +130,45 @@ async def menu_cmd(message: types.Message):
 
 @dp.message(F.text == MENU_BTN_TEXT)
 async def menu_button(message: types.Message):
-    pass
+    # Ничего не делаем: WebApp откроется сам по кнопке
+    return
+
+# ========= ПУБЛИКАЦИЯ В КАНАЛ =========
+# Команда: /post  -> отправляет пост в канал + пытается закрепить
+@dp.message(Command("post"))
+async def post_to_channel(message: types.Message):
+    if not is_admin(message):
+        await message.answer("⛔ Команда доступна только администратору.")
+        return
+
+    text = (
+        "🍗 <b>SHASH TOVUQ — Меню и заказ</b>\n\n"
+        "Нажмите кнопку ниже, чтобы открыть приложение и оформить заказ 👇"
+    )
+
+    # 1) отправляем пост
+    sent = await bot.send_message(
+        chat_id=CHANNEL_USERNAME,
+        text=text,
+        reply_markup=channel_webapp_kb()
+    )
+
+    # 2) пробуем закрепить (если боту выдали право “Закреплять сообщения”)
+    pinned = False
+    try:
+        await bot.pin_chat_message(
+            chat_id=CHANNEL_USERNAME,
+            message_id=sent.message_id,
+            disable_notification=True
+        )
+        pinned = True
+    except Exception as e:
+        logging.warning(f"Не смог закрепить сообщение в канале: {e}")
+
+    await message.answer(
+        "✅ Пост отправлен в канал."
+        + (" 📌 Сообщение закреплено." if pinned else " ℹ️ Не закрепил (проверь права бота: 'Закреплять сообщения').")
+    )
 
 # ========= ПРИЁМ ДАННЫХ ИЗ WEBAPP =========
 @dp.message(F.web_app_data)
@@ -123,13 +184,30 @@ async def webapp_order(message: types.Message):
         reply_markup=menu_kb()
     )
 
-    order = data.get("order", {})
-    if isinstance(order, dict) and order:
-        items = "\n".join(
-            [f"• {safe_html(name)} × <b>{safe_html(qty)}</b>" for name, qty in order.items()]
-        )
-    else:
-        items = "• —"
+    # ВАЖНО: в твоём WebApp ты отправляешь payload.items (красивые строки) и payload.order (словарь key->qty).
+    # Здесь я аккуратно использую items, если они есть; иначе — order.
+    lines = []
+    items_list = data.get("items")
+    if isinstance(items_list, list) and items_list:
+        for it in items_list:
+            try:
+                nm = safe_html(it.get("name", ""))
+                qty = safe_html(it.get("qty", ""))
+                pr = safe_html(it.get("price", ""))
+                sm = safe_html(it.get("sum", ""))
+                # кратко и красиво
+                lines.append(f"• {nm} × <b>{qty}</b> = <b>{sm}</b>")
+            except Exception:
+                pass
+
+    if not lines:
+        order = data.get("order", {})
+        if isinstance(order, dict) and order:
+            # если пришёл dict key->qty (как у тебя), то это не имена, а ключи.
+            # всё равно покажем, чтобы не терять заказ.
+            lines = [f"• <code>{safe_html(k)}</code> × <b>{safe_html(v)}</b>" for k, v in order.items()]
+
+    items_text = "\n".join(lines) if lines else "• —"
 
     phone = data.get("phone", "")
     address = data.get("address", "")
@@ -137,14 +215,16 @@ async def webapp_order(message: types.Message):
     otype = type_label(data.get("type"))
     total = data.get("total", "—")
     comment = data.get("comment", "")
+    order_id = data.get("order_id", "")
 
     admin_text = (
         "🔥 <b>НОВЫЙ ЗАКАЗ — SHASH TOVUQ</b>\n\n"
         f"{build_user_link_html(message.from_user, data)}\n"
         f"{build_phone_html(phone)}\n"
-        f"🚚 Тип: <b>{safe_html(otype)}</b>\n"
-        f"📍 Адрес: <b>{safe_html(address) if address else '—'}</b>\n"
-        f"💳 Оплата: <b>{safe_html(pay)}</b>\n"
+        + (f"🧾 Заказ ID: <b>{safe_html(order_id)}</b>\n" if order_id else "")
+        + f"🚚 Тип: <b>{safe_html(otype)}</b>\n"
+        + f"📍 Адрес: <b>{safe_html(address) if address else '—'}</b>\n"
+        + f"💳 Оплата: <b>{safe_html(pay)}</b>\n"
     )
 
     if comment:
@@ -152,7 +232,7 @@ async def webapp_order(message: types.Message):
 
     admin_text += (
         "\n"
-        f"{items}\n\n"
+        f"{items_text}\n\n"
         f"💰 <b>{safe_html(total)}</b> сум"
     )
 
