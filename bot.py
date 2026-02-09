@@ -28,14 +28,14 @@ WEBAPP_URL = "https://tahirovdd-lang.github.io/shash-tovuq-cafe/?v=1"
 CHANNEL_USERNAME = "@shashtovuqfastfood"
 MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65"
 
-BOT_START_LINK = "https://t.me/SHASH_TOVUQ_bot?start=menu"  # ✅ only start= (NOT startapp)
+# ВАЖНО: для канала используем start= (не startapp, не web_app)
+OPEN_BOT_LINK = "https://t.me/SHASH_TOVUQ_bot?start=menu"
 
-# ===================== BOT =====================
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
 
 # ===================== UI =====================
-MENU_BTN_TEXT = "🔵 Ochish / Открыть / Open"
+WEBAPP_BTN_TEXT = "🔵 Ochish / Открыть / Open"
 
 WELCOME_3LANG = (
     "🇷🇺 <b>Добро пожаловать в SHASH TOVUQ!</b> 👋\n"
@@ -47,17 +47,18 @@ WELCOME_3LANG = (
 )
 
 def menu_kb() -> ReplyKeyboardMarkup:
-    # ✅ "Синяя кнопка" (WebApp) работает в личке/группах
+    # ✅ Это и есть настоящая “синяя кнопка” WebApp (работает в личке с ботом)
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=MENU_BTN_TEXT, web_app=WebAppInfo(url=WEBAPP_URL))]],
+        keyboard=[[KeyboardButton(text=WEBAPP_BTN_TEXT, web_app=WebAppInfo(url=WEBAPP_URL))]],
         resize_keyboard=True
     )
 
-def channel_kb_url() -> InlineKeyboardMarkup:
-    # ✅ В канале используем ТОЛЬКО URL кнопки (без web_app)
+def pinned_post_kb() -> InlineKeyboardMarkup:
+    # ✅ Это кнопка под постом в КАНАЛЕ (inline). “Синей” как WebApp она не станет,
+    # но мы делаем стиль: 🔵 + CAPS + 1 большая кнопка
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🔵 Ochish / Открыть / Open", url=BOT_START_LINK)],
-        [InlineKeyboardButton(text="📍 Manzil / Адрес / Location", url=MAP_URL)]
+        [InlineKeyboardButton(text="🔵 OCHISH / ОТКРЫТЬ / OPEN", url=OPEN_BOT_LINK)],
+        [InlineKeyboardButton(text="📍 Manzil / Адрес", url=MAP_URL)]
     ])
 
 # ===================== HELPERS =====================
@@ -118,7 +119,7 @@ def is_admin(message: types.Message) -> bool:
 # ===================== COMMANDS =====================
 @dp.message(CommandStart())
 async def start(message: types.Message, command: CommandObject):
-    # если пользователь пришёл по ?start=menu — всё равно просто показываем кнопку WebApp
+    # пользователь может прийти по кнопке из канала (?start=menu) — всё равно покажем WebApp кнопку
     await message.answer(WELCOME_3LANG, reply_markup=menu_kb())
 
 @dp.message(Command("menu"))
@@ -137,7 +138,8 @@ async def post_to_channel(message: types.Message):
         return
 
     post_text = (
-        "🍗 <b>SHASH TOVUQ — Menu & Buyurtma</b>\n\n"
+        "🍗 <b>SHASH TOVUQ</b>\n"
+        "Fast Food • Samarkand\n\n"
         "🇺🇿 Buyurtma berish uchun tugmani bosing 👇\n"
         "🇷🇺 Для заказа нажмите кнопку ниже 👇\n"
         "🇬🇧 Tap the button below to order 👇"
@@ -147,16 +149,14 @@ async def post_to_channel(message: types.Message):
         sent = await bot.send_message(
             chat_id=CHANNEL_USERNAME,
             text=post_text,
-            reply_markup=channel_kb_url()
+            reply_markup=pinned_post_kb()
         )
     except Exception as e:
-        logging.exception("POST FAILED (channel buttons)")
+        logging.exception("POST FAILED")
         await message.answer(
             "❌ <b>Не смог отправить пост в канал.</b>\n\n"
             f"<b>Ошибка:</b> <code>{type(e).__name__}</code>\n"
-            f"<b>Текст:</b> <code>{str(e)[:350]}</code>\n\n"
-            "Если снова <b>BUTTON_TYPE_INVALID</b> — скажи, я дам вариант без кнопок "
-            "и закреп с ссылкой в тексте."
+            f"<b>Текст:</b> <code>{str(e)[:350]}</code>"
         )
         return
 
