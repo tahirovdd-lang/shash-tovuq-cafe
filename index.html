@@ -1058,7 +1058,8 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
 
       <div id="reviewWidgetWrap" style="display:none; padding:6px 4px 10px;">
         <div style="border:1px solid rgba(0,0,0,.08); border-radius:18px; overflow:hidden; background:#fff; padding:10px; display:flex; justify-content:center;">
-          <iframe src="https://yandex.ru/sprav/widget/rating-badge/23178318202?type=rating" width="150" height="50" frameborder="0" style="border:0; display:block;"></iframe>
+          <!-- ✅ ЗАМЕНЕНА ССЫЛКА НА ТВОЮ -->
+          <iframe src="https://yandex.ru/sprav/widget/rating-badge/200404730149?type=rating" width="150" height="50" frameborder="0" style="border:0; display:block;"></iframe>
         </div>
         <div class="menu-sub" id="mReviewHint" style="margin-top:8px;">
           Если виджет не открылся в Telegram — нажми «Открыть отзывы».
@@ -1467,7 +1468,6 @@ const MENU2 = {
       {id:'shashtovuq_6', p:42000, img:'images/shashtovuq_6.jpg', spicy:false, n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shashtovuq + Pita + 6 dona", en:'Shashtovuq + Pita + 6 pcs'}}
     ],
 
-    /* ✅ MOVED: hotdog subcategory from beef -> chicken (data kept the same) */
     hotdog:[
       { id:'hotdog_pita', img:'images/hotdog_pita.jpg', spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
         variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] },
@@ -1491,7 +1491,6 @@ const MENU2 = {
       {id:'burger', p:35000, img:'images/burger.jpg', spicy:false, n:{ru:'Бургер', uz:'Burger', en:'Burger'}},
       {id:'cheeseburger', p:38000, img:'images/cheeseburger.jpg', spicy:false, n:{ru:'Чизбургер', uz:'Chizburger', en:'Cheeseburger'}}
     ]
-    /* ✅ removed hotdog from beef */
   },
 
   combo:[
@@ -1509,7 +1508,6 @@ const MENU2 = {
   ],
 
   sauce:[
-    /* ✅ BBQ + Сырный соус УДАЛЕНЫ */
     { id:'ketchup', img:'images/ketchup.jpg', spicy:false, n:{ru:'Кетчуп', uz:'Ketchup', en:'Ketchup'},
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
     { id:'chili_sauce', img:'images/chili_sauce.jpg', spicy:true, n:{ru:'Чили', uz:'Chili', en:'Chili'},
@@ -1520,8 +1518,6 @@ const MENU2 = {
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
     { id:'red_hot_sauce', img:'images/red_hot_sauce.jpg', spicy:true, n:{ru:'Острый красный соус', uz:'Qizil achchiq sous', en:'Hot red sauce'},
       variants:[ {k:'l', label:'L', p:3000},{k:'xl', label:'XL', p:5000} ] },
-
-    /* ✅ NEW: Сыр Hochland 4000 */
     {id:'hochland_cheese', p:4000, img:'images/hochland.jpg', spicy:false, n:{ru:'Сыр Hochland', uz:'Hochland pishloq', en:'Hochland cheese'}}
   ],
 
