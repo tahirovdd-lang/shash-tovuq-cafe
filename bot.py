@@ -20,7 +20,7 @@ if not BOT_TOKEN:
     raise RuntimeError("❌ BOT_TOKEN не найден в переменных окружения")
 
 # ====== НАСТРОЙКИ ======
-BOT_USERNAME = "shash_tovuq_bot"          # без @
+BOT_USERNAME = "shash_tovuq_bot"          # без @ (инфо)
 ADMIN_ID = 6013591658
 
 # WebApp (GitHub Pages)
@@ -28,6 +28,9 @@ WEBAPP_URL = "https://tahirovdd-lang.github.io/shash-tovuq-cafe/?v=1"
 
 # Канал
 CHANNEL_USERNAME = "@shashtovuqfastfood"
+
+# Локация (Яндекс карты)
+MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65"
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
@@ -55,12 +58,17 @@ def menu_kb() -> ReplyKeyboardMarkup:
 async def send_welcome(message: types.Message):
     await message.answer(WELCOME_3LANG, reply_markup=menu_kb())
 
-# ====== КНОПКА ДЛЯ КАНАЛА (INLINE) ======
-def channel_webapp_kb() -> InlineKeyboardMarkup:
+# ====== INLINE КНОПКИ ДЛЯ КАНАЛА (WEBAPP + MAP) ======
+def channel_kb() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[[
         InlineKeyboardButton(
             text="🔵 Ochish / Открыть / Open",
             web_app=WebAppInfo(url=WEBAPP_URL)
+        )
+    ], [
+        InlineKeyboardButton(
+            text="📍 Manzil / Адрес / Location",
+            url=MAP_URL
         )
     ]])
 
@@ -134,23 +142,26 @@ async def menu_button(message: types.Message):
     return
 
 # ========= ПУБЛИКАЦИЯ В КАНАЛ =========
-# Команда: /post  -> отправляет пост в канал + пытается закрепить
+# Команда: /post -> отправит пост в канал с 3 языками + 2 кнопки (WebApp + Map) и попробует закрепить
 @dp.message(Command("post"))
 async def post_to_channel(message: types.Message):
     if not is_admin(message):
         await message.answer("⛔ Команда доступна только администратору.")
         return
 
-    text = (
-        "🍗 <b>SHASH TOVUQ — Меню и заказ</b>\n\n"
-        "Нажмите кнопку ниже, чтобы открыть приложение и оформить заказ 👇"
+    post_text = (
+        "🍗 <b>SHASH TOVUQ — Menu & Buyurtma / Меню и заказ</b>\n\n"
+        "🇺🇿 Pastdagi tugmani bosing — ilova ochiladi va buyurtma berasiz.\n"
+        "🇷🇺 Нажмите кнопку ниже — откроется приложение и вы оформите заказ.\n"
+        "🇬🇧 Tap the button below — the app will open and you can place an order.\n\n"
+        "📍 Manzil / Адрес / Location — ikkinchi tugma orqali."
     )
 
-    # 1) отправляем пост
+    # 1) отправляем пост в канал
     sent = await bot.send_message(
         chat_id=CHANNEL_USERNAME,
-        text=text,
-        reply_markup=channel_webapp_kb()
+        text=post_text,
+        reply_markup=channel_kb()
     )
 
     # 2) пробуем закрепить (если боту выдали право “Закреплять сообщения”)
@@ -184,8 +195,7 @@ async def webapp_order(message: types.Message):
         reply_markup=menu_kb()
     )
 
-    # ВАЖНО: в твоём WebApp ты отправляешь payload.items (красивые строки) и payload.order (словарь key->qty).
-    # Здесь я аккуратно использую items, если они есть; иначе — order.
+    # Используем payload.items (если есть), иначе payload.order
     lines = []
     items_list = data.get("items")
     if isinstance(items_list, list) and items_list:
@@ -193,9 +203,7 @@ async def webapp_order(message: types.Message):
             try:
                 nm = safe_html(it.get("name", ""))
                 qty = safe_html(it.get("qty", ""))
-                pr = safe_html(it.get("price", ""))
                 sm = safe_html(it.get("sum", ""))
-                # кратко и красиво
                 lines.append(f"• {nm} × <b>{qty}</b> = <b>{sm}</b>")
             except Exception:
                 pass
@@ -203,8 +211,7 @@ async def webapp_order(message: types.Message):
     if not lines:
         order = data.get("order", {})
         if isinstance(order, dict) and order:
-            # если пришёл dict key->qty (как у тебя), то это не имена, а ключи.
-            # всё равно покажем, чтобы не терять заказ.
+            # если пришёл dict key->qty (ключи), покажем так, чтобы не потерять заказ
             lines = [f"• <code>{safe_html(k)}</code> × <b>{safe_html(v)}</b>" for k, v in order.items()]
 
     items_text = "\n".join(lines) if lines else "• —"
