@@ -2,11 +2,9 @@ import os
 import json
 import logging
 import asyncio
-import re
 
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import CommandStart, Command
-from aiogram.filters.command import CommandObject
 from aiogram.client.default import DefaultBotProperties
 from aiogram.types import (
     ReplyKeyboardMarkup, KeyboardButton, WebAppInfo,
@@ -15,243 +13,115 @@ from aiogram.types import (
 
 logging.basicConfig(level=logging.INFO)
 
+# ================= НАСТРОЙКИ =================
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 if not BOT_TOKEN:
-    raise RuntimeError("❌ BOT_TOKEN не найден в переменных окружения")
+    raise RuntimeError("❌ BOT_TOKEN не найден")
 
-# ====== НАСТРОЙКИ ======
-BOT_USERNAME = "shash_tovuq_bot"          # без @ (инфо)
 ADMIN_ID = 6013591658
+ADMINS = {6013591658}
 
-# WebApp (GitHub Pages)
 WEBAPP_URL = "https://tahirovdd-lang.github.io/shash-tovuq-cafe/?v=1"
-
-# Канал
 CHANNEL_USERNAME = "@shashtovuqfastfood"
-
-# Локация (Яндекс карты)
 MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65"
 
+# ============================================
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
 
-# ====== ПРИВЕТСТВИЕ (3 ЯЗЫКА + ФЛАГИ) ======
-WELCOME_3LANG = (
-    "🇷🇺 <b>Добро пожаловать в SHASH TOVUQ!</b> 👋\n"
-    "Выберите любимые блюда и оформите заказ — просто нажмите «Открыть» ниже.\n\n"
-    "🇺🇿 <b>SHASH TOVUQ ga xush kelibsiz!</b> 👋\n"
-    "Sevimli taomlaringizni tanlang va buyurtma bering — "
-    "buning uchun pastdagi «Ochish» tugmasini bosing.\n\n"
-    "🇬🇧 <b>Welcome to SHASH TOVUQ!</b> 👋\n"
-    "Choose your favorite dishes and place an order — just tap “Open” below."
-)
-
-# ====== КНОПКА (НИЖНЯЯ) ДЛЯ ЛИЧКИ ======
+# ================= КНОПКИ ====================
 MENU_BTN_TEXT = "Ochish / Открыть / Open"
 
-def menu_kb() -> ReplyKeyboardMarkup:
+def menu_kb():
     return ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=MENU_BTN_TEXT, web_app=WebAppInfo(url=WEBAPP_URL))]],
+        keyboard=[[KeyboardButton(
+            text=MENU_BTN_TEXT,
+            web_app=WebAppInfo(url=WEBAPP_URL)
+        )]],
         resize_keyboard=True
     )
 
-async def send_welcome(message: types.Message):
-    await message.answer(WELCOME_3LANG, reply_markup=menu_kb())
-
-# ====== INLINE КНОПКИ ДЛЯ КАНАЛА (WEBAPP + MAP) ======
-def channel_kb() -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(
+def channel_kb():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
             text="🔵 Ochish / Открыть / Open",
             web_app=WebAppInfo(url=WEBAPP_URL)
-        )
-    ], [
-        InlineKeyboardButton(
+        )],
+        [InlineKeyboardButton(
             text="📍 Manzil / Адрес / Location",
             url=MAP_URL
-        )
-    ]])
+        )]
+    ])
 
-# ====== УТИЛИТЫ ======
-def safe_html(s) -> str:
-    if s is None:
-        return ""
-    return (str(s)
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;"))
-
-def normalize_phone(phone: str) -> str:
-    if not phone:
-        return ""
-    p = phone.strip()
-    p = re.sub(r"[^\d+]", "", p)
-    if p.startswith("998"):
-        p = "+" + p
-    return p
-
-def payment_label(val: str) -> str:
-    v = (val or "").strip().lower()
-    if v in ("cash", "кэш", "кеш", "нал", "наличные", "naqd", "naqdi"):
-        return "Наличные"
-    if v in ("card", "карта", "karta", "plastik", "plastic", "click"):
-        return "Карта / CLICK"
-    if v in ("online", "перевод", "transfer"):
-        return "Онлайн / Перевод"
-    return val or "—"
-
-def type_label(val: str) -> str:
-    v = (val or "").strip().lower()
-    if v in ("delivery", "доставка"):
-        return "Доставка"
-    if v in ("pickup", "самовывоз", "takeaway"):
-        return "Самовывоз"
-    return val or "—"
-
-def build_user_link_html(from_user: types.User, data: dict) -> str:
-    tg = data.get("tg") or {}
-    username = tg.get("username") or from_user.username
-    first_name = tg.get("first_name") or from_user.first_name or "Клиент"
-
-    if username:
-        u = safe_html(username.lstrip("@"))
-        return f'👤 Клиент: <a href="https://t.me/{u}">@{u}</a>'
-    return f'👤 Клиент: <a href="tg://user?id={from_user.id}">{safe_html(first_name)}</a>'
-
-def build_phone_html(phone: str) -> str:
-    p = normalize_phone(phone)
-    if not p:
-        return "📞 Телефон: <b>—</b>"
-    return f'📞 Телефон: <a href="tel:{safe_html(p)}"><b>{safe_html(p)}</b></a>'
-
-def is_admin(message: types.Message) -> bool:
-    return bool(message.from_user and message.from_user.id == ADMIN_ID)
-
-# ========= START =========
+# ================= /start ====================
 @dp.message(CommandStart())
-async def start(message: types.Message, command: CommandObject):
-    await send_welcome(message)
+async def start(message: types.Message):
+    await message.answer(
+        "🍗 <b>SHASH TOVUQ</b>\n\nНажмите кнопку ниже 👇",
+        reply_markup=menu_kb()
+    )
 
-@dp.message(Command("menu"))
-async def menu_cmd(message: types.Message):
-    await send_welcome(message)
+# ================= /id ======================
+@dp.message(Command("id"))
+async def my_id(message: types.Message):
+    await message.answer(f"🆔 Ваш user_id: <b>{message.from_user.id}</b>")
 
-@dp.message(F.text == MENU_BTN_TEXT)
-async def menu_button(message: types.Message):
-    # Ничего не делаем: WebApp откроется сам по кнопке
-    return
-
-# ========= ПУБЛИКАЦИЯ В КАНАЛ =========
-# Команда: /post -> отправит пост в канал с 3 языками + 2 кнопки (WebApp + Map) и попробует закрепить
+# ================= /post ====================
 @dp.message(Command("post"))
 async def post_to_channel(message: types.Message):
-    if not is_admin(message):
-        await message.answer("⛔ Команда доступна только администратору.")
+    if message.from_user.id not in ADMINS:
+        await message.answer("⛔ Нет доступа")
         return
 
     post_text = (
-        "🍗 <b>SHASH TOVUQ — Menu & Buyurtma / Меню и заказ</b>\n\n"
-        "🇺🇿 Pastdagi tugmani bosing — ilova ochiladi va buyurtma berasiz.\n"
-        "🇷🇺 Нажмите кнопку ниже — откроется приложение и вы оформите заказ.\n"
-        "🇬🇧 Tap the button below — the app will open and you can place an order.\n\n"
-        "📍 Manzil / Адрес / Location — ikkinchi tugma orqali."
+        "🍗 <b>SHASH TOVUQ — Menu & Buyurtma</b>\n\n"
+        "🇺🇿 Buyurtma berish uchun pastdagi tugmani bosing\n"
+        "🇷🇺 Для заказа нажмите кнопку ниже\n"
+        "🇬🇧 Tap the button below to order"
     )
 
-    # 1) отправляем пост в канал
     sent = await bot.send_message(
         chat_id=CHANNEL_USERNAME,
         text=post_text,
         reply_markup=channel_kb()
     )
 
-    # 2) пробуем закрепить (если боту выдали право “Закреплять сообщения”)
-    pinned = False
+    # пробуем закрепить
     try:
         await bot.pin_chat_message(
             chat_id=CHANNEL_USERNAME,
             message_id=sent.message_id,
             disable_notification=True
         )
-        pinned = True
-    except Exception as e:
-        logging.warning(f"Не смог закрепить сообщение в канале: {e}")
+        pinned = "📌 Закреплено"
+    except:
+        pinned = "⚠️ Не закреплено (проверь права бота)"
 
-    await message.answer(
-        "✅ Пост отправлен в канал."
-        + (" 📌 Сообщение закреплено." if pinned else " ℹ️ Не закрепил (проверь права бота: 'Закреплять сообщения').")
-    )
+    await message.answer(f"✅ Пост отправлен в канал\n{pinned}")
 
-# ========= ПРИЁМ ДАННЫХ ИЗ WEBAPP =========
+# ============ WEBAPP DATA ===================
 @dp.message(F.web_app_data)
 async def webapp_order(message: types.Message):
-    raw = message.web_app_data.data
-    try:
-        data = json.loads(raw)
-    except Exception:
-        data = {}
+    data = json.loads(message.web_app_data.data)
 
     await message.answer(
-        "✅ <b>Заказ принят!</b>\nSHASH TOVUQ благодарит вас 😊",
+        "✅ <b>Заказ принят!</b>\nМы скоро свяжемся с вами 😊",
         reply_markup=menu_kb()
     )
 
-    # Используем payload.items (если есть), иначе payload.order
-    lines = []
-    items_list = data.get("items")
-    if isinstance(items_list, list) and items_list:
-        for it in items_list:
-            try:
-                nm = safe_html(it.get("name", ""))
-                qty = safe_html(it.get("qty", ""))
-                sm = safe_html(it.get("sum", ""))
-                lines.append(f"• {nm} × <b>{qty}</b> = <b>{sm}</b>")
-            except Exception:
-                pass
-
-    if not lines:
-        order = data.get("order", {})
-        if isinstance(order, dict) and order:
-            # если пришёл dict key->qty (ключи), покажем так, чтобы не потерять заказ
-            lines = [f"• <code>{safe_html(k)}</code> × <b>{safe_html(v)}</b>" for k, v in order.items()]
-
-    items_text = "\n".join(lines) if lines else "• —"
-
-    phone = data.get("phone", "")
-    address = data.get("address", "")
-    pay = payment_label(data.get("payment"))
-    otype = type_label(data.get("type"))
-    total = data.get("total", "—")
-    comment = data.get("comment", "")
-    order_id = data.get("order_id", "")
-
-    admin_text = (
-        "🔥 <b>НОВЫЙ ЗАКАЗ — SHASH TOVUQ</b>\n\n"
-        f"{build_user_link_html(message.from_user, data)}\n"
-        f"{build_phone_html(phone)}\n"
-        + (f"🧾 Заказ ID: <b>{safe_html(order_id)}</b>\n" if order_id else "")
-        + f"🚚 Тип: <b>{safe_html(otype)}</b>\n"
-        + f"📍 Адрес: <b>{safe_html(address) if address else '—'}</b>\n"
-        + f"💳 Оплата: <b>{safe_html(pay)}</b>\n"
+    await bot.send_message(
+        ADMIN_ID,
+        f"🔥 <b>НОВЫЙ ЗАКАЗ</b>\n\n<code>{json.dumps(data, ensure_ascii=False, indent=2)}</code>"
     )
 
-    if comment:
-        admin_text += f"💬 Комментарий: <b>{safe_html(comment)}</b>\n"
-
-    admin_text += (
-        "\n"
-        f"{items_text}\n\n"
-        f"💰 <b>{safe_html(total)}</b> сум"
-    )
-
-    await bot.send_message(ADMIN_ID, admin_text)
-
-# ========= FALLBACK =========
+# ================= fallback =================
 @dp.message()
 async def fallback(message: types.Message):
-    await send_welcome(message)
+    await start(message)
 
+# ================= main =====================
 async def main():
-    logging.info("🚀 SHASH TOVUQ bot started")
+    logging.info("🚀 BOT STARTED")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
