@@ -22,13 +22,14 @@ if not BOT_TOKEN:
 
 # ===================== SETTINGS =====================
 ADMIN_ID = 6013591658
-ADMINS = {6013591658}
+
+# ✅ ДОБАВЛЕН ВТОРОЙ АДМИН
+ADMINS = {6013591658, 8592687402}
 
 WEBAPP_URL = "https://tahirovdd-lang.github.io/shash-tovuq-cafe/?v=1"
 CHANNEL_USERNAME = "@shashtovuqfastfood"
 MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65"
 
-# ВАЖНО: для канала используем start= (не startapp, не web_app)
 OPEN_BOT_LINK = "https://t.me/SHASH_TOVUQ_bot?start=menu"
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
@@ -47,15 +48,12 @@ WELCOME_3LANG = (
 )
 
 def menu_kb() -> ReplyKeyboardMarkup:
-    # ✅ Это и есть настоящая “синяя кнопка” WebApp (работает в личке с ботом)
     return ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text=WEBAPP_BTN_TEXT, web_app=WebAppInfo(url=WEBAPP_URL))]],
         resize_keyboard=True
     )
 
 def pinned_post_kb() -> InlineKeyboardMarkup:
-    # ✅ Это кнопка под постом в КАНАЛЕ (inline). “Синей” как WebApp она не станет,
-    # но мы делаем стиль: 🔵 + CAPS + 1 большая кнопка
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🔵 OCHISH / ОТКРЫТЬ / OPEN", url=OPEN_BOT_LINK)],
         [InlineKeyboardButton(text="📍 Manzil / Адрес", url=MAP_URL)]
@@ -119,7 +117,6 @@ def is_admin(message: types.Message) -> bool:
 # ===================== COMMANDS =====================
 @dp.message(CommandStart())
 async def start(message: types.Message, command: CommandObject):
-    # пользователь может прийти по кнопке из канала (?start=menu) — всё равно покажем WebApp кнопку
     await message.answer(WELCOME_3LANG, reply_markup=menu_kb())
 
 @dp.message(Command("menu"))
@@ -130,7 +127,6 @@ async def menu_cmd(message: types.Message):
 async def my_id(message: types.Message):
     await message.answer(f"🆔 Ваш user_id: <b>{message.from_user.id}</b>")
 
-# ✅ /post и /post@botname
 @dp.message(F.text.regexp(r"^/post(@\w+)?$"))
 async def post_to_channel(message: types.Message):
     if not is_admin(message):
@@ -233,7 +229,16 @@ async def webapp_order(message: types.Message):
         f"💰 <b>{safe_html(total)}</b> сум"
     )
 
+    # Отправка основному админу
     await bot.send_message(ADMIN_ID, admin_text)
+
+    # Отправка второму админу (если он не совпадает)
+    for admin in ADMINS:
+        if admin != ADMIN_ID:
+            try:
+                await bot.send_message(admin, admin_text)
+            except Exception:
+                pass
 
 # ===================== FALLBACK =====================
 @dp.message()
