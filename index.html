@@ -1015,6 +1015,10 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
 
   <div class="cart" id="cartBlock">
     <b id="cartTitle"></b>: <span id="total">0</span> сум
+
+    <!-- ✅ ДОБАВИЛ: список позиций в корзине (чтобы было видно “Одноразовая тарелка”) -->
+    <div id="cartItems" style="margin-top:10px; font-weight:800; opacity:.92;"></div>
+
     <textarea id="comment" class="input"></textarea>
 
     <div class="payments">
@@ -1058,7 +1062,6 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
 
       <div id="reviewWidgetWrap" style="display:none; padding:6px 4px 10px;">
         <div style="border:1px solid rgba(0,0,0,.08); border-radius:18px; overflow:hidden; background:#fff; padding:10px; display:flex; justify-content:center;">
-          <!-- ✅ ЗАМЕНЕНА ССЫЛКА НА ТВОЮ -->
           <iframe src="https://yandex.ru/sprav/widget/rating-badge/200404730149?type=rating" width="150" height="50" frameborder="0" style="border:0; display:block;"></iframe>
         </div>
         <div class="menu-sub" id="mReviewHint" style="margin-top:8px;">
@@ -1257,17 +1260,18 @@ function imgFix(el){
 
 /* links */
 const IG_URL = "https://www.instagram.com/shash.tovuq.n1/";
-/* ✅ UPDATED/CONFIRMED: reviews button link */
 const YANDEX_REVIEWS_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=17.08";
 const MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.669089&z=16.65";
 
-/* card data */
 /* ✅ UPDATED: ONLINE card transfer details */
 const CARD_NUMBER = "5614682103693760";
 const CARD_NAME   = "Abubakir Voxidovich";
 
 /* QR path (Click) */
 const CLICK_QR_SRC = "images/click_qr.png";
+
+/* ✅ ДОСТАВКА: автоматически добавляем “Одноразовая тарелка” */
+const DELIVERY_PLATE_ID = "disposable_plate";
 
 /* legal */
 const LEGAL_PHONES = ["+998 95 410 37 38", "+998 97 392 00 15"];
@@ -1320,6 +1324,26 @@ async function copyText(txt){
   }
 }
 
+/* ✅ CLICK: сервис в разработке — показываем всплывающее окно */
+function showClickDevPopup(){
+  const title = (lang==='en') ? 'Click' : (lang==='uz' ? 'Click' : 'Click');
+  const msg =
+    (lang==='en') ? 'This service is currently under development.' :
+    (lang==='uz') ? 'Ushbu servis hozirda ishlab chiqilmoqda.' :
+    'Сервис в данный момент в разработке.';
+  try{
+    if(Telegram?.WebApp?.showPopup){
+      Telegram.WebApp.showPopup({
+        title,
+        message: msg,
+        buttons: [{type:'ok', text:'OK'}]
+      });
+      return;
+    }
+  }catch(_){}
+  alert(msg);
+}
+
 /* Pay sheet open/close */
 function openPaySheet(mode){
   $('payTitle').innerText = (lang==='en') ? 'Payment' : (lang==='uz' ? 'To‘lov' : 'Оплата');
@@ -1332,9 +1356,9 @@ function openPaySheet(mode){
   $('cardName').innerText = CARD_NAME;
 
   if(mode === 'click'){
-    $('payQr').style.display = 'block';
-    $('payQr').src = CLICK_QR_SRC;
-    $('payHint').style.display = 'block';
+    /* ✅ ВАЖНО: QR для Click больше не показываем вообще */
+    $('payQr').style.display = 'none';
+    $('payHint').style.display = 'none';
   }else{
     $('payQr').style.display = 'none';
     $('payHint').style.display = 'none';
@@ -1389,17 +1413,20 @@ const TEXT={
   ru:{
     delivery:'🚚 Доставка',pickup:'🏃 Самовывоз',address:'📍 Адрес доставки',phone:'📞 Телефон',cart:'🛒 Корзина',order:'Оформить заказ',comment:'✍️ Комментарий к заказу',
     cash:'💵 Наличные',click:'💳 Click',online:'💳 Онлайн',
-    results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина'
+    results:'Результаты поиска',popular:'🔥 Популярное',empty:'Корзина пустая',cart_btn:'🛒 Корзина',
+    plate:'Одноразовая тарелка'
   },
   uz:{
     delivery:'🚚 Yetkazish',pickup:'🏃 Olib ketish',address:'📍 Manzil',phone:'📞 Telefon',cart:'🛒 Savat',order:'Buyurtma berish',comment:'✍️ Izoh',
     cash:'💵 Naqd',click:'💳 Click',online:'💳 Onlayn',
-    results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:"Savat bo‘sh",cart_btn:'🛒 Savat'
+    results:'Qidiruv natijalari',popular:'🔥 Ommabop',empty:"Savat bo‘sh",cart_btn:'🛒 Savat',
+    plate:"Bir martalik tarelka"
   },
   en:{
     delivery:'🚚 Delivery',pickup:'🏃 Pickup',address:'📍 Address',phone:'📞 Phone',cart:'🛒 Cart',order:'Place order',comment:'✍️ Comment',
     cash:'💵 Cash',click:'💳 Click',online:'💳 Online',
-    results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart'
+    results:'Search results',popular:'🔥 Popular',empty:'Cart is empty',cart_btn:'🛒 Cart',
+    plate:'Disposable plate'
   }
 };
 
@@ -1410,7 +1437,6 @@ const CATS={
 };
 
 const SUBCATS = {
-  /* ✅ MOVE hotdog FROM beef -> chicken */
   chicken: ['lavash','pita','doner','burger','wings','sausages','shashlik','tovuq','hotdog'],
   beef: ['beef_shashlik','kufta','burger'],
   combo: [],
@@ -1467,7 +1493,6 @@ const MENU2 = {
       {id:'shashtovuq_5', p:37000, img:'images/shashtovuq_5.jpg', spicy:false, n:{ru:'Шаштовук + Пита + 5 кусков', uz:"Shashtovuq + Pita + 5 dona", en:'Shashtovuq + Pita + 5 pcs'}},
       {id:'shashtovuq_6', p:42000, img:'images/shashtovuq_6.jpg', spicy:false, n:{ru:'Шаштовук + Пита + 6 кусков', uz:"Shashtovuq + Pita + 6 dona", en:'Shashtovuq + Pita + 6 pcs'}}
     ],
-
     hotdog:[
       { id:'hotdog_pita', img:'images/hotdog_pita.jpg', spicy:false, n:{ru:'Хот-дог в пите', uz:'Hot-dog pitada', en:'Hot-dog in pita'},
         variants:[ {k:'1', label:'1', p:15000},{k:'2', label:'2', p:17000},{k:'3', label:'3', p:19000} ] },
@@ -1504,7 +1529,10 @@ const MENU2 = {
     {id:'fries_xl', p:15000, img:'images/fries_xl.jpg', spicy:false, n:{ru:'Картофель фри XL', uz:'Fri kartoshka XL', en:'French fries XL'}},
     {id:'fries_pita', p:16000, img:'images/fries_pita.jpg', spicy:false, n:{ru:'Картофель фри + Пита', uz:'Fri + Pita', en:'Fries + Pita'}},
     {id:'village_potato', p:20000, img:'images/village_potato.jpg', spicy:false, n:{ru:'Картофель по-деревенски', uz:'Qishloq kartoshkasi', en:'Village potato'}},
-    {id:'fries_aviko', p:15000, img:'images/fries_aviko.jpg', spicy:false, n:{ru:'Картофель фри Aviko', uz:'Fri kartoshka Aviko', en:'French fries Aviko'}}
+    {id:'fries_aviko', p:15000, img:'images/fries_aviko.jpg', spicy:false, n:{ru:'Картофель фри Aviko', uz:'Fri kartoshka Aviko', en:'French fries Aviko'}},
+
+    /* ✅ ДОБАВИЛОСЬ: для доставки автоматически (скрытый элемент меню) */
+    {id:'disposable_plate', p:2000, img:'images/disposable_plate.jpg', spicy:false, hidden:true, n:{ru:'Одноразовая тарелка', uz:"Bir martalik tarelka", en:'Disposable plate'}}
   ],
 
   sauce:[
@@ -1539,6 +1567,10 @@ const MENU2 = {
     {id:'coca_05', p:7000, img:'images/coca_05.jpg', spicy:false, n:{ru:'Coca Cola 0.5L', uz:'Coca Cola 0.5L', en:'Coca Cola 0.5L'}},
     {id:'fanta_05', p:7000, img:'images/fanta_05.jpg', spicy:false, n:{ru:'Fanta 0.5L', uz:'Fanta 0.5L', en:'Fanta 0.5L'}},
     {id:'sprite_05', p:7000, img:'images/sprite_05.jpg', spicy:false, n:{ru:'Sprite 0.5L', uz:'Sprite 0.5L', en:'Sprite 0.5L'}},
+
+    /* ✅ ДОБАВИЛ: розлив 0.4L */
+    {id:'coca_draft_04', p:7000, img:'images/coca_draft_04.jpg', spicy:false, n:{ru:'Coca Cola розлив 0.4L', uz:'Coca Cola razliv 0.4L', en:'Coca Cola draft 0.4L'}},
+    {id:'fanta_draft_04', p:7000, img:'images/fanta_draft_04.jpg', spicy:false, n:{ru:'Fanta розлив 0.4L', uz:'Fanta razliv 0.4L', en:'Fanta draft 0.4L'}},
 
     {id:'coca_cola_1l', p:11000, img:'images/coca_cola_1l.jpg', spicy:false, n:{ru:'Coca Cola 1L', uz:'Coca Cola 1L', en:'Coca Cola 1L'}},
     {id:'fanta_1l', p:11000, img:'images/fanta_1l.jpg', spicy:false, n:{ru:'Fanta 1L', uz:'Fanta 1L', en:'Fanta 1L'}},
@@ -1958,23 +1990,74 @@ function cardHTML(it, q=''){
 function renderProducts(){
   $('products').innerHTML='';
   const items = getCurrentItems();
-  items.forEach(it=>{ $('products').innerHTML += cardHTML(it,''); });
+  items.forEach(it=>{
+    /* ✅ скрытые элементы (например disposable_plate) не показываем в каталоге */
+    if(it && it.hidden) return;
+    $('products').innerHTML += cardHTML(it,'');
+  });
+}
+
+/* ✅ корзина: показываем позиции */
+function renderCartItems(){
+  const box = $('cartItems');
+  if(!box) return;
+
+  const lines = [];
+  for(const k in cart){
+    const qty = Number(cart[k]||0);
+    if(qty<=0) continue;
+
+    const {base, v} = parseKey(k);
+    const it = ITEM_BY_ID[base];
+    if(!it) continue;
+
+    let nm = getName(it);
+    if(it.variants && v){
+      const vv = it.variants.find(x=>String(x.k)===String(v));
+      const label = vv ? vv.label : String(v).toUpperCase();
+      nm = `${nm} ${label}`;
+    }
+    lines.push(`• ${escapeHtml(nm)} × <b>${qty}</b> = <b>${formatSum(price(k)*qty)}</b>`);
+  }
+
+  box.innerHTML = lines.length ? lines.join('<br>') : '';
 }
 
 /* cart total */
 function chg(key,v){
-  cart[key]=Math.max(0,(cart[key]||0)+v);
+  /* ✅ если это одноразовая тарелка — не даём делать 0/2/3: всегда 1 при доставке */
+  if(parseKey(key).base === DELIVERY_PLATE_ID){
+    if(type === 'delivery'){ cart[key]=1; }
+    else { cart[key]=0; }
+  }else{
+    cart[key]=Math.max(0,(cart[key]||0)+v);
+  }
+
   const safeId = 'c_'+key.replace(/[^a-zA-Z0-9_]/g,'_');
   const el = document.getElementById(safeId);
   if(el) el.innerText=cart[key];
   syncCarouselCounts(key);
   updateTotal();
 }
+
+function ensureDeliveryPlate(){
+  const k = DELIVERY_PLATE_ID;
+  if(type === 'delivery'){
+    cart[k] = 1;
+  }else{
+    cart[k] = 0;
+  }
+}
+
 function updateTotal(){
+  ensureDeliveryPlate();
+
   let s=0;
   for(let k in cart) s += (cart[k]||0) * price(k);
   $('total').innerText = formatSum(s);
   $('stickyTotal').innerText = formatSum(s);
+
+  renderCartItems();
 }
 
 /* type */
@@ -1985,6 +2068,7 @@ function applyTypeUI(){
   } else {
     $('address').style.display = 'block';
   }
+  updateTotal();
 }
 function setType(t,b){
   if(isSearchOpen()) closeSearch();
@@ -2001,7 +2085,12 @@ function setPayment(p){
   $('payClick').classList.toggle('active',p==='click');
   $('payOnline').classList.toggle('active',p==='online');
 
-  if(p === 'click') openPaySheet('click');
+  if(p === 'click'){
+    /* ✅ Click: всплывающее окно “в разработке” + QR не показываем */
+    closePaySheet();
+    showClickDevPopup();
+  }
+
   if(p === 'online') openPaySheet('online');
 }
 
@@ -2045,6 +2134,7 @@ function searchProducts(){
   if(!q){ renderProducts(); return; }
 
   const pushCard = (it)=>{
+    if(it && it.hidden) return; /* ✅ скрытые не ищем */
     const baseName = getName(it);
     const allNames = [
       String(baseName||'').toLowerCase(),
