@@ -127,6 +127,30 @@ async def menu_cmd(message: types.Message):
 async def my_id(message: types.Message):
     await message.answer(f"🆔 Ваш user_id: <b>{message.from_user.id}</b>")
 
+# ✅ ТЕСТ: может ли бот писать всем админам
+@dp.message(Command("testadmin"))
+async def test_admin_send(message: types.Message):
+    if not is_admin(message):
+        await message.answer("⛔ Нет доступа")
+        return
+
+    ok, bad = [], []
+    for admin in ADMINS:
+        try:
+            await bot.send_message(admin, "✅ Тест: бот может писать вам. Если вы это видите — всё ок.")
+            ok.append(admin)
+        except Exception as e:
+            bad.append((admin, type(e).__name__, str(e)[:180]))
+
+    text = "🧪 <b>Результат теста админов</b>\n\n"
+    if ok:
+        text += "✅ Доставлено: " + ", ".join([f"<code>{a}</code>" for a in ok]) + "\n"
+    if bad:
+        text += "\n⚠️ <b>Не доставлено:</b>\n" + "\n".join(
+            [f"• <code>{a}</code> — <code>{en}</code>: <code>{msg}</code>" for a, en, msg in bad]
+        )
+    await message.answer(text)
+
 @dp.message(F.text.regexp(r"^/post(@\w+)?$"))
 async def post_to_channel(message: types.Message):
     if not is_admin(message):
@@ -229,16 +253,13 @@ async def webapp_order(message: types.Message):
         f"💰 <b>{safe_html(total)}</b> сум"
     )
 
-    # Отправка основному админу
-    await bot.send_message(ADMIN_ID, admin_text)
-
-    # Отправка второму админу (если он не совпадает)
+    # ✅ ВАЖНОЕ ИЗМЕНЕНИЕ:
+    # Отправляем заказ ВСЕМ админам + логируем причину если не отправилось
     for admin in ADMINS:
-        if admin != ADMIN_ID:
-            try:
-                await bot.send_message(admin, admin_text)
-            except Exception:
-                pass
+        try:
+            await bot.send_message(admin, admin_text)
+        except Exception as e:
+            logging.warning(f"Не смог отправить админу {admin}: {type(e).__name__} / {str(e)[:250]}")
 
 # ===================== FALLBACK =====================
 @dp.message()
