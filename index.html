@@ -1202,7 +1202,8 @@ body[data-theme="dark"] .qr-wrap{ border-color: rgba(255,255,255,.10); backgroun
       </div>
 
       <div class="qr-wrap">
-        <img id="payQr" src="images/click_qr.png" onerror="this.src='images/click_qr.png'">
+        <!-- ✅ поменял на .jpg (файл: images/click_qr.jpg) -->
+        <img id="payQr" src="images/click_qr.jpg" onerror="this.src='images/click_qr.jpg'">
       </div>
 
       <div style="margin-top:10px; font-size:12.5px; opacity:.75; line-height:1.35;" id="payHint">
@@ -1267,8 +1268,8 @@ const MAP_URL = "https://yandex.uz/maps/org/200404730149/?ll=66.968820%2C39.6690
 const CARD_NUMBER = "5614682103693760";
 const CARD_NAME   = "Abubakir Voxidovich";
 
-/* QR path (Click) */
-const CLICK_QR_SRC = "images/click_qr.png";
+/* ✅ QR path (Click) — файл должен быть: images/click_qr.jpg */
+const CLICK_QR_SRC = "images/click_qr.jpg";
 
 /* ✅ ДОСТАВКА: автоматически добавляем “Одноразовая тарелка” */
 const DELIVERY_PLATE_ID = "disposable_plate";
@@ -1324,42 +1325,34 @@ async function copyText(txt){
   }
 }
 
-/* ✅ CLICK: сервис в разработке — показываем всплывающее окно */
-function showClickDevPopup(){
-  const title = (lang==='en') ? 'Click' : (lang==='uz' ? 'Click' : 'Click');
-  const msg =
-    (lang==='en') ? 'This service is currently under development.' :
-    (lang==='uz') ? 'Ushbu servis hozirda ishlab chiqilmoqda.' :
-    'Сервис в данный момент в разработке.';
-  try{
-    if(Telegram?.WebApp?.showPopup){
-      Telegram.WebApp.showPopup({
-        title,
-        message: msg,
-        buttons: [{type:'ok', text:'OK'}]
-      });
-      return;
-    }
-  }catch(_){}
-  alert(msg);
-}
-
 /* Pay sheet open/close */
 function openPaySheet(mode){
   $('payTitle').innerText = (lang==='en') ? 'Payment' : (lang==='uz' ? 'To‘lov' : 'Оплата');
-  $('paySubtitle').innerText =
-    (mode==='click')
-      ? (lang==='en' ? 'Click / QR payment' : (lang==='uz' ? 'Click / QR to‘lov' : 'Click / QR оплата'))
-      : (lang==='en' ? 'Online / card transfer' : (lang==='uz' ? 'Onlayn / karta orqali' : 'Онлайн / перевод на карту'));
 
-  $('cardNumber').innerText = CARD_NUMBER.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
-  $('cardName').innerText = CARD_NAME;
-
+  /* ✅ Click: показываем QR; Online: оставляем как перевод по реквизитам */
   if(mode === 'click'){
-    /* ✅ ВАЖНО: QR для Click больше не показываем вообще */
-    $('payQr').style.display = 'none';
-    $('payHint').style.display = 'none';
-  }else{
+    $('paySubtitle').innerText =
+      (lang==='en' ? 'Click / QR payment' : (lang==='uz' ? 'Click / QR to‘lov' : 'Click / QR оплата'));
+
+    /* Для Click: скрываем реквизиты карты (если не нужно — можно оставить, но ты просил QR) */
+    $('cardNumber').innerText = CARD_NUMBER.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+    $('cardName').innerText = CARD_NAME;
+
+    $('payQr').style.display = 'block';
+    $('payQr').src = CLICK_QR_SRC;
+    $('payHint').style.display = 'block';
+    $('payHint').innerText =
+      (lang==='en') ? 'Scan the QR code in Click and complete the payment.' :
+      (lang==='uz') ? 'Click ilovasida QR-kodni skaner qilib to‘lovni amalga oshiring.' :
+      'Откройте Click и отсканируйте QR-код для оплаты.';
+  } else {
+    $('paySubtitle').innerText =
+      (lang==='en' ? 'Online / card transfer' : (lang==='uz' ? 'Onlayn / karta orqali' : 'Онлайн / перевод на карту'));
+
+    $('cardNumber').innerText = CARD_NUMBER.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+    $('cardName').innerText = CARD_NAME;
+
+    /* Онлайн: QR не показываем (как было) */
     $('payQr').style.display = 'none';
     $('payHint').style.display = 'none';
   }
@@ -2078,7 +2071,7 @@ function setType(t,b){
   applyTypeUI();
 }
 
-/* payment */
+/* ✅ payment */
 function setPayment(p){
   payment=p;
   $('payCash').classList.toggle('active',p==='cash');
@@ -2086,9 +2079,11 @@ function setPayment(p){
   $('payOnline').classList.toggle('active',p==='online');
 
   if(p === 'click'){
-    /* ✅ Click: всплывающее окно “в разработке” + QR не показываем */
+    /* ✅ Click: ОТКРЫВАЕМ QR */
+    openPaySheet('click');
+  }else{
+    /* если ушли с click — закрываем sheet, чтобы не мешал */
     closePaySheet();
-    showClickDevPopup();
   }
 
   if(p === 'online') openPaySheet('online');
